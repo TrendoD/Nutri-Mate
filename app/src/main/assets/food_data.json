@@ -1,0 +1,152 @@
+[
+  {
+    "id": "f1",
+    "name": "Nasi Putih",
+    "calories": 204,
+    "carbs": 44,
+    "protein": 4,
+    "fat": 0.5,
+    "servingSize": 1,
+    "servingUnit": "mangkuk"
+  },
+  {
+    "id": "f2",
+    "name": "Nasi Goreng",
+    "calories": 330,
+    "carbs": 40,
+    "protein": 10,
+    "fat": 12,
+    "servingSize": 1,
+    "servingUnit": "piring"
+  },
+  {
+    "id": "f3",
+    "name": "Ayam Goreng",
+    "calories": 260,
+    "carbs": 8,
+    "protein": 22,
+    "fat": 15,
+    "servingSize": 1,
+    "servingUnit": "potong"
+  },
+  {
+    "id": "f4",
+    "name": "Telur Rebus",
+    "calories": 78,
+    "carbs": 0.6,
+    "protein": 6,
+    "fat": 5,
+    "servingSize": 1,
+    "servingUnit": "butir"
+  },
+  {
+    "id": "f5",
+    "name": "Telur Dadar",
+    "calories": 150,
+    "carbs": 1,
+    "protein": 7,
+    "fat": 12,
+    "servingSize": 1,
+    "servingUnit": "butir"
+  },
+  {
+    "id": "f6",
+    "name": "Tempe Goreng",
+    "calories": 160,
+    "carbs": 10,
+    "protein": 9,
+    "fat": 10,
+    "servingSize": 2,
+    "servingUnit": "potong"
+  },
+  {
+    "id": "f7",
+    "name": "Tahu Goreng",
+    "calories": 110,
+    "carbs": 4,
+    "protein": 8,
+    "fat": 7,
+    "servingSize": 2,
+    "servingUnit": "potong"
+  },
+  {
+    "id": "f8",
+    "name": "Sayur Asem",
+    "calories": 80,
+    "carbs": 15,
+    "protein": 3,
+    "fat": 2,
+    "servingSize": 1,
+    "servingUnit": "mangkuk"
+  },
+  {
+    "id": "f9",
+    "name": "Sate Ayam",
+    "calories": 340,
+    "carbs": 15,
+    "protein": 35,
+    "fat": 18,
+    "servingSize": 5,
+    "servingUnit": "tusuk"
+  },
+  {
+    "id": "f10",
+    "name": "Gado-Gado",
+    "calories": 320,
+    "carbs": 35,
+    "protein": 18,
+    "fat": 14,
+    "servingSize": 1,
+    "servingUnit": "piring"
+  },
+  {
+    "id": "f11",
+    "name": "Mie Goreng",
+    "calories": 380,
+    "carbs": 50,
+    "protein": 10,
+    "fat": 18,
+    "servingSize": 1,
+    "servingUnit": "piring"
+  },
+  {
+    "id": "f12",
+    "name": "Soto Ayam",
+    "calories": 300,
+    "carbs": 20,
+    "protein": 25,
+    "fat": 15,
+    "servingSize": 1,
+    "servingUnit": "mangkuk"
+  },
+  {
+    "id": "f13",
+    "name": "Bakso",
+    "calories": 325,
+    "carbs": 40,
+    "protein": 20,
+    "fat": 12,
+    "servingSize": 1,
+    "servingUnit": "mangkuk"
+  },
+  {
+    "id": "f14",
+    "name": "Pisang Goreng",
+    "calories": 140,
+    "carbs": 28,
+    "protein": 1,
+    "fat": 6,
+    "servingSize": 1,
+    "servingUnit": "buah"
+  },
+  {
+    "id": "f15",
+    "name": "Teh Manis",
+    "calories": 90,
+    "carbs": 22,
+    "protein": 0,
+    "fat": 0,
+    "servingSize": 1,
+    "servingUnit": "gelas"
+  }
+]
