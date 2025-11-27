@@ -3,13 +3,14 @@ package com.example.nutrimate
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.lifecycle.lifecycleScope
 import com.example.nutrimate.data.AppDatabase
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -18,20 +19,27 @@ import java.util.Locale
 class MainActivity : AppCompatActivity() {
 
     private lateinit var tvWelcome: TextView
-    private lateinit var btnLogout: Button
-    private lateinit var btnProfile: Button
-    private lateinit var btnFoodLog: Button
+    private lateinit var btnLogout: MaterialButton
+    private lateinit var btnProfile: MaterialButton
+    private lateinit var btnFoodLog: MaterialButton
     
     // Dashboard Views
     private lateinit var tvCalorieProgress: TextView
     private lateinit var tvCalorieTarget: TextView
+    private lateinit var tvCaloriePercentage: TextView
     private lateinit var pbCalories: ProgressBar
     private lateinit var tvCarbs: TextView
     private lateinit var tvProtein: TextView
     private lateinit var tvFat: TextView
-    private lateinit var cvAlert: CardView
+    private lateinit var tvCarbsTarget: TextView
+    private lateinit var tvProteinTarget: TextView
+    private lateinit var tvFatTarget: TextView
+    private lateinit var cvAlert: MaterialCardView
     private lateinit var tvAlertTitle: TextView
     private lateinit var tvAlertBody: TextView
+    private lateinit var ivAlertIcon: ImageView
+    private lateinit var cvMedicalConditions: MaterialCardView
+    private lateinit var tvMedicalConditions: TextView
 
     private lateinit var database: AppDatabase
     private var currentUsername: String = ""
@@ -74,14 +82,22 @@ class MainActivity : AppCompatActivity() {
         
         tvCalorieProgress = findViewById(R.id.tvCalorieProgress)
         tvCalorieTarget = findViewById(R.id.tvCalorieTarget)
+        tvCaloriePercentage = findViewById(R.id.tvCaloriePercentage)
         pbCalories = findViewById(R.id.pbCalories)
         tvCarbs = findViewById(R.id.tvCarbs)
         tvProtein = findViewById(R.id.tvProtein)
         tvFat = findViewById(R.id.tvFat)
+        tvCarbsTarget = findViewById(R.id.tvCarbsTarget)
+        tvProteinTarget = findViewById(R.id.tvProteinTarget)
+        tvFatTarget = findViewById(R.id.tvFatTarget)
         
         cvAlert = findViewById(R.id.cvAlert)
         tvAlertTitle = findViewById(R.id.tvAlertTitle)
         tvAlertBody = findViewById(R.id.tvAlertBody)
+        ivAlertIcon = findViewById(R.id.ivAlertIcon)
+        
+        cvMedicalConditions = findViewById(R.id.cvMedicalConditions)
+        tvMedicalConditions = findViewById(R.id.tvMedicalConditions)
     }
 
     private fun setupListeners() {
@@ -117,9 +133,19 @@ class MainActivity : AppCompatActivity() {
                     return@launch
                 }
 
-                tvWelcome.text = "Hello, ${user.fullName}!"
+                tvWelcome.text = user.fullName
                 val target = user.dailyCalorieTarget
                 tvCalorieTarget.text = "/ $target kcal"
+
+                // Calculate macro targets based on calorie target
+                // Standard macro split: 50% carbs, 20% protein, 30% fat
+                val carbsTarget = (target * 0.5 / 4).toInt() // 4 cal per gram
+                val proteinTarget = (target * 0.2 / 4).toInt() // 4 cal per gram
+                val fatTarget = (target * 0.3 / 9).toInt() // 9 cal per gram
+                
+                tvCarbsTarget.text = "/ ${carbsTarget}g"
+                tvProteinTarget.text = "/ ${proteinTarget}g"
+                tvFatTarget.text = "/ ${fatTarget}g"
 
                 // Calculate Consumed
                 val dateStr = dateFormat.format(Date())
@@ -143,52 +169,163 @@ class MainActivity : AppCompatActivity() {
                 // Update UI
                 tvCalorieProgress.text = totalCals.toInt().toString()
                 pbCalories.max = target
-                pbCalories.progress = totalCals.toInt()
+                pbCalories.progress = totalCals.toInt().coerceAtMost(target)
+                
+                val percentage = if (target > 0) (totalCals / target * 100).toInt() else 0
+                tvCaloriePercentage.text = "$percentage% of daily goal"
                 
                 tvCarbs.text = "${totalCarbs.toInt()}g"
                 tvProtein.text = "${totalProtein.toInt()}g"
                 tvFat.text = "${totalFat.toInt()}g"
 
+                // Show medical conditions if any
+                if (user.medicalConditions.isNotEmpty()) {
+                    cvMedicalConditions.visibility = View.VISIBLE
+                    tvMedicalConditions.text = user.medicalConditions.replace(",", " • ")
+                } else {
+                    cvMedicalConditions.visibility = View.GONE
+                }
+
                 // Generate Insights/Warnings
-                generateInsights(user.medicalConditions, totalCals, target, totalCarbs, totalFat)
+                generateInsights(user.medicalConditions, totalCals, target, totalCarbs, totalProtein, totalFat, carbsTarget, proteinTarget, fatTarget)
             }
         }
     }
 
-    private fun generateInsights(conditions: String, currentCals: Float, targetCals: Int, carbs: Float, fat: Float) {
-        val conditionList = conditions.split(",").map { it.trim() }
+    private fun generateInsights(
+        conditions: String, 
+        currentCals: Float, 
+        targetCals: Int, 
+        carbs: Float,
+        protein: Float,
+        fat: Float,
+        carbsTarget: Int,
+        proteinTarget: Int,
+        fatTarget: Int
+    ) {
+        val conditionList = conditions.split(",").map { it.trim() }.filter { it.isNotEmpty() }
         var title = "Daily Tip"
-        var body = "Stay hydrated and eat balanced meals!"
-        var isWarning = false
-
-        if (currentCals > targetCals) {
-            title = "Calorie Alert"
-            body = "You have exceeded your daily calorie limit. Try to eat lighter for the rest of the day."
-            isWarning = true
-        } else if (conditionList.contains("Diabetes") && carbs > 250) {
-            // Simple threshold for example
-            title = "Diabetes Alert"
-            body = "Your carb intake is high ($carbs g). Monitor your blood sugar closely."
-            isWarning = true
-        } else if (conditionList.contains("Hypertension") || conditionList.contains("Cholesterol")) {
-            if (fat > 70) {
-                 title = "Heart Health Alert"
-                 body = "Fat intake is high ($fat g). Reduce fried foods to manage your condition."
-                 isWarning = true
+        var body = "Stay hydrated and eat balanced meals! Track your food to get personalized recommendations."
+        var alertType = AlertType.INFO
+        
+        // Check for various conditions and provide specific insights
+        when {
+            currentCals > targetCals -> {
+                title = "Calorie Limit Exceeded"
+                body = "You've consumed ${currentCals.toInt()} kcal, which is ${(currentCals - targetCals).toInt()} kcal over your daily target. Consider lighter meals for the rest of the day."
+                alertType = AlertType.WARNING
+            }
+            currentCals > targetCals * 0.9 && currentCals <= targetCals -> {
+                title = "Almost There!"
+                body = "You're at ${(currentCals / targetCals * 100).toInt()}% of your daily calorie goal. Only ${(targetCals - currentCals).toInt()} kcal remaining."
+                alertType = AlertType.SUCCESS
+            }
+            conditionList.contains("Diabetes") && carbs > carbsTarget -> {
+                title = "Diabetes Alert - High Carbs"
+                body = "Your carb intake (${carbs.toInt()}g) exceeds the recommended ${carbsTarget}g. High carb intake can affect blood sugar levels. Consider low-carb alternatives."
+                alertType = AlertType.DANGER
+            }
+            conditionList.contains("Diabetes") && carbs > carbsTarget * 0.8 -> {
+                title = "Diabetes Reminder"
+                body = "You've consumed ${(carbs / carbsTarget * 100).toInt()}% of your daily carb limit. Monitor your intake to maintain stable blood sugar levels."
+                alertType = AlertType.WARNING
+            }
+            (conditionList.contains("Hypertension") || conditionList.contains("Cholesterol")) && fat > fatTarget -> {
+                title = "Heart Health Alert"
+                body = "Fat intake (${fat.toInt()}g) is above the recommended ${fatTarget}g. For heart health, consider reducing fried and fatty foods."
+                alertType = AlertType.DANGER
+            }
+            (conditionList.contains("Hypertension") || conditionList.contains("Cholesterol")) && fat > fatTarget * 0.8 -> {
+                title = "Heart Health Tip"
+                body = "You're approaching your daily fat limit. Choose lean proteins and avoid excessive oil for better heart health."
+                alertType = AlertType.WARNING
+            }
+            conditionList.contains("Gastritis") && currentCals < targetCals * 0.3 -> {
+                title = "Gastritis Reminder"
+                body = "You haven't eaten much today. For gastritis management, avoid long gaps between meals. Consider small, frequent meals."
+                alertType = AlertType.WARNING
+            }
+            protein < proteinTarget * 0.5 && currentCals > targetCals * 0.5 -> {
+                title = "Protein Intake Low"
+                body = "Your protein intake (${protein.toInt()}g) is below the recommended level. Include lean meats, eggs, or legumes in your next meal."
+                alertType = AlertType.INFO
+            }
+            currentCals == 0f -> {
+                title = "Start Tracking!"
+                body = "You haven't logged any food today. Tap 'Track Food' to start monitoring your nutrition."
+                alertType = AlertType.INFO
+            }
+            conditionList.isNotEmpty() -> {
+                title = "Personalized for You"
+                val conditionAdvice = buildConditionAdvice(conditionList)
+                body = conditionAdvice
+                alertType = AlertType.INFO
             }
         }
 
         tvAlertTitle.text = title
         tvAlertBody.text = body
         
-        if (isWarning) {
-            cvAlert.setCardBackgroundColor(android.graphics.Color.parseColor("#FFEBEE")) // Red tint
-            tvAlertTitle.setTextColor(android.graphics.Color.parseColor("#C62828"))
-            tvAlertBody.setTextColor(android.graphics.Color.parseColor("#B71C1C"))
-        } else {
-            cvAlert.setCardBackgroundColor(android.graphics.Color.parseColor("#E3F2FD")) // Blue tint
-            tvAlertTitle.setTextColor(android.graphics.Color.parseColor("#1565C0"))
-            tvAlertBody.setTextColor(android.graphics.Color.parseColor("#0D47A1"))
+        // Update card appearance based on alert type
+        updateAlertAppearance(alertType)
+    }
+    
+    private fun buildConditionAdvice(conditions: List<String>): String {
+        val advices = mutableListOf<String>()
+        
+        if (conditions.contains("Diabetes")) {
+            advices.add("Monitor carbs for diabetes management")
         }
+        if (conditions.contains("Hypertension")) {
+            advices.add("Watch sodium and fat intake for blood pressure")
+        }
+        if (conditions.contains("Cholesterol")) {
+            advices.add("Limit saturated fats for cholesterol control")
+        }
+        if (conditions.contains("Gastritis")) {
+            advices.add("Eat small, frequent meals for gastritis")
+        }
+        
+        return if (advices.isNotEmpty()) {
+            "Based on your conditions: ${advices.joinToString(". ")}."
+        } else {
+            "Track your meals regularly for better health insights!"
+        }
+    }
+    
+    private enum class AlertType {
+        INFO, SUCCESS, WARNING, DANGER
+    }
+    
+    private fun updateAlertAppearance(type: AlertType) {
+        val (backgroundColor, textColor, iconRes) = when (type) {
+            AlertType.INFO -> Triple(
+                getColor(R.color.alert_info),
+                getColor(R.color.alert_info_text),
+                android.R.drawable.ic_dialog_info
+            )
+            AlertType.SUCCESS -> Triple(
+                getColor(R.color.alert_success),
+                getColor(R.color.alert_success_text),
+                android.R.drawable.checkbox_on_background
+            )
+            AlertType.WARNING -> Triple(
+                getColor(R.color.alert_warning),
+                getColor(R.color.alert_warning_text),
+                android.R.drawable.ic_dialog_alert
+            )
+            AlertType.DANGER -> Triple(
+                getColor(R.color.alert_danger),
+                getColor(R.color.alert_danger_text),
+                android.R.drawable.ic_dialog_alert
+            )
+        }
+        
+        cvAlert.setCardBackgroundColor(backgroundColor)
+        cvAlert.strokeColor = textColor
+        tvAlertTitle.setTextColor(textColor)
+        tvAlertBody.setTextColor(textColor)
+        ivAlertIcon.setImageResource(iconRes)
+        ivAlertIcon.setColorFilter(textColor)
     }
 }

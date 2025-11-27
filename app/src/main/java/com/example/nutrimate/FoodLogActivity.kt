@@ -2,7 +2,6 @@ package com.example.nutrimate
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nutrimate.data.AppDatabase
+import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -23,16 +23,20 @@ class FoodLogActivity : AppCompatActivity() {
     private lateinit var rvDinner: RecyclerView
     private lateinit var rvSnack: RecyclerView
     
-    private lateinit var btnAddBreakfast: Button
-    private lateinit var btnAddLunch: Button
-    private lateinit var btnAddDinner: Button
-    private lateinit var btnAddSnack: Button
+    private lateinit var btnAddBreakfast: MaterialButton
+    private lateinit var btnAddLunch: MaterialButton
+    private lateinit var btnAddDinner: MaterialButton
+    private lateinit var btnAddSnack: MaterialButton
     
     private lateinit var tvDate: TextView
+    private lateinit var tvBreakfastCals: TextView
+    private lateinit var tvLunchCals: TextView
+    private lateinit var tvDinnerCals: TextView
+    private lateinit var tvSnackCals: TextView
     
     private var username: String = ""
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    private val displayDateFormat = SimpleDateFormat("EEEE, d MMMM", Locale.getDefault())
+    private val displayDateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
     private val today = Date()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,6 +84,11 @@ class FoodLogActivity : AppCompatActivity() {
         btnAddLunch = findViewById(R.id.btnAddLunch)
         btnAddDinner = findViewById(R.id.btnAddDinner)
         btnAddSnack = findViewById(R.id.btnAddSnack)
+        
+        tvBreakfastCals = findViewById(R.id.tvBreakfastCals)
+        tvLunchCals = findViewById(R.id.tvLunchCals)
+        tvDinnerCals = findViewById(R.id.tvDinnerCals)
+        tvSnackCals = findViewById(R.id.tvSnackCals)
     }
 
     private fun setupListeners() {
@@ -106,6 +115,11 @@ class FoodLogActivity : AppCompatActivity() {
             val dinnerList = mutableListOf<FoodLogItem>()
             val snackList = mutableListOf<FoodLogItem>()
             
+            var breakfastCals = 0f
+            var lunchCals = 0f
+            var dinnerCals = 0f
+            var snackCals = 0f
+            
             for (log in logs) {
                 val food = database.foodDao().getFoodById(log.foodId)
                 if (food != null) {
@@ -119,10 +133,22 @@ class FoodLogActivity : AppCompatActivity() {
                     )
                     
                     when (log.mealType) {
-                        "Breakfast" -> breakfastList.add(item)
-                        "Lunch" -> lunchList.add(item)
-                        "Dinner" -> dinnerList.add(item)
-                        "Snack" -> snackList.add(item)
+                        "Breakfast" -> {
+                            breakfastList.add(item)
+                            breakfastCals += totalCals
+                        }
+                        "Lunch" -> {
+                            lunchList.add(item)
+                            lunchCals += totalCals
+                        }
+                        "Dinner" -> {
+                            dinnerList.add(item)
+                            dinnerCals += totalCals
+                        }
+                        "Snack" -> {
+                            snackList.add(item)
+                            snackCals += totalCals
+                        }
                     }
                 }
             }
@@ -131,6 +157,12 @@ class FoodLogActivity : AppCompatActivity() {
             (rvLunch.adapter as FoodLogAdapter).submitList(lunchList)
             (rvDinner.adapter as FoodLogAdapter).submitList(dinnerList)
             (rvSnack.adapter as FoodLogAdapter).submitList(snackList)
+            
+            // Update calorie totals
+            tvBreakfastCals.text = "${breakfastCals.toInt()} kcal"
+            tvLunchCals.text = "${lunchCals.toInt()} kcal"
+            tvDinnerCals.text = "${dinnerCals.toInt()} kcal"
+            tvSnackCals.text = "${snackCals.toInt()} kcal"
         }
     }
 }

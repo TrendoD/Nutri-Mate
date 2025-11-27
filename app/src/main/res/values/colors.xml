@@ -1,10 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Primary Colors - Fresh Green for Health Theme -->
+    <color name="primary">#FF4CAF50</color>
+    <color name="primary_dark">#FF388E3C</color>
+    <color name="primary_light">#FFC8E6C9</color>
+    <color name="primary_variant">#FF2E7D32</color>
+    
+    <!-- Secondary Colors - Warm Orange for Energy -->
+    <color name="secondary">#FFFF9800</color>
+    <color name="secondary_dark">#FFF57C00</color>
+    <color name="secondary_light">#FFFFE0B2</color>
+    
+    <!-- Legacy colors for compatibility -->
     <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
+    <color name="purple_500">#FF4CAF50</color>
+    <color name="purple_700">#FF388E3C</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
+    
+    <!-- Basic Colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- Background Colors -->
+    <color name="background_light">#FFF5F5F5</color>
+    <color name="surface">#FFFFFFFF</color>
+    <color name="card_background">#FFFFFFFF</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary">#DD000000</color>
+    <color name="text_secondary">#89000000</color>
+    <color name="text_hint">#61000000</color>
+    
+    <!-- Macro Colors -->
+    <color name="carbs_color">#FFFFC107</color>
+    <color name="protein_color">#FF2196F3</color>
+    <color name="fat_color">#FFFF5722</color>
+    
+    <!-- Alert Colors -->
+    <color name="alert_warning">#FFFFF3E0</color>
+    <color name="alert_warning_text">#FFE65100</color>
+    <color name="alert_danger">#FFFFEBEE</color>
+    <color name="alert_danger_text">#FFC62828</color>
+    <color name="alert_info">#FFE3F2FD</color>
+    <color name="alert_info_text">#FF1565C0</color>
+    <color name="alert_success">#FFE8F5E9</color>
+    <color name="alert_success_text">#FF2E7D32</color>
+    
+    <!-- Meal Section Colors -->
+    <color name="breakfast_color">#FFFFF8E1</color>
+    <color name="lunch_color">#FFE3F2FD</color>
+    <color name="dinner_color">#FFFCE4EC</color>
+    <color name="snack_color">#FFF3E5F5</color>
 </resources>
