@@ -172,7 +172,12 @@ class MainActivity : AppCompatActivity() {
                 pbCalories.progress = totalCals.toInt().coerceAtMost(target)
                 
                 val percentage = if (target > 0) (totalCals / target * 100).toInt() else 0
-                tvCaloriePercentage.text = "$percentage% of daily goal"
+                val percentageText = when {
+                    percentage > 100 -> "${percentage}% (exceeded daily goal)"
+                    percentage >= 90 -> "$percentage% - almost there!"
+                    else -> "$percentage% of daily goal"
+                }
+                tvCaloriePercentage.text = percentageText
                 
                 tvCarbs.text = "${totalCarbs.toInt()}g"
                 tvProtein.text = "${totalProtein.toInt()}g"
@@ -323,6 +328,7 @@ class MainActivity : AppCompatActivity() {
         
         cvAlert.setCardBackgroundColor(backgroundColor)
         cvAlert.strokeColor = textColor
+        cvAlert.strokeWidth = resources.getDimensionPixelSize(R.dimen.card_stroke_width)
         tvAlertTitle.setTextColor(textColor)
         tvAlertBody.setTextColor(textColor)
         ivAlertIcon.setImageResource(iconRes)
