@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -18,12 +19,16 @@ class LoginActivity : AppCompatActivity() {
         private const val PREF_NAME = "NutriMatePrefs"
         private const val KEY_LOGGED_IN_USER = "logged_in_user"
         private const val KEY_LOGGED_IN_USER_FULLNAME = "logged_in_user_fullname"
+        private const val KEY_REMEMBER_ME = "remember_me"
+        private const val KEY_SAVED_USERNAME = "saved_username"
+        private const val KEY_SAVED_PASSWORD = "saved_password"
     }
 
     private lateinit var etUsername: EditText
     private lateinit var etPassword: EditText
     private lateinit var btnLogin: Button
     private lateinit var tvRegister: TextView
+    private lateinit var cbRememberMe: CheckBox
     private lateinit var database: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +43,10 @@ class LoginActivity : AppCompatActivity() {
         etPassword = findViewById(R.id.etPassword)
         btnLogin = findViewById(R.id.btnLogin)
         tvRegister = findViewById(R.id.tvRegister)
+        cbRememberMe = findViewById(R.id.cbRememberMe)
+        
+        // Load saved credentials if Remember Me was checked
+        loadSavedCredentials()
 
         // Login button click listener
         btnLogin.setOnClickListener {
@@ -56,6 +65,13 @@ class LoginActivity : AppCompatActivity() {
                 if (user != null) {
                     // Save login session
                     saveLoginSession(user.username, user.fullName)
+                    
+                    // Handle Remember Me
+                    if (cbRememberMe.isChecked) {
+                        saveCredentials(username, password)
+                    } else {
+                        clearSavedCredentials()
+                    }
                     
                     Toast.makeText(this@LoginActivity, "Login successful! Welcome ${user.fullName}", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
@@ -81,6 +97,40 @@ class LoginActivity : AppCompatActivity() {
         sharedPreferences.edit().apply {
             putString(KEY_LOGGED_IN_USER, username)
             putString(KEY_LOGGED_IN_USER_FULLNAME, fullName)
+            apply()
+        }
+    }
+    
+    private fun loadSavedCredentials() {
+        val sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val rememberMe = sharedPreferences.getBoolean(KEY_REMEMBER_ME, false)
+        
+        if (rememberMe) {
+            val savedUsername = sharedPreferences.getString(KEY_SAVED_USERNAME, "") ?: ""
+            val savedPassword = sharedPreferences.getString(KEY_SAVED_PASSWORD, "") ?: ""
+            
+            etUsername.setText(savedUsername)
+            etPassword.setText(savedPassword)
+            cbRememberMe.isChecked = true
+        }
+    }
+    
+    private fun saveCredentials(username: String, password: String) {
+        val sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        sharedPreferences.edit().apply {
+            putBoolean(KEY_REMEMBER_ME, true)
+            putString(KEY_SAVED_USERNAME, username)
+            putString(KEY_SAVED_PASSWORD, password)
+            apply()
+        }
+    }
+    
+    private fun clearSavedCredentials() {
+        val sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        sharedPreferences.edit().apply {
+            putBoolean(KEY_REMEMBER_ME, false)
+            remove(KEY_SAVED_USERNAME)
+            remove(KEY_SAVED_PASSWORD)
             apply()
         }
     }
