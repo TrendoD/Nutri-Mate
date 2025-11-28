@@ -3,6 +3,8 @@ package com.example.nutrimate
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -16,6 +18,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 class SplashActivity : AppCompatActivity() {
 
     companion object {
+        private const val SPLASH_DELAY = 2500L // 2.5 seconds before fade out
         private const val PREF_NAME = "NutriMatePrefs"
         private const val KEY_LOGGED_IN_USER = "logged_in_user"
     }
@@ -38,9 +41,9 @@ class SplashActivity : AppCompatActivity() {
         val tapHint = findViewById<TextView>(R.id.tvTapHint)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
 
-        // Hide progress bar, show tap hint
-        progressBar.visibility = View.GONE
-        tapHint.visibility = View.VISIBLE
+        // Show progress bar, hide tap hint (auto mode)
+        progressBar.visibility = View.VISIBLE
+        tapHint.visibility = View.GONE
 
         // Load animations
         val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in)
@@ -50,15 +53,14 @@ class SplashActivity : AppCompatActivity() {
         logoImage.startAnimation(fadeIn)
         appName.startAnimation(slideUp)
         tagline.startAnimation(slideUp)
-        tapHint.startAnimation(fadeIn)
 
-        // Set click listener on root layout - user must tap to continue
-        rootLayout.setOnClickListener {
+        // Auto navigate after delay with fade out animation
+        Handler(Looper.getMainLooper()).postDelayed({
             if (!isNavigating) {
                 isNavigating = true
                 startFadeOutAndNavigate()
             }
-        }
+        }, SPLASH_DELAY)
     }
 
     private fun startFadeOutAndNavigate() {
