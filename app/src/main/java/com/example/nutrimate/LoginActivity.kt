@@ -1,5 +1,6 @@
 package com.example.nutrimate
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -12,6 +13,12 @@ import com.example.nutrimate.data.AppDatabase
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
+
+    companion object {
+        private const val PREF_NAME = "NutriMatePrefs"
+        private const val KEY_LOGGED_IN_USER = "logged_in_user"
+        private const val KEY_LOGGED_IN_USER_FULLNAME = "logged_in_user_fullname"
+    }
 
     private lateinit var etUsername: EditText
     private lateinit var etPassword: EditText
@@ -47,6 +54,9 @@ class LoginActivity : AppCompatActivity() {
                 val user = database.userDao().login(username, password)
                 
                 if (user != null) {
+                    // Save login session
+                    saveLoginSession(user.username, user.fullName)
+                    
                     Toast.makeText(this@LoginActivity, "Login successful! Welcome ${user.fullName}", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     intent.putExtra("USER_NAME", user.fullName)
@@ -63,6 +73,15 @@ class LoginActivity : AppCompatActivity() {
         tvRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    private fun saveLoginSession(username: String, fullName: String) {
+        val sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        sharedPreferences.edit().apply {
+            putString(KEY_LOGGED_IN_USER, username)
+            putString(KEY_LOGGED_IN_USER_FULLNAME, fullName)
+            apply()
         }
     }
 }
