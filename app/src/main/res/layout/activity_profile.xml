@@ -2,12 +2,14 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -15,15 +17,60 @@
             android:text="Complete Your Profile"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:layout_marginBottom="24dp"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Profile Picture Section -->
+        <ImageView
+            android:id="@+id/ivProfilePicture"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_launcher_foreground"
+            android:background="@drawable/ic_launcher_background"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="8dp"/>
+
+        <Button
+            android:id="@+id/btnChangePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change Photo"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Personal Info Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Full Name"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp"/>
+        <EditText
+            android:id="@+id/etFullName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Full Name"
+            android:layout_marginBottom="16dp"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp"/>
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:hint="Email"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Physical Stats Section -->
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Age"
             android:layout_marginBottom="4dp"/>
-
         <EditText
             android:id="@+id/etAge"
             android:layout_width="match_parent"
@@ -32,54 +79,99 @@
             android:hint="Enter your age"
             android:layout_marginBottom="16dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Weight (kg)"
-            android:layout_marginBottom="4dp"/>
+            android:orientation="horizontal"
+            android:weightSum="2">
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginEnd="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Weight (kg)"
+                    android:layout_marginBottom="4dp"/>
+                <EditText
+                    android:id="@+id/etWeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:hint="kg"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Height (cm)"
+                    android:layout_marginBottom="4dp"/>
+                <EditText
+                    android:id="@+id/etHeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:hint="cm"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- BMI Result -->
+        <TextView
+            android:id="@+id/tvBMI"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="BMI: --"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/tvBMIStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="(Normal)"
+            android:textColor="@color/black"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Target Weight (kg)"
+            android:layout_marginBottom="4dp"/>
         <EditText
-            android:id="@+id/etWeight"
+            android:id="@+id/etTargetWeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:hint="Enter your weight in kg"
+            android:hint="Enter target weight"
             android:layout_marginBottom="16dp"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Height (cm)"
-            android:layout_marginBottom="4dp"/>
-
-        <EditText
-            android:id="@+id/etHeight"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:hint="Enter your height in cm"
-            android:layout_marginBottom="16dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Gender"
             android:layout_marginBottom="4dp"/>
-
         <RadioGroup
             android:id="@+id/rgGender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="16dp">
-
             <RadioButton
                 android:id="@+id/rbMale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Male"
                 android:layout_marginEnd="16dp"/>
-
             <RadioButton
                 android:id="@+id/rbFemale"
                 android:layout_width="wrap_content"
@@ -87,42 +179,99 @@
                 android:text="Female"/>
         </RadioGroup>
 
+        <!-- Activity Level -->
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Activity Level"
+            android:layout_marginBottom="4dp"/>
+        <Spinner
+            android:id="@+id/spActivityLevel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Diet Goal -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Diet Goal"
+            android:layout_marginBottom="4dp"/>
+        <RadioGroup
+            android:id="@+id/rgDietGoal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp">
+            <RadioButton
+                android:id="@+id/rbLoseWeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lose Weight"/>
+            <RadioButton
+                android:id="@+id/rbMaintain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Maintain Weight"/>
+            <RadioButton
+                android:id="@+id/rbGainWeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gain Weight"/>
+        </RadioGroup>
+
+        <!-- Medical Conditions -->
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Medical Conditions"
             android:layout_marginBottom="4dp"/>
-            
         <CheckBox
             android:id="@+id/cbDiabetes"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Diabetes"/>
-
         <CheckBox
             android:id="@+id/cbHypertension"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hypertension (High Blood Pressure)"/>
-            
         <CheckBox
             android:id="@+id/cbCholesterol"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="High Cholesterol"/>
-
         <CheckBox
             android:id="@+id/cbGastritis"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Gastritis/GERD"/>
+
+        <!-- Allergies -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Allergies / Food Restrictions"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"/>
+        <EditText
+            android:id="@+id/etAllergies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:gravity="top|start"
+            android:hint="e.g. Peanuts, Shellfish, Gluten..."
+            android:layout_marginBottom="16dp"/>
 
         <Button
             android:id="@+id/btnSaveProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Calculate &amp; Save"
-            android:layout_marginTop="24dp"/>
+            android:text="Calculate &amp; Save Profile"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="32dp"/>
 
     </LinearLayout>
 </ScrollView>

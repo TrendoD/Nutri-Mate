@@ -16,5 +16,10 @@ data class User(
     val height: Float = 0f,
     val gender: String = "",
     val medicalConditions: String = "", // Stored as comma-separated string or JSON
-    val dailyCalorieTarget: Int = 0
+    val dailyCalorieTarget: Int = 0,
+    val activityLevel: String = "Sedentary",
+    val dietGoal: String = "Maintain",
+    val targetWeight: Float = 0f,
+    val allergies: String = "",
+    val profilePicture: String = ""
 )
