@@ -27,6 +27,7 @@ class LoginActivity : AppCompatActivity() {
         database = AppDatabase.getDatabase(this)
 
         // Initialize views
+        // PASTIKAN ID DI BAWAH INI SAMA PERSIS DENGAN YANG ADA DI FILE activity_login.xml
         etUsername = findViewById(R.id.etUsername)
         etPassword = findViewById(R.id.etPassword)
         btnLogin = findViewById(R.id.btnLogin)
@@ -45,10 +46,11 @@ class LoginActivity : AppCompatActivity() {
             // Check credentials from database
             lifecycleScope.launch {
                 val user = database.userDao().login(username, password)
-                
+
                 if (user != null) {
                     Toast.makeText(this@LoginActivity, "Login successful! Welcome ${user.fullName}", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    // Mengirim data user ke MainActivity (Opsional, tergantung kebutuhan)
                     intent.putExtra("USER_NAME", user.fullName)
                     intent.putExtra("USERNAME", user.username)
                     startActivity(intent)
