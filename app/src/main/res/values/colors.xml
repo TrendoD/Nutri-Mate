@@ -13,4 +13,9 @@
     <color name="green_primary">#4CAF50</color>
     <color name="green_dark">#2E7D32</color>
     <color name="light_bg">#F1F8E9</color>
+    <!-- Password Strength Colors -->
+    <color name="strength_weak">#F44336</color>
+    <color name="strength_medium">#FF9800</color>
+    <color name="strength_strong">#4CAF50</color>
+    <color name="gray_light">#E0E0E0</color>
 </resources>
