@@ -151,10 +151,11 @@ class AddFoodActivity : AppCompatActivity() {
         // Function to update nutrition preview
         fun updatePreview() {
             val qty = etQty.text.toString().toFloatOrNull() ?: 1.0f
-            tvPreviewCalories.text = (food.calories * qty).toInt().toString()
-            tvPreviewCarbs.text = "${(food.carbs * qty).toInt()}g"
-            tvPreviewProtein.text = "${(food.protein * qty).toInt()}g"
-            tvPreviewFat.text = "${(food.fat * qty).toInt()}g"
+            val safeQty = qty.coerceIn(0f, 999f)
+            tvPreviewCalories.text = (food.calories * safeQty).toInt().coerceAtLeast(0).toString()
+            tvPreviewCarbs.text = "${(food.carbs * safeQty).toInt().coerceAtLeast(0)}g"
+            tvPreviewProtein.text = "${(food.protein * safeQty).toInt().coerceAtLeast(0)}g"
+            tvPreviewFat.text = "${(food.fat * safeQty).toInt().coerceAtLeast(0)}g"
         }
         
         // Initial preview

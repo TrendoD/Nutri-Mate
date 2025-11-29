@@ -32,9 +32,9 @@ class FoodSearchAdapter(
         val food = foods[position]
         holder.tvName.text = food.name
         holder.tvDetails.text = "${food.servingSize.toInt()} ${food.servingUnit} | ${food.calories.toInt()} kcal"
-        holder.tvCarbs.text = "C: ${food.carbs.toInt()}g"
-        holder.tvProtein.text = "P: ${food.protein.toInt()}g"
-        holder.tvFat.text = "F: ${food.fat.toInt()}g"
+        holder.tvCarbs.text = "C: ${food.carbs.toInt().coerceAtLeast(0)}g"
+        holder.tvProtein.text = "P: ${food.protein.toInt().coerceAtLeast(0)}g"
+        holder.tvFat.text = "F: ${food.fat.toInt().coerceAtLeast(0)}g"
         
         holder.itemView.setOnClickListener {
             onFoodClick(food)
