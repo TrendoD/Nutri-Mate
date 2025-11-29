@@ -32,6 +32,7 @@ class AddFoodActivity : AppCompatActivity() {
     
     private var username: String = ""
     private var mealType: String = ""
+    private var selectedDate: String = ""
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +42,7 @@ class AddFoodActivity : AppCompatActivity() {
         database = AppDatabase.getDatabase(this)
         username = intent.getStringExtra("USERNAME") ?: ""
         mealType = intent.getStringExtra("MEAL_TYPE") ?: "Breakfast"
+        selectedDate = intent.getStringExtra("DATE") ?: dateFormat.format(Date())
         
         if (username.isEmpty()) {
             finish()
@@ -119,7 +121,7 @@ class AddFoodActivity : AppCompatActivity() {
                 foodId = food.id,
                 servingQty = qty,
                 mealType = mealType,
-                date = dateFormat.format(Date())
+                date = selectedDate
             )
             database.foodDao().insertFoodLog(log)
             Toast.makeText(this@AddFoodActivity, "Added ${food.name}", Toast.LENGTH_SHORT).show()

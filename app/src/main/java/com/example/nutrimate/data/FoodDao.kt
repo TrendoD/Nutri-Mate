@@ -27,6 +27,12 @@ interface FoodDao {
     @Query("DELETE FROM food_logs WHERE id = :id")
     suspend fun deleteFoodLog(id: Int)
     
+    @Query("UPDATE food_logs SET servingQty = :servingQty WHERE id = :id")
+    suspend fun updateFoodLogQuantity(id: Int, servingQty: Float)
+    
+    @Query("SELECT * FROM food_logs WHERE username = :username AND date = :date")
+    suspend fun getFoodLogsWithFoodByDate(username: String, date: String): List<FoodLog>
+    
     // Helper to check if DB is empty
     @Query("SELECT COUNT(*) FROM foods")
     suspend fun getFoodCount(): Int
