@@ -1,11 +1,15 @@
 package com.example.nutrimate
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.nutrimate.data.AppDatabase
 import com.example.nutrimate.data.User
@@ -21,6 +25,12 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var btnRegister: Button
     private lateinit var tvLogin: TextView
     private lateinit var database: AppDatabase
+    
+    // Password Strength Views
+    private lateinit var strengthBar1: View
+    private lateinit var strengthBar2: View
+    private lateinit var strengthBar3: View
+    private lateinit var tvPasswordStrength: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +47,15 @@ class RegisterActivity : AppCompatActivity() {
         etConfirmPassword = findViewById(R.id.etConfirmPassword)
         btnRegister = findViewById(R.id.btnRegister)
         tvLogin = findViewById(R.id.tvLogin)
+        
+        // Initialize Password Strength Views
+        strengthBar1 = findViewById(R.id.strengthBar1)
+        strengthBar2 = findViewById(R.id.strengthBar2)
+        strengthBar3 = findViewById(R.id.strengthBar3)
+        tvPasswordStrength = findViewById(R.id.tvPasswordStrength)
+        
+        // Setup Password Strength Checker
+        setupPasswordStrengthChecker()
 
         // Register button click listener
         btnRegister.setOnClickListener {
@@ -97,5 +116,90 @@ class RegisterActivity : AppCompatActivity() {
         tvLogin.setOnClickListener {
             finish()
         }
+    }
+    
+    private fun setupPasswordStrengthChecker() {
+        etPassword.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                val password = s.toString()
+                updatePasswordStrength(password)
+            }
+        })
+    }
+    
+    private fun updatePasswordStrength(password: String) {
+        if (password.isEmpty()) {
+            // Hide strength indicator when password is empty
+            tvPasswordStrength.visibility = View.GONE
+            resetStrengthBars()
+            return
+        }
+        
+        tvPasswordStrength.visibility = View.VISIBLE
+        val strength = calculatePasswordStrength(password)
+        
+        when (strength) {
+            PasswordStrength.WEAK -> {
+                strengthBar1.setBackgroundColor(ContextCompat.getColor(this, R.color.strength_weak))
+                strengthBar2.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_light))
+                strengthBar3.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_light))
+                tvPasswordStrength.text = "Weak password"
+                tvPasswordStrength.setTextColor(ContextCompat.getColor(this, R.color.strength_weak))
+            }
+            PasswordStrength.MEDIUM -> {
+                strengthBar1.setBackgroundColor(ContextCompat.getColor(this, R.color.strength_medium))
+                strengthBar2.setBackgroundColor(ContextCompat.getColor(this, R.color.strength_medium))
+                strengthBar3.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_light))
+                tvPasswordStrength.text = "Medium password"
+                tvPasswordStrength.setTextColor(ContextCompat.getColor(this, R.color.strength_medium))
+            }
+            PasswordStrength.STRONG -> {
+                strengthBar1.setBackgroundColor(ContextCompat.getColor(this, R.color.strength_strong))
+                strengthBar2.setBackgroundColor(ContextCompat.getColor(this, R.color.strength_strong))
+                strengthBar3.setBackgroundColor(ContextCompat.getColor(this, R.color.strength_strong))
+                tvPasswordStrength.text = "Strong password"
+                tvPasswordStrength.setTextColor(ContextCompat.getColor(this, R.color.strength_strong))
+            }
+        }
+    }
+    
+    private fun resetStrengthBars() {
+        val grayColor = ContextCompat.getColor(this, R.color.gray_light)
+        strengthBar1.setBackgroundColor(grayColor)
+        strengthBar2.setBackgroundColor(grayColor)
+        strengthBar3.setBackgroundColor(grayColor)
+    }
+    
+    private fun calculatePasswordStrength(password: String): PasswordStrength {
+        var score = 0
+        
+        // Length checks
+        if (password.length >= 6) score++
+        if (password.length >= 8) score++
+        if (password.length >= 12) score++
+        
+        // Contains lowercase
+        if (password.any { it.isLowerCase() }) score++
+        
+        // Contains uppercase
+        if (password.any { it.isUpperCase() }) score++
+        
+        // Contains digit
+        if (password.any { it.isDigit() }) score++
+        
+        // Contains special character
+        if (password.any { !it.isLetterOrDigit() }) score++
+        
+        return when {
+            score <= 2 -> PasswordStrength.WEAK
+            score <= 4 -> PasswordStrength.MEDIUM
+            else -> PasswordStrength.STRONG
+        }
+    }
+    
+    private enum class PasswordStrength {
+        WEAK, MEDIUM, STRONG
     }
 }

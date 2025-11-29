@@ -107,7 +107,6 @@ class AddFoodActivity : AppCompatActivity() {
             
             saveFoodLog(food, qty)
             dialog.dismiss()
-            finish() // Go back to Log
         }
         
         dialog.show()
@@ -124,6 +123,7 @@ class AddFoodActivity : AppCompatActivity() {
             )
             database.foodDao().insertFoodLog(log)
             Toast.makeText(this@AddFoodActivity, "Added ${food.name}", Toast.LENGTH_SHORT).show()
+            finish() // Go back to Log after save is complete
         }
     }
 }

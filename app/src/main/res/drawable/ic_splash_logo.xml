@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="150dp"
+    android:height="150dp"
+    android:viewportWidth="150"
+    android:viewportHeight="150">
+    
+    <!-- Circle background -->
+    <path
+        android:pathData="M75,75m-70,0a70,70 0,1 1,140 0a70,70 0,1 1,-140 0"
+        android:fillColor="#FFFFFF"/>
+    
+    <!-- Leaf icon (representing healthy/nutrition) -->
+    <path
+        android:pathData="M75,30 C55,50 45,75 50,95 C55,100 65,100 75,95 C85,100 95,100 100,95 C105,75 95,50 75,30"
+        android:fillColor="#4CAF50"/>
+    
+    <!-- Leaf vein -->
+    <path
+        android:pathData="M75,35 L75,90"
+        android:strokeWidth="3"
+        android:strokeColor="#2E7D32"
+        android:fillColor="#00000000"/>
+    
+    <!-- Left vein -->
+    <path
+        android:pathData="M75,55 L58,70"
+        android:strokeWidth="2"
+        android:strokeColor="#2E7D32"
+        android:fillColor="#00000000"/>
+    
+    <!-- Right vein -->
+    <path
+        android:pathData="M75,55 L92,70"
+        android:strokeWidth="2"
+        android:strokeColor="#2E7D32"
+        android:fillColor="#00000000"/>
+    
+    <!-- Left lower vein -->
+    <path
+        android:pathData="M75,70 L62,82"
+        android:strokeWidth="2"
+        android:strokeColor="#2E7D32"
+        android:fillColor="#00000000"/>
+    
+    <!-- Right lower vein -->
+    <path
+        android:pathData="M75,70 L88,82"
+        android:strokeWidth="2"
+        android:strokeColor="#2E7D32"
+        android:fillColor="#00000000"/>
+    
+    <!-- Fork icon (representing food) -->
+    <path
+        android:pathData="M40,105 L40,120 M40,105 L35,95 M40,105 L40,95 M40,105 L45,95"
+        android:strokeWidth="4"
+        android:strokeColor="#FF9800"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"/>
+    
+    <!-- Spoon icon -->
+    <path
+        android:pathData="M110,95 C115,95 118,100 118,105 C118,110 115,113 110,113 C105,113 102,110 102,105 C102,100 105,95 110,95 M110,113 L110,120"
+        android:strokeWidth="4"
+        android:strokeColor="#FF9800"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"/>
+    
+</vector>
