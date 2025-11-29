@@ -3,6 +3,7 @@ package com.example.nutrimate
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nutrimate.data.Food
@@ -15,6 +16,10 @@ class FoodSearchAdapter(
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvName: TextView = view.findViewById(R.id.tvName)
         val tvDetails: TextView = view.findViewById(R.id.tvDetails)
+        val tvCarbs: TextView = view.findViewById(R.id.tvCarbs)
+        val tvProtein: TextView = view.findViewById(R.id.tvProtein)
+        val tvFat: TextView = view.findViewById(R.id.tvFat)
+        val btnAddFood: ImageButton = view.findViewById(R.id.btnAddFood)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,9 +31,16 @@ class FoodSearchAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val food = foods[position]
         holder.tvName.text = food.name
-        holder.tvDetails.text = "${food.servingSize} ${food.servingUnit} | ${food.calories.toInt()} kcal"
+        holder.tvDetails.text = "${food.servingSize.toInt()} ${food.servingUnit} | ${food.calories.toInt()} kcal"
+        holder.tvCarbs.text = "C: ${food.carbs.toInt()}g"
+        holder.tvProtein.text = "P: ${food.protein.toInt()}g"
+        holder.tvFat.text = "F: ${food.fat.toInt()}g"
         
         holder.itemView.setOnClickListener {
+            onFoodClick(food)
+        }
+        
+        holder.btnAddFood.setOnClickListener {
             onFoodClick(food)
         }
     }
