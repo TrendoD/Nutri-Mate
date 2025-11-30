@@ -21,4 +21,8 @@ interface WaterIntakeDao {
     
     @Query("DELETE FROM water_intakes WHERE username = :username AND date = :date")
     suspend fun clearWaterIntakeForDate(username: String, date: String)
+    
+    // Delete all water intake for a user (for Settings)
+    @Query("DELETE FROM water_intakes WHERE username = :username")
+    suspend fun deleteAllWaterIntakeByUser(username: String)
 }

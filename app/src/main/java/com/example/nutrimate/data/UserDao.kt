@@ -33,4 +33,8 @@ interface UserDao {
 
     @Query("UPDATE users SET dailyCalorieTarget = :calorieTarget, carbsTarget = :carbsTarget, proteinTarget = :proteinTarget, fatTarget = :fatTarget, sugarLimit = :sugarLimit, sodiumLimit = :sodiumLimit, fiberTarget = :fiberTarget, waterTarget = :waterTarget WHERE username = :username")
     suspend fun updateAllNutritionTargets(username: String, calorieTarget: Int, carbsTarget: Float, proteinTarget: Float, fatTarget: Float, sugarLimit: Float, sodiumLimit: Float, fiberTarget: Float, waterTarget: Int)
+    
+    // Delete user account
+    @Query("DELETE FROM users WHERE username = :username")
+    suspend fun deleteUserByUsername(username: String)
 }

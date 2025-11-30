@@ -183,6 +183,12 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+                R.id.nav_settings -> {
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    intent.putExtra("USERNAME", currentUsername)
+                    startActivity(intent)
+                    true
+                }
                 else -> false
             }
         }

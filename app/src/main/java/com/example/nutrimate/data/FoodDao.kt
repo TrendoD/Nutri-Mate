@@ -81,4 +81,14 @@ interface FoodDao {
     // Get all food logs for a user (for statistics)
     @Query("SELECT * FROM food_logs WHERE username = :username ORDER BY date DESC")
     suspend fun getAllFoodLogs(username: String): List<FoodLog>
+    
+    // Delete methods for Settings
+    @Query("DELETE FROM food_logs WHERE username = :username")
+    suspend fun deleteAllFoodLogsByUser(username: String)
+    
+    @Query("DELETE FROM foods WHERE isCustom = 1 AND createdBy = :username")
+    suspend fun deleteAllCustomFoodsByUser(username: String)
+    
+    @Query("DELETE FROM favorite_foods WHERE username = :username")
+    suspend fun deleteAllFavoriteFoodsByUser(username: String)
 }
