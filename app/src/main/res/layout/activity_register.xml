@@ -102,13 +102,15 @@
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp">
+                app:boxStrokeWidthFocused="0dp"
+                app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="nicholas@ergemla.com"
+                    android:textColorHint="@color/gray_text"
                     android:inputType="textEmailAddress"
                     android:textSize="14sp"
                     android:paddingVertical="16dp" />
@@ -133,13 +135,15 @@
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp">
+                app:boxStrokeWidthFocused="0dp"
+                app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etFullName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Nicholas Ergemla"
+                    android:textColorHint="@color/gray_text"
                     android:inputType="textPersonName"
                     android:textSize="14sp"
                     android:paddingVertical="16dp" />
@@ -164,13 +168,15 @@
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp">
+                app:boxStrokeWidthFocused="0dp"
+                app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="nicholasergemla"
+                    android:textColorHint="@color/gray_text"
                     android:inputType="text"
                     android:textSize="14sp"
                     android:paddingVertical="16dp" />
@@ -197,13 +203,15 @@
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
-                app:endIconTint="@color/green_primary">
+                app:endIconTint="@color/green_primary"
+                app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="••••••••••••••••"
+                    android:textColorHint="@color/gray_text"
                     android:inputType="textPassword"
                     android:textSize="14sp"
                     android:paddingVertical="16dp" />
@@ -270,13 +278,15 @@
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
-                app:endIconTint="@color/green_primary">
+                app:endIconTint="@color/green_primary"
+                app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etConfirmPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="••••••••••••••••"
+                    android:textColorHint="@color/gray_text"
                     android:inputType="textPassword"
                     android:textSize="14sp"
                     android:paddingVertical="16dp" />
