@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 
-@Database(entities = [User::class, Food::class, FoodLog::class, WaterIntake::class], version = 4, exportSchema = false)
+@Database(entities = [User::class, Food::class, FoodLog::class, WaterIntake::class, FavoriteFood::class], version = 5, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     
     abstract fun userDao(): UserDao
@@ -28,7 +28,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "nutrimate_database"
                 )
-                .fallbackToDestructiveMigration()
+                .fallbackToDestructiveMigration() // This will drop and recreate DB on version change
                 .addCallback(FoodDatabaseCallback(context))
                 .build()
                 INSTANCE = instance
@@ -40,8 +40,9 @@ abstract class AppDatabase : RoomDatabase() {
             private val context: Context
         ) : RoomDatabase.Callback() {
 
-            override fun onOpen(db: SupportSQLiteDatabase) {
-                super.onOpen(db)
+            override fun onCreate(db: SupportSQLiteDatabase) {
+                super.onCreate(db)
+                // Populate database when it's created for the first time
                 INSTANCE?.let { database ->
                     CoroutineScope(Dispatchers.IO).launch {
                         populateDatabase(context, database.foodDao())
@@ -49,9 +50,25 @@ abstract class AppDatabase : RoomDatabase() {
                 }
             }
             
+            override fun onOpen(db: SupportSQLiteDatabase) {
+                super.onOpen(db)
+                // Also check on open in case database was cleared
+                INSTANCE?.let { database ->
+                    CoroutineScope(Dispatchers.IO).launch {
+                        try {
+                            populateDatabase(context, database.foodDao())
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            // Log error but don't crash the app
+                        }
+                    }
+                }
+            }
+            
             suspend fun populateDatabase(context: Context, foodDao: FoodDao) {
-                if (foodDao.getFoodCount() == 0) {
-                    try {
+                try {
+                    // Only populate if database is empty
+                    if (foodDao.getFoodCount() == 0) {
                         val jsonString = context.assets.open("food_data.json").bufferedReader().use { it.readText() }
                         val jsonArray = JSONArray(jsonString)
                         val foods = mutableListOf<Food>()
@@ -66,14 +83,24 @@ abstract class AppDatabase : RoomDatabase() {
                                 protein = item.getDouble("protein").toFloat(),
                                 fat = item.getDouble("fat").toFloat(),
                                 servingSize = item.getDouble("servingSize").toFloat(),
-                                servingUnit = item.getString("servingUnit")
+                                servingUnit = item.getString("servingUnit"),
+                                // Handle optional new fields with defaults
+                                category = if (item.has("category")) item.getString("category") else "Other",
+                                sugar = if (item.has("sugar")) item.getDouble("sugar").toFloat() else 0f,
+                                fiber = if (item.has("fiber")) item.getDouble("fiber").toFloat() else 0f,
+                                sodium = if (item.has("sodium")) item.getDouble("sodium").toFloat() else 0f,
+                                isCustom = false,
+                                createdBy = null
                             ))
                         }
                         
-                        foodDao.insertAll(foods)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+                        if (foods.isNotEmpty()) {
+                            foodDao.insertAll(foods)
+                        }
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    // Log error but don't crash - app can still work without pre-populated foods
                 }
             }
         }

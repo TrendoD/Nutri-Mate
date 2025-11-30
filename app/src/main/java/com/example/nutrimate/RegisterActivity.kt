@@ -62,8 +62,8 @@ class RegisterActivity : AppCompatActivity() {
             val fullName = etFullName.text.toString().trim()
             val email = etEmail.text.toString().trim()
             val username = etUsername.text.toString().trim()
-            val password = etPassword.text.toString().trim()
-            val confirmPassword = etConfirmPassword.text.toString().trim()
+            val password = etPassword.text.toString() // Don't trim password - user might want spaces
+            val confirmPassword = etConfirmPassword.text.toString()
 
             // Basic validation
             if (fullName.isEmpty() || email.isEmpty() || username.isEmpty() || 
@@ -84,31 +84,43 @@ class RegisterActivity : AppCompatActivity() {
 
             // Register user in database
             lifecycleScope.launch {
-                // Check if username already exists
-                val existingUser = database.userDao().getUserByUsername(username)
-                if (existingUser != null) {
-                    Toast.makeText(this@RegisterActivity, "Username already exists", Toast.LENGTH_SHORT).show()
-                    return@launch
-                }
+                try {
+                    // Check if username already exists
+                    val existingUser = database.userDao().getUserByUsername(username)
+                    if (existingUser != null) {
+                        Toast.makeText(this@RegisterActivity, "Username already exists", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
 
-                // Check if email already exists
-                val existingEmail = database.userDao().getUserByEmail(email)
-                if (existingEmail != null) {
-                    Toast.makeText(this@RegisterActivity, "Email already registered", Toast.LENGTH_SHORT).show()
-                    return@launch
-                }
+                    // Check if email already exists
+                    val existingEmail = database.userDao().getUserByEmail(email)
+                    if (existingEmail != null) {
+                        Toast.makeText(this@RegisterActivity, "Email already registered", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
 
-                // Create new user
-                val newUser = User(
-                    fullName = fullName,
-                    email = email,
-                    username = username,
-                    password = password
-                )
-                
-                database.userDao().insertUser(newUser)
-                Toast.makeText(this@RegisterActivity, "Registration successful! Please login.", Toast.LENGTH_SHORT).show()
-                finish()
+                    // Create new user
+                    val newUser = User(
+                        fullName = fullName,
+                        email = email,
+                        username = username,
+                        password = password // Store password as-is
+                    )
+                    
+                    database.userDao().insertUser(newUser)
+                    
+                    // Verify the user was actually saved
+                    val verifyUser = database.userDao().getUserByUsername(username)
+                    if (verifyUser != null) {
+                        Toast.makeText(this@RegisterActivity, "Registration successful! Please login with:\nUsername: $username", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(this@RegisterActivity, "Error: User not saved properly", Toast.LENGTH_SHORT).show()
+                    }
+                    finish()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(this@RegisterActivity, "Registration error: ${e.message}", Toast.LENGTH_LONG).show()
+                }
             }
         }
 

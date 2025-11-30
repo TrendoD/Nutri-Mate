@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="24dp">
+        android:layout_marginBottom="16dp">
 
         <EditText
             android:id="@+id/etQuantity"
@@ -44,10 +44,59 @@
             android:layout_marginStart="8dp"/>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnAdd"
+    <!-- Nutrition Preview Card -->
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add to Log"/>
+        android:layout_marginBottom="16dp"
+        android:elevation="2dp">
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:background="#F5F5F5">
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nutrition Preview:"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+            
+            <TextView
+                android:id="@+id/tvNutritionPreview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Calories: 300 kcal\nCarbs: 45g | Protein: 8g | Fat: 10g"
+                android:textSize="13sp"
+                android:lineSpacingMultiplier="1.2"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            style="?android:attr/buttonBarButtonStyle"
+            android:textColor="#757575"/>
+
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add to Log"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
 
 </LinearLayout>

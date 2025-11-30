@@ -18,6 +18,12 @@ interface UserDao {
     
     @Query("SELECT * FROM users WHERE email = :email LIMIT 1")
     suspend fun getUserByEmail(email: String): User?
+    
+    @Query("SELECT * FROM users")
+    suspend fun getAllUsers(): List<User>
+    
+    @Query("SELECT COUNT(*) FROM users")
+    suspend fun getUserCount(): Int
 
     @Query("UPDATE users SET age = :age, weight = :weight, height = :height, gender = :gender, medicalConditions = :conditions, dailyCalorieTarget = :calories, activityLevel = :activityLevel, dietGoal = :dietGoal, targetWeight = :targetWeight, allergies = :allergies, profilePicture = :profilePicture, fullName = :fullName, email = :email WHERE username = :username")
     suspend fun updateProfile(username: String, age: Int, weight: Float, height: Float, gender: String, conditions: String, calories: Int, activityLevel: String, dietGoal: String, targetWeight: Float, allergies: String, profilePicture: String, fullName: String, email: String)
