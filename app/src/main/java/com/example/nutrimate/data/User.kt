@@ -21,5 +21,13 @@ data class User(
     val dietGoal: String = "Maintain",
     val targetWeight: Float = 0f,
     val allergies: String = "",
-    val profilePicture: String = ""
+    val profilePicture: String = "",
+    // Nutrition Targets
+    val carbsTarget: Float = 0f,      // Target carbs in grams
+    val proteinTarget: Float = 0f,    // Target protein in grams
+    val fatTarget: Float = 0f,        // Target fat in grams
+    val sugarLimit: Float = 0f,       // Sugar limit in grams
+    val sodiumLimit: Float = 0f,      // Sodium limit in mg
+    val fiberTarget: Float = 0f,      // Fiber target in grams
+    val waterTarget: Int = 2000       // Water target in ml
 )

@@ -310,6 +310,55 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Diet Recommendations Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvRecommendations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#E8F5E9"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🥗 Diet Recommendations"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#2E7D32"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Personalized meal plans and nutrition tips based on your health profile"
+                            android:textSize="12sp"
+                            android:textColor="#558B2F"
+                            android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@android:drawable/ic_menu_send"
+                        android:contentDescription="Go to recommendations"
+                        android:layout_marginStart="8dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
             <!-- Insights Section -->
             <TextView
                 android:layout_width="wrap_content"

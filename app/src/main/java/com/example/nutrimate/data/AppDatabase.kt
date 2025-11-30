@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 
-@Database(entities = [User::class, Food::class, FoodLog::class, WaterIntake::class, FavoriteFood::class], version = 5, exportSchema = false)
+@Database(entities = [User::class, Food::class, FoodLog::class, WaterIntake::class, FavoriteFood::class], version = 6, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     
     abstract fun userDao(): UserDao

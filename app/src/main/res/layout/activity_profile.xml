@@ -265,6 +265,16 @@
             android:hint="e.g. Peanuts, Shellfish, Gluten..."
             android:layout_marginBottom="16dp"/>
 
+        <!-- Nutrition Targets Button -->
+        <Button
+            android:id="@+id/btnNutritionTargets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🎯 Set Nutrition Targets"
+            android:backgroundTint="#2196F3"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="8dp"/>
+
         <Button
             android:id="@+id/btnSaveProfile"
             android:layout_width="match_parent"

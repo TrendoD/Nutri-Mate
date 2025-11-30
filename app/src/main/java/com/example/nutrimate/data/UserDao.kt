@@ -27,4 +27,10 @@ interface UserDao {
 
     @Query("UPDATE users SET age = :age, weight = :weight, height = :height, gender = :gender, medicalConditions = :conditions, dailyCalorieTarget = :calories, activityLevel = :activityLevel, dietGoal = :dietGoal, targetWeight = :targetWeight, allergies = :allergies, profilePicture = :profilePicture, fullName = :fullName, email = :email WHERE username = :username")
     suspend fun updateProfile(username: String, age: Int, weight: Float, height: Float, gender: String, conditions: String, calories: Int, activityLevel: String, dietGoal: String, targetWeight: Float, allergies: String, profilePicture: String, fullName: String, email: String)
+
+    @Query("UPDATE users SET carbsTarget = :carbsTarget, proteinTarget = :proteinTarget, fatTarget = :fatTarget, sugarLimit = :sugarLimit, sodiumLimit = :sodiumLimit, fiberTarget = :fiberTarget, waterTarget = :waterTarget WHERE username = :username")
+    suspend fun updateNutritionTargets(username: String, carbsTarget: Float, proteinTarget: Float, fatTarget: Float, sugarLimit: Float, sodiumLimit: Float, fiberTarget: Float, waterTarget: Int)
+
+    @Query("UPDATE users SET dailyCalorieTarget = :calorieTarget, carbsTarget = :carbsTarget, proteinTarget = :proteinTarget, fatTarget = :fatTarget, sugarLimit = :sugarLimit, sodiumLimit = :sodiumLimit, fiberTarget = :fiberTarget, waterTarget = :waterTarget WHERE username = :username")
+    suspend fun updateAllNutritionTargets(username: String, calorieTarget: Int, carbsTarget: Float, proteinTarget: Float, fatTarget: Float, sugarLimit: Float, sodiumLimit: Float, fiberTarget: Float, waterTarget: Int)
 }

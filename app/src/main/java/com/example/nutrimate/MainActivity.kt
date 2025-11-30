@@ -35,6 +35,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvAlertTitle: TextView
     private lateinit var tvAlertBody: TextView
     
+    // Recommendations Card
+    private lateinit var cvRecommendations: CardView
+    
     // Water Intake Views
     private lateinit var tvWaterIntake: TextView
     private lateinit var pbWater: ProgressBar
@@ -104,6 +107,9 @@ class MainActivity : AppCompatActivity() {
         tvAlertTitle = findViewById(R.id.tvAlertTitle)
         tvAlertBody = findViewById(R.id.tvAlertBody)
         
+        // Recommendations
+        cvRecommendations = findViewById(R.id.cvRecommendations)
+        
         // Water Intake
         tvWaterIntake = findViewById(R.id.tvWaterIntake)
         pbWater = findViewById(R.id.pbWater)
@@ -133,6 +139,13 @@ class MainActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()
+        }
+        
+        // Recommendations card click
+        cvRecommendations.setOnClickListener {
+            val intent = Intent(this, RecommendationsActivity::class.java)
+            intent.putExtra("USERNAME", currentUsername)
+            startActivity(intent)
         }
         
         // Water intake buttons

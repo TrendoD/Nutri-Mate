@@ -41,6 +41,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var cbCholesterol: CheckBox
     private lateinit var cbGastritis: CheckBox
     private lateinit var etAllergies: EditText
+    private lateinit var btnNutritionTargets: Button
     private lateinit var btnSaveProfile: Button
     
     private lateinit var database: AppDatabase
@@ -99,6 +100,7 @@ class ProfileActivity : AppCompatActivity() {
         cbCholesterol = findViewById(R.id.cbCholesterol)
         cbGastritis = findViewById(R.id.cbGastritis)
         etAllergies = findViewById(R.id.etAllergies)
+        btnNutritionTargets = findViewById(R.id.btnNutritionTargets)
         btnSaveProfile = findViewById(R.id.btnSaveProfile)
 
         // Setup Spinner
@@ -114,6 +116,12 @@ class ProfileActivity : AppCompatActivity() {
 
         btnSaveProfile.setOnClickListener {
             saveProfile()
+        }
+
+        btnNutritionTargets.setOnClickListener {
+            val intent = Intent(this, NutritionTargetActivity::class.java)
+            intent.putExtra("USERNAME", username)
+            startActivity(intent)
         }
 
         val textWatcher = object : TextWatcher {
