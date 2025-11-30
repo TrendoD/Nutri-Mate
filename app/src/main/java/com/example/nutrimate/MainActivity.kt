@@ -1,5 +1,6 @@
 package com.example.nutrimate
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -19,6 +20,11 @@ import java.util.Date
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private const val PREF_NAME = "NutriMatePrefs"
+        private const val KEY_LOGGED_IN_USER = "logged_in_user"
+    }
 
     private lateinit var tvWelcome: TextView
     private lateinit var tvDate: TextView
@@ -135,6 +141,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnLogout.setOnClickListener {
+            // Clear login session from SharedPreferences
+            val sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            sharedPreferences.edit().remove(KEY_LOGGED_IN_USER).apply()
+            
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

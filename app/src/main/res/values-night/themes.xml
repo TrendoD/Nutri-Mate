@@ -8,4 +8,9 @@
         <item name="colorOnSecondary">@color/black</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
     </style>
+
+    <style name="Theme.NutriMate.Splash" parent="Theme.NutriMate">
+        <item name="android:windowBackground">@drawable/bg_gradient_green</item>
+        <item name="android:statusBarColor">@color/green_primary</item>
+    </style>
 </resources>

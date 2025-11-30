@@ -63,6 +63,10 @@ class SettingsActivity : AppCompatActivity() {
         const val KEY_UNIT_SYSTEM = "unit_system"
         const val KEY_LANGUAGE = "language"
         const val KEY_DARK_MODE = "dark_mode"
+        
+        // Login session
+        private const val LOGIN_PREF_NAME = "NutriMatePrefs"
+        private const val KEY_LOGGED_IN_USER = "logged_in_user"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -355,6 +359,10 @@ class SettingsActivity : AppCompatActivity() {
                         database.foodDao().deleteAllFavoriteFoodsByUser(username)
                         database.waterIntakeDao().deleteAllWaterIntakeByUser(username)
                         database.userDao().deleteUserByUsername(username)
+                        
+                        // Clear login session
+                        val loginPrefs = getSharedPreferences(LOGIN_PREF_NAME, Context.MODE_PRIVATE)
+                        loginPrefs.edit().remove(KEY_LOGGED_IN_USER).apply()
                         
                         Toast.makeText(this@SettingsActivity, "Account deleted successfully", Toast.LENGTH_SHORT).show()
                         
