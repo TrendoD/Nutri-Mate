@@ -77,4 +77,8 @@ interface FoodDao {
     // Helper to check if DB is empty
     @Query("SELECT COUNT(*) FROM foods")
     suspend fun getFoodCount(): Int
+    
+    // Get all food logs for a user (for statistics)
+    @Query("SELECT * FROM food_logs WHERE username = :username ORDER BY date DESC")
+    suspend fun getAllFoodLogs(username: String): List<FoodLog>
 }

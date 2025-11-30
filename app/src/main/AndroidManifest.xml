@@ -46,6 +46,10 @@
             android:name=".AddFoodActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".StatisticsActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

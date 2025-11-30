@@ -159,8 +159,9 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_stats -> {
-                    // Stats not implemented yet - show toast
-                    Toast.makeText(this, "Statistics coming soon!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, StatisticsActivity::class.java)
+                    intent.putExtra("USERNAME", currentUsername)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_profile -> {
