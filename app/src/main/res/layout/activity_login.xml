@@ -107,7 +107,7 @@
                     android:id="@+id/etUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="nicholas@ergemla.com"
+                    android:hint="alucard@gmail.com"
                     android:textColorHint="@color/gray_text"
                     android:inputType="textEmailAddress"
                     android:textSize="14sp"
