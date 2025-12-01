@@ -208,10 +208,19 @@ class StatisticsActivity : AppCompatActivity() {
 
             // Calorie trend (compare first half vs second half)
             val sortedDates = dailyCalories.keys.sorted()
-            val midPoint = sortedDates.size / 2
-            val firstHalfAvg = sortedDates.take(midPoint).mapNotNull { dailyCalories[it] }.average()
-            val secondHalfAvg = sortedDates.takeLast(midPoint).mapNotNull { dailyCalories[it] }.average()
-            val trendPercent = ((secondHalfAvg - firstHalfAvg) / firstHalfAvg * 100).roundToInt()
+            val trendPercent = if (sortedDates.size < 2) {
+                0
+            } else {
+                val midPoint = sortedDates.size / 2
+                val firstHalfAvg = sortedDates.take(midPoint).mapNotNull { dailyCalories[it] }.average()
+                val secondHalfAvg = sortedDates.takeLast(midPoint).mapNotNull { dailyCalories[it] }.average()
+
+                if (firstHalfAvg.isNaN() || secondHalfAvg.isNaN() || firstHalfAvg == 0.0) {
+                    0
+                } else {
+                    ((secondHalfAvg - firstHalfAvg) / firstHalfAvg * 100).roundToInt()
+                }
+            }
 
             // Update UI
             updateUI(
@@ -334,7 +343,11 @@ class StatisticsActivity : AppCompatActivity() {
             }
 
             // Bar view
-            val barHeight = (calories / chartMax * 150).coerceAtLeast(10f).toInt()
+            val barHeight = if (chartMax > 0) {
+                (calories / chartMax * 150).coerceAtLeast(10f).toInt()
+            } else {
+                10
+            }
             val bar = View(this).apply {
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
