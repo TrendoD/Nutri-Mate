@@ -1,1 +1,0 @@
-Analyze my codebase and always understand it first. Dont Changes Anything until you already fully understand the project.
