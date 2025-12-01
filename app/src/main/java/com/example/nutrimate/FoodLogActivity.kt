@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nutrimate.data.AppDatabase
 import com.example.nutrimate.data.FoodLog
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -42,6 +43,8 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
     private lateinit var btnNextDay: ImageButton
     private lateinit var btnCopyPreviousDay: Button
     
+    private lateinit var bottomNavigation: BottomNavigationView
+
     // Daily Summary TextViews
     private lateinit var tvTotalCalories: TextView
     private lateinit var tvTotalCarbs: TextView
@@ -71,6 +74,7 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
 
         initViews()
         setupListeners()
+        setupBottomNavigation()
     }
 
     override fun onResume() {
@@ -83,6 +87,7 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
         btnPrevDay = findViewById(R.id.btnPrevDay)
         btnNextDay = findViewById(R.id.btnNextDay)
         btnCopyPreviousDay = findViewById(R.id.btnCopyPreviousDay)
+        bottomNavigation = findViewById(R.id.bottomNavigation)
         
         // Daily Summary
         tvTotalCalories = findViewById(R.id.tvTotalCalories)
@@ -179,6 +184,48 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
         // Copy Previous Day
         btnCopyPreviousDay.setOnClickListener {
             copyFromPreviousDay()
+        }
+    }
+    
+    private fun setupBottomNavigation() {
+        bottomNavigation.selectedItemId = R.id.nav_food_log
+        
+        bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("USERNAME", username)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.nav_food_log -> {
+                    true
+                }
+                R.id.nav_stats -> {
+                    val intent = Intent(this, StatisticsActivity::class.java)
+                    intent.putExtra("USERNAME", username)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.nav_profile -> {
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    intent.putExtra("USERNAME", username)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.nav_settings -> {
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    intent.putExtra("USERNAME", username)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                else -> false
+            }
         }
     }
     
