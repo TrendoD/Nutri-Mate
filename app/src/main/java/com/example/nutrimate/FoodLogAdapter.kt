@@ -48,7 +48,7 @@ class FoodLogAdapter(
         val item = items[position]
         holder.tvFoodName.text = item.name
         holder.tvServing.text = "${item.servingQty} ${item.unit}"
-        holder.tvCalories.text = "${item.totalCalories.toInt()} kcal"
+        holder.tvCalories.text = "${item.totalCalories.toInt()} kkal"
         
         holder.btnEdit.setOnClickListener {
             listener?.onEditClick(item)

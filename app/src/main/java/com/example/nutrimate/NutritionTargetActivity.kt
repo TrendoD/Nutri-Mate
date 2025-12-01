@@ -253,20 +253,20 @@ class NutritionTargetActivity : AppCompatActivity() {
     private fun updateRecommendationsText(user: User) {
         // Update calorie recommendation
         if (user.dailyCalorieTarget > 0) {
-            tvCalorieRecommendation.text = "Based on your TDEE: ${user.dailyCalorieTarget} kcal"
+            tvCalorieRecommendation.text = "Berdasarkan TDEE Anda: ${user.dailyCalorieTarget} kkal"
         } else {
-            tvCalorieRecommendation.text = "Complete your profile to get personalized recommendation"
+            tvCalorieRecommendation.text = "Lengkapi profil Anda untuk mendapatkan rekomendasi yang dipersonalisasi"
         }
 
         // Update sodium recommendation based on medical conditions
         val conditions = user.medicalConditions.split(",").map { it.trim() }
         if (conditions.contains("Hypertension")) {
-            tvSodiumRecommendation.text = "⚠️ Hypertension detected: Limit to <1500mg daily"
+            tvSodiumRecommendation.text = "⚠️ Hipertensi terdeteksi: Batasi hingga <1500mg setiap hari"
         }
 
         // Update sugar recommendation for diabetes
         if (conditions.contains("Diabetes")) {
-            tvSugarRecommendation.text = "⚠️ Diabetes detected: Strictly limit sugar intake"
+            tvSugarRecommendation.text = "⚠️ Diabetes terdeteksi: Batasi asupan gula secara ketat"
         }
     }
 
@@ -381,24 +381,24 @@ class NutritionTargetActivity : AppCompatActivity() {
     private fun updateWaterGlasses() {
         val waterMl = etWaterTarget.text.toString().toIntOrNull() ?: 0
         val glasses = (waterMl / 250f).toInt() // 250ml per glass
-        tvWaterGlasses.text = "($glasses glasses)"
+        tvWaterGlasses.text = "($glasses gelas)"
     }
 
     private fun showResetConfirmationDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Reset to Defaults")
-            .setMessage("This will reset all nutrition targets to recommended default values based on your profile. Continue?")
-            .setPositiveButton("Reset") { _, _ ->
+            .setTitle("Atur Ulang ke Default")
+            .setMessage("Ini akan mengatur ulang semua target nutrisi ke nilai default yang disarankan berdasarkan profil Anda. Lanjutkan?")
+            .setPositiveButton("Atur Ulang") { _, _ ->
                 resetToDefaults()
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Batal", null)
             .show()
     }
 
     private fun resetToDefaults() {
         switchAutoCalculate.isChecked = true
         calculateAutoTargets()
-        Toast.makeText(this, "Targets reset to defaults", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Target diatur ulang ke default", Toast.LENGTH_SHORT).show()
     }
 
     private fun saveTargets() {
@@ -413,12 +413,12 @@ class NutritionTargetActivity : AppCompatActivity() {
         val waterTarget = etWaterTarget.text.toString().toIntOrNull()
 
         if (calorieTarget == null || calorieTarget < 1000) {
-            Toast.makeText(this, "Please enter a valid calorie target (minimum 1000)", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Harap masukkan target kalori yang valid (minimal 1000)", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (carbsTarget == null || proteinTarget == null || fatTarget == null) {
-            Toast.makeText(this, "Please enter valid macronutrient targets", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Harap masukkan target makronutrisi yang valid", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -431,16 +431,16 @@ class NutritionTargetActivity : AppCompatActivity() {
         // Allow some variance (80-120% of target)
         if (totalMacroCalories < calorieTarget * 0.8 || totalMacroCalories > calorieTarget * 1.2) {
             AlertDialog.Builder(this)
-                .setTitle("Macro Warning")
-                .setMessage("Your macronutrient targets (${totalMacroCalories.toInt()} kcal) don't match your calorie target ($calorieTarget kcal). Would you like to save anyway?")
-                .setPositiveButton("Save Anyway") { _, _ ->
+                .setTitle("Peringatan Makro")
+                .setMessage("Target makronutrisi Anda (${totalMacroCalories.toInt()} kkal) tidak sesuai dengan target kalori Anda ($calorieTarget kkal). Apakah Anda ingin tetap menyimpan?")
+                .setPositiveButton("Simpan Saja") { _, _ ->
                     performSave(calorieTarget, carbsTarget, proteinTarget, fatTarget, 
                                sugarLimit ?: DEFAULT_SUGAR_LIMIT, 
                                sodiumLimit ?: DEFAULT_SODIUM_LIMIT,
                                fiberTarget ?: DEFAULT_FIBER_TARGET,
                                waterTarget ?: DEFAULT_WATER_TARGET)
                 }
-                .setNegativeButton("Adjust", null)
+                .setNegativeButton("Sesuaikan", null)
                 .show()
             return
         }
@@ -470,7 +470,7 @@ class NutritionTargetActivity : AppCompatActivity() {
 
             runOnUiThread {
                 Toast.makeText(this@NutritionTargetActivity, 
-                    "Nutrition targets saved successfully!", Toast.LENGTH_SHORT).show()
+                    "Target nutrisi berhasil disimpan!", Toast.LENGTH_SHORT).show()
                 
                 // Navigate back to main activity
                 val intent = Intent(this@NutritionTargetActivity, MainActivity::class.java)

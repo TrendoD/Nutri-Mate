@@ -49,8 +49,9 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
     private lateinit var tvTotalFat: TextView
     
     private var username: String = ""
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    private val displayDateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
+    private val localeID = Locale("id", "ID")
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", localeID)
+    private val displayDateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", localeID)
     
     private var currentCalendar: Calendar = Calendar.getInstance()
     private val todayCalendar: Calendar = Calendar.getInstance()
@@ -63,7 +64,7 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
         username = intent.getStringExtra("USERNAME") ?: ""
         
         if (username.isEmpty()) {
-            Toast.makeText(this, "User error", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Kesalahan pengguna", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -125,7 +126,7 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
     private fun updateDateDisplay() {
         val isToday = isSameDay(currentCalendar, todayCalendar)
         val displayText = if (isToday) {
-            "Today, ${displayDateFormat.format(currentCalendar.time)}"
+            "Hari Ini, ${displayDateFormat.format(currentCalendar.time)}"
         } else {
             displayDateFormat.format(currentCalendar.time)
         }
@@ -218,7 +219,7 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
             
             if (previousLogs.isEmpty()) {
                 runOnUiThread {
-                    Toast.makeText(this@FoodLogActivity, "No food logs from previous day", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@FoodLogActivity, "Tidak ada catatan makanan dari hari sebelumnya", Toast.LENGTH_SHORT).show()
                 }
                 return@launch
             }
@@ -236,7 +237,7 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
             }
             
             runOnUiThread {
-                Toast.makeText(this@FoodLogActivity, "Copied ${previousLogs.size} items from previous day", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@FoodLogActivity, "Disalin ${previousLogs.size} item dari hari sebelumnya", Toast.LENGTH_SHORT).show()
                 loadFoodLogs()
             }
         }
@@ -334,7 +335,7 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
         fun updatePreview() {
             val qty = etQuantity.text.toString().toFloatOrNull() ?: 0f
             val calories = (item.caloriesPerServing * qty).toInt()
-            tvNutritionPreview.text = "Calories: $calories kcal"
+            tvNutritionPreview.text = "Kalori: $calories kkal"
         }
         
         updatePreview()
@@ -358,14 +359,14 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
         btnSave.setOnClickListener {
             val newQty = etQuantity.text.toString().toFloatOrNull()
             if (newQty == null || newQty <= 0) {
-                Toast.makeText(this, "Please enter a valid quantity", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Harap masukkan jumlah yang valid", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             
             lifecycleScope.launch {
                 database.foodDao().updateFoodLogQuantity(item.id, newQty)
                 runOnUiThread {
-                    Toast.makeText(this@FoodLogActivity, "Updated successfully", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@FoodLogActivity, "Berhasil diperbarui", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
                     loadFoodLogs()
                 }
@@ -377,18 +378,18 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
     
     private fun showDeleteConfirmation(item: FoodLogItem) {
         AlertDialog.Builder(this)
-            .setTitle("Delete Food")
-            .setMessage("Are you sure you want to delete '${item.name}' from your log?")
-            .setPositiveButton("Delete") { _, _ ->
+            .setTitle("Hapus Makanan")
+            .setMessage("Apakah Anda yakin ingin menghapus '${item.name}' dari log Anda?")
+            .setPositiveButton("Hapus") { _, _ ->
                 lifecycleScope.launch {
                     database.foodDao().deleteFoodLog(item.id)
                     runOnUiThread {
-                        Toast.makeText(this@FoodLogActivity, "Deleted successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@FoodLogActivity, "Berhasil dihapus", Toast.LENGTH_SHORT).show()
                         loadFoodLogs()
                     }
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Batal", null)
             .show()
     }
 }

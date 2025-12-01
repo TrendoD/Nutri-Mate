@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create Custom Food"
+            android:text="Buat Makanan Kustom"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginBottom="16dp"/>
@@ -21,7 +21,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Food Name *"
+            android:text="Nama Makanan *"
             android:textSize="12sp"
             android:layout_marginBottom="4dp"/>
 
@@ -29,14 +29,14 @@
             android:id="@+id/etFoodName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="e.g. My Special Salad"
+            android:hint="mis. Salad Spesial Saya"
             android:inputType="text"
             android:layout_marginBottom="12dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Serving Size *"
+            android:text="Ukuran Porsi *"
             android:textSize="12sp"
             android:layout_marginBottom="4dp"/>
 
@@ -59,7 +59,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="piring/cup/gram"
+                android:hint="piring/cangkir/gram"
                 android:inputType="text"
                 android:layout_marginStart="8dp"/>
         </LinearLayout>
@@ -67,7 +67,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Calories (kcal) *"
+            android:text="Kalori (kkal) *"
             android:textSize="12sp"
             android:layout_marginBottom="4dp"/>
 
@@ -82,7 +82,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Carbohydrates (g) *"
+            android:text="Karbohidrat (g) *"
             android:textSize="12sp"
             android:layout_marginBottom="4dp"/>
 
@@ -112,7 +112,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fat (g) *"
+            android:text="Lemak (g) *"
             android:textSize="12sp"
             android:layout_marginBottom="4dp"/>
 
@@ -127,7 +127,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Category"
+            android:text="Kategori"
             android:textSize="12sp"
             android:layout_marginBottom="4dp"/>
 
@@ -147,7 +147,7 @@
                 android:id="@+id/btnCancelCustom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cancel"
+                android:text="Batal"
                 style="?android:attr/buttonBarButtonStyle"
                 android:textColor="#757575"/>
 
@@ -155,7 +155,7 @@
                 android:id="@+id/btnSaveCustom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save Food"
+                android:text="Simpan Makanan"
                 android:layout_marginStart="8dp"/>
         </LinearLayout>
 

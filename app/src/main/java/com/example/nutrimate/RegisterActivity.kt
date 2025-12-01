@@ -68,17 +68,17 @@ class RegisterActivity : AppCompatActivity() {
             // Basic validation
             if (fullName.isEmpty() || email.isEmpty() || username.isEmpty() || 
                 password.isEmpty() || confirmPassword.isEmpty()) {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Harap isi semua kolom", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (password != confirmPassword) {
-                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Kata sandi tidak cocok", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (password.length < 6) {
-                Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Kata sandi harus minimal 6 karakter", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -88,14 +88,14 @@ class RegisterActivity : AppCompatActivity() {
                     // Check if username already exists
                     val existingUser = database.userDao().getUserByUsername(username)
                     if (existingUser != null) {
-                        Toast.makeText(this@RegisterActivity, "Username already exists", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@RegisterActivity, "Nama pengguna sudah ada", Toast.LENGTH_SHORT).show()
                         return@launch
                     }
 
                     // Check if email already exists
                     val existingEmail = database.userDao().getUserByEmail(email)
                     if (existingEmail != null) {
-                        Toast.makeText(this@RegisterActivity, "Email already registered", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@RegisterActivity, "Email sudah terdaftar", Toast.LENGTH_SHORT).show()
                         return@launch
                     }
 
@@ -112,14 +112,14 @@ class RegisterActivity : AppCompatActivity() {
                     // Verify the user was actually saved
                     val verifyUser = database.userDao().getUserByUsername(username)
                     if (verifyUser != null) {
-                        Toast.makeText(this@RegisterActivity, "Registration successful! Please login with:\nUsername: $username", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@RegisterActivity, "Pendaftaran berhasil! Silakan masuk dengan:\nUsername: $username", Toast.LENGTH_LONG).show()
                     } else {
-                        Toast.makeText(this@RegisterActivity, "Error: User not saved properly", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@RegisterActivity, "Kesalahan: Pengguna tidak tersimpan dengan benar", Toast.LENGTH_SHORT).show()
                     }
                     finish()
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Toast.makeText(this@RegisterActivity, "Registration error: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@RegisterActivity, "Gagal mendaftar: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -157,21 +157,21 @@ class RegisterActivity : AppCompatActivity() {
                 strengthBar1.setBackgroundColor(ContextCompat.getColor(this, R.color.strength_weak))
                 strengthBar2.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_light))
                 strengthBar3.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_light))
-                tvPasswordStrength.text = "Weak password"
+                tvPasswordStrength.text = "Kata sandi lemah"
                 tvPasswordStrength.setTextColor(ContextCompat.getColor(this, R.color.strength_weak))
             }
             PasswordStrength.MEDIUM -> {
                 strengthBar1.setBackgroundColor(ContextCompat.getColor(this, R.color.strength_medium))
                 strengthBar2.setBackgroundColor(ContextCompat.getColor(this, R.color.strength_medium))
                 strengthBar3.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_light))
-                tvPasswordStrength.text = "Medium password"
+                tvPasswordStrength.text = "Kata sandi sedang"
                 tvPasswordStrength.setTextColor(ContextCompat.getColor(this, R.color.strength_medium))
             }
             PasswordStrength.STRONG -> {
                 strengthBar1.setBackgroundColor(ContextCompat.getColor(this, R.color.strength_strong))
                 strengthBar2.setBackgroundColor(ContextCompat.getColor(this, R.color.strength_strong))
                 strengthBar3.setBackgroundColor(ContextCompat.getColor(this, R.color.strength_strong))
-                tvPasswordStrength.text = "Strong password"
+                tvPasswordStrength.text = "Kata sandi kuat"
                 tvPasswordStrength.setTextColor(ContextCompat.getColor(this, R.color.strength_strong))
             }
         }

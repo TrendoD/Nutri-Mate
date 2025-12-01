@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Nutri-Mate</string>
-    <string name="app_tagline">Healthy Food, Healthy Life</string>
-    <string name="app_logo_description">NutriMate Logo</string>
-    <string name="tap_to_continue">Tap anywhere to continue</string>
+    <string name="app_tagline">Makanan Sehat, Hidup Sehat</string>
+    <string name="app_logo_description">Logo NutriMate</string>
+    <string name="tap_to_continue">Ketuk di mana saja untuk melanjutkan</string>
 </resources>

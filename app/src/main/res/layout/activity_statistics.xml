@@ -21,7 +21,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Statistics &amp; History"
+                android:text="Statistik &amp; Riwayat"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"/>
@@ -29,7 +29,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Track your progress over time"
+                android:text="Lacak kemajuan Anda dari waktu ke waktu"
                 android:textSize="14sp"
                 android:textColor="#757575"
                 android:layout_marginBottom="16dp"/>
@@ -52,7 +52,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Time Range:"
+                        android:text="Rentang Waktu:"
                         android:textStyle="bold"
                         android:layout_marginEnd="12dp"/>
 
@@ -69,7 +69,8 @@
                 android:id="@+id/tvNoData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="No data available for selected period.\nStart logging your meals to see statistics!"
+                android:text="Tidak ada data untuk periode yang dipilih.
+Mulai catat makanan Anda untuk melihat statistik!"
                 android:textSize="16sp"
                 android:textColor="#757575"
                 android:gravity="center"
@@ -94,7 +95,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📊 Daily Calorie Chart"
+                        android:text="📊 Grafik Kalori Harian"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="12dp"/>
@@ -111,7 +112,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🟢 On Target  🟠 Over  ⚫ Under"
+                        android:text="🟢 Sesuai Target  🟠 Berlebih  ⚫ Kurang"
                         android:textSize="12sp"
                         android:textColor="#757575"
                         android:layout_marginTop="8dp"
@@ -137,7 +138,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📈 Average Daily Intake"
+                        android:text="📈 Rata-rata Asupan Harian"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="12dp"/>
@@ -158,7 +159,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Days Logged"
+                                android:text="Hari Tercatat"
                                 android:textSize="12sp"
                                 android:textColor="#757575"/>
 
@@ -182,7 +183,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Avg Calories"
+                                android:text="Rata-rata Kalori"
                                 android:textSize="12sp"
                                 android:textColor="#757575"/>
 
@@ -190,7 +191,7 @@
                                 android:id="@+id/tvAvgCalories"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0 kcal"
+                                android:text="0 kkal"
                                 android:textSize="20sp"
                                 android:textStyle="bold"
                                 android:textColor="#4CAF50"/>
@@ -218,7 +219,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Carbs"
+                                android:text="Karbo"
                                 android:textSize="12sp"
                                 android:textColor="#757575"/>
 
@@ -264,7 +265,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Fat"
+                                android:text="Lemak"
                                 android:textSize="12sp"
                                 android:textColor="#757575"/>
 
@@ -298,7 +299,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🎯 Goal Achievement"
+                        android:text="🎯 Pencapaian Tujuan"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="12dp"/>
@@ -306,7 +307,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Days within calorie goal (90-110%)"
+                        android:text="Hari dalam target kalori (90-110%)"
                         android:textSize="12sp"
                         android:textColor="#757575"
                         android:layout_marginBottom="8dp"/>
@@ -358,7 +359,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🏆 Best &amp; Lowest Days"
+                        android:text="🏆 Hari Terbaik &amp; Terendah"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="12dp"/>
@@ -381,7 +382,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Highest"
+                                android:text="Tertinggi"
                                 android:textSize="12sp"
                                 android:textColor="#2E7D32"
                                 android:layout_marginBottom="4dp"/>
@@ -399,7 +400,7 @@
                                 android:id="@+id/tvBestDayCalories"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0 kcal"
+                                android:text="0 kkal"
                                 android:textSize="12sp"
                                 android:textColor="#2E7D32"/>
                         </LinearLayout>
@@ -417,7 +418,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Lowest"
+                                android:text="Terendah"
                                 android:textSize="12sp"
                                 android:textColor="#E65100"
                                 android:layout_marginBottom="4dp"/>
@@ -435,7 +436,7 @@
                                 android:id="@+id/tvWorstDayCalories"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0 kcal"
+                                android:text="0 kkal"
                                 android:textSize="12sp"
                                 android:textColor="#E65100"/>
                         </LinearLayout>
@@ -461,7 +462,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📉 Calorie Trend"
+                        android:text="📉 Tren Kalori"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp"/>
@@ -469,7 +470,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Comparing first half vs second half of period"
+                        android:text="Membandingkan paruh pertama vs paruh kedua periode"
                         android:textSize="12sp"
                         android:textColor="#757575"
                         android:layout_marginBottom="8dp"/>
@@ -478,7 +479,7 @@
                         android:id="@+id/tvCalorieTrend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="→ Stable"
+                        android:text="→ Stabil"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:gravity="center"/>

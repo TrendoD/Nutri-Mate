@@ -21,7 +21,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nutrition Targets"
+                android:text="Target Nutrisi"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="#2E7D32"
@@ -31,7 +31,7 @@
                 android:id="@+id/tvSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Set your daily nutrition goals"
+                android:text="Tetapkan tujuan nutrisi harian Anda"
                 android:textSize="14sp"
                 android:textColor="#757575"
                 android:layout_marginBottom="16dp"/>
@@ -61,7 +61,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="🧮 Auto Calculate"
+                            android:text="🧮 Hitung Otomatis"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="#1565C0"/>
@@ -69,7 +69,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Based on your profile and goals"
+                            android:text="Berdasarkan profil dan tujuan Anda"
                             android:textSize="12sp"
                             android:textColor="#757575"/>
                     </LinearLayout>
@@ -99,7 +99,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🔥 Daily Calorie Target"
+                        android:text="🔥 Target Kalori Harian"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FF5722"
@@ -124,7 +124,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="kcal"
+                            android:text="kkal"
                             android:textSize="14sp"
                             android:textColor="#757575"
                             android:layout_marginStart="8dp"/>
@@ -134,7 +134,7 @@
                         android:id="@+id/tvCalorieRecommendation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Recommended: Based on your TDEE"
+                        android:text="Disarankan: Berdasarkan TDEE Anda"
                         android:textSize="12sp"
                         android:textColor="#4CAF50"
                         android:layout_marginTop="8dp"/>
@@ -159,7 +159,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🥗 Macronutrients"
+                        android:text="🥗 Makronutrisi"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#2E7D32"
@@ -169,7 +169,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Carbohydrates"
+                        android:text="Karbohidrat"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="4dp"/>
@@ -194,7 +194,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="grams"
+                            android:text="gram"
                             android:textSize="14sp"
                             android:textColor="#757575"
                             android:layout_marginStart="8dp"/>
@@ -238,7 +238,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="grams"
+                            android:text="gram"
                             android:textSize="14sp"
                             android:textColor="#757575"
                             android:layout_marginStart="8dp"/>
@@ -257,7 +257,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Fat"
+                        android:text="Lemak"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="4dp"/>
@@ -281,7 +281,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="grams"
+                            android:text="gram"
                             android:textSize="14sp"
                             android:textColor="#757575"
                             android:layout_marginStart="8dp"/>
@@ -346,7 +346,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text=" Carbs"
+                                android:text=" Karbo"
                                 android:textSize="10sp"/>
                         </LinearLayout>
 
@@ -380,7 +380,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text=" Fat"
+                                android:text=" Lemak"
                                 android:textSize="10sp"/>
                         </LinearLayout>
                     </LinearLayout>
@@ -405,7 +405,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="⚠️ Daily Limits"
+                        android:text="⚠️ Batas Harian"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FF5722"
@@ -414,7 +414,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Important for medical conditions like Diabetes and Hypertension"
+                        android:text="Penting untuk kondisi medis seperti Diabetes dan Hipertensi"
                         android:textSize="12sp"
                         android:textColor="#757575"
                         android:layout_marginBottom="16dp"/>
@@ -423,7 +423,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🍬 Sugar Limit"
+                        android:text="🍬 Batas Gula"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="4dp"/>
@@ -448,7 +448,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="grams"
+                            android:text="gram"
                             android:textSize="14sp"
                             android:textColor="#757575"
                             android:layout_marginStart="8dp"/>
@@ -458,7 +458,7 @@
                         android:id="@+id/tvSugarRecommendation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="💡 WHO recommends &lt;25g for added sugars"
+                        android:text="💡 WHO merekomendasikan &lt;25g untuk gula tambahan"
                         android:textSize="12sp"
                         android:textColor="#FF9800"
                         android:layout_marginBottom="16dp"
@@ -468,7 +468,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🧂 Sodium Limit"
+                        android:text="🧂 Batas Natrium"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="4dp"/>
@@ -502,7 +502,7 @@
                         android:id="@+id/tvSodiumRecommendation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="💡 Recommended: &lt;2300mg (or &lt;1500mg for hypertension)"
+                        android:text="💡 Disarankan: &lt;2300mg (atau &lt;1500mg untuk hipertensi)"
                         android:textSize="12sp"
                         android:textColor="#FF9800"
                         android:layout_marginTop="8dp"/>
@@ -527,7 +527,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🌿 Other Targets"
+                        android:text="🌿 Target Lainnya"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#4CAF50"
@@ -537,7 +537,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🌾 Fiber Target"
+                        android:text="🌾 Target Serat"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="4dp"/>
@@ -562,7 +562,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="grams"
+                            android:text="gram"
                             android:textSize="14sp"
                             android:textColor="#757575"
                             android:layout_marginStart="8dp"/>
@@ -572,7 +572,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="💧 Water Target"
+                        android:text="💧 Target Air"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="4dp"/>
@@ -605,7 +605,7 @@
                             android:id="@+id/tvWaterGlasses"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="(8 glasses)"
+                            android:text="(8 gelas)"
                             android:textSize="12sp"
                             android:textColor="#2196F3"
                             android:layout_marginStart="8dp"/>
@@ -626,7 +626,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Reset to Defaults"
+                    android:text="Atur Ulang ke Default"
                     android:backgroundTint="#E0E0E0"
                     android:textColor="#757575"
                     android:layout_marginEnd="8dp"/>
@@ -636,7 +636,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Save Targets"
+                    android:text="Simpan Target"
                     android:backgroundTint="#4CAF50"
                     android:textColor="#FFFFFF"
                     android:layout_marginStart="8dp"/>

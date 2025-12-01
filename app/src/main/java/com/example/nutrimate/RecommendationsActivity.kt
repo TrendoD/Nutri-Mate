@@ -20,7 +20,8 @@ class RecommendationsActivity : AppCompatActivity() {
 
     private lateinit var database: AppDatabase
     private var currentUsername: String = ""
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    private val localeID = Locale("id", "ID")
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", localeID)
 
     // Views
     private lateinit var bottomNavigation: BottomNavigationView
@@ -222,34 +223,34 @@ class RecommendationsActivity : AppCompatActivity() {
         val adviceList = mutableListOf<String>()
 
         if (userConditions.contains("Diabetes")) {
-            adviceList.add("🩺 Diabetes: Monitor carbohydrate intake. Aim for complex carbs with low glycemic index. Limit sugar to under 25g/day. Eat regular, balanced meals to maintain stable blood sugar.")
+            adviceList.add("🩺 Diabetes: Pantau asupan karbohidrat. Targetkan karbohidrat kompleks dengan indeks glikemik rendah. Batasi gula hingga di bawah 25g/hari. Makan teratur dan seimbang untuk menjaga gula darah stabil.")
         }
 
         if (userConditions.contains("Hypertension")) {
-            adviceList.add("💓 Hypertension: Reduce sodium intake to less than 2,300mg/day. Focus on potassium-rich foods like bananas, spinach, and sweet potatoes. Follow the DASH diet principles.")
+            adviceList.add("💓 Hipertensi: Kurangi asupan natrium hingga kurang dari 2.300mg/hari. Fokus pada makanan kaya kalium seperti pisang, bayam, dan ubi jalar. Ikuti prinsip diet DASH.")
         }
 
         if (userConditions.contains("Cholesterol")) {
-            adviceList.add("🫀 High Cholesterol: Limit saturated fats to less than 13g/day. Increase fiber intake. Choose lean proteins and avoid fried foods. Include omega-3 fatty acids from fish.")
+            adviceList.add("🫀 Kolesterol Tinggi: Batasi lemak jenuh hingga kurang dari 13g/hari. Tingkatkan asupan serat. Pilih protein tanpa lemak dan hindari makanan gorengan. Sertakan asam lemak omega-3 dari ikan.")
         }
 
         if (userConditions.contains("Gastritis")) {
-            adviceList.add("🍃 Gastritis: Avoid spicy, acidic, and fried foods. Eat smaller, more frequent meals. Don't eat late at night. Avoid alcohol and caffeine. Consider probiotic-rich foods.")
+            adviceList.add("🍃 Maag: Hindari makanan pedas, asam, dan gorengan. Makan dalam porsi kecil namun sering. Jangan makan larut malam. Hindari alkohol dan kafein. Pertimbangkan makanan kaya probiotik.")
         }
 
         // Diet goal specific advice
         when (dietGoal) {
-            "Lose Weight" -> adviceList.add("⚖️ Weight Loss: Create a calorie deficit of 500-750 kcal/day for healthy weight loss. Focus on protein to maintain muscle mass. Stay hydrated and avoid liquid calories.")
-            "Gain Weight" -> adviceList.add("💪 Weight Gain: Aim for a calorie surplus of 300-500 kcal/day. Include protein-rich foods and healthy fats. Eat more frequently and include calorie-dense nutritious foods.")
+            "Lose Weight" -> adviceList.add("⚖️ Penurunan Berat Badan: Buat defisit kalori 500-750 kkal/hari untuk penurunan berat badan yang sehat. Fokus pada protein untuk mempertahankan massa otot. Tetap terhidrasi dan hindari kalori cair.")
+            "Gain Weight" -> adviceList.add("💪 Peningkatan Berat Badan: Targetkan surplus kalori 300-500 kkal/hari. Sertakan makanan kaya protein dan lemak sehat. Makan lebih sering dan sertakan makanan bergizi padat kalori.")
         }
 
         // Allergies
         if (userAllergies.isNotEmpty()) {
-            adviceList.add("⚠️ Allergies: Remember to avoid foods containing: ${userAllergies.joinToString(", ")}")
+            adviceList.add("⚠️ Alergi: Ingatlah untuk menghindari makanan yang mengandung: ${userAllergies.joinToString(", ")}")
         }
 
         if (adviceList.isEmpty()) {
-            tvConditionAdvice.text = "You're in good health! Keep maintaining a balanced diet with plenty of vegetables, lean proteins, whole grains, and healthy fats."
+            tvConditionAdvice.text = "Anda dalam keadaan sehat! Tetap pertahankan pola makan seimbang dengan banyak sayuran, protein tanpa lemak, biji-bijian utuh, dan lemak sehat."
         } else {
             tvConditionAdvice.text = adviceList.joinToString("\n\n")
         }
@@ -257,35 +258,35 @@ class RecommendationsActivity : AppCompatActivity() {
 
     private fun getNutritionistTips(): List<String> {
         val generalTips = listOf(
-            "💧 Hydration is key! Drink at least 8 glasses (2L) of water daily. Start your day with a glass of water before breakfast.",
-            "🥗 Fill half your plate with colorful vegetables at each meal. Different colors mean different nutrients!",
-            "🍳 Don't skip breakfast! A protein-rich breakfast helps control hunger and maintains energy levels throughout the day.",
-            "🕐 Practice mindful eating. Eat slowly, chew thoroughly, and avoid distractions like TV or phones during meals.",
-            "🌾 Choose whole grains over refined grains. They provide more fiber, vitamins, and keep you fuller longer.",
-            "🥜 Include healthy fats in your diet from sources like avocados, nuts, olive oil, and fatty fish.",
-            "🍎 Eat fruits instead of drinking fruit juice. Whole fruits contain fiber that slows down sugar absorption.",
-            "🧂 Read nutrition labels! Pay attention to serving sizes, sodium content, and added sugars.",
-            "🍖 Choose lean proteins like chicken breast, fish, legumes, and tofu. Limit red meat to 2-3 times per week.",
-            "🥬 Eat the rainbow! Different colored vegetables provide different antioxidants and phytonutrients.",
-            "⏰ Try to eat dinner at least 2-3 hours before bedtime to improve digestion and sleep quality.",
-            "🍫 It's okay to have treats occasionally! Aim for the 80/20 rule - eat nutritious foods 80% of the time."
+            "💧 Hidrasi adalah kunci! Minum setidaknya 8 gelas (2L) air setiap hari. Awali hari Anda dengan segelas air sebelum sarapan.",
+            "🥗 Isi setengah piring Anda dengan sayuran berwarna setiap kali makan. Warna berbeda berarti nutrisi berbeda!",
+            "🍳 Jangan lewatkan sarapan! Sarapan kaya protein membantu mengendalikan rasa lapar dan menjaga tingkat energi sepanjang hari.",
+            "🕐 Praktikkan makan dengan sadar. Makan perlahan, kunyah dengan saksama, dan hindari gangguan seperti TV atau ponsel saat makan.",
+            "🌾 Pilih biji-bijian utuh daripada biji-bijian olahan. Mereka menyediakan lebih banyak serat, vitamin, dan membuat Anda kenyang lebih lama.",
+            "🥜 Sertakan lemak sehat dalam diet Anda dari sumber seperti alpukat, kacang-kacangan, minyak zaitun, dan ikan berlemak.",
+            "🍎 Makan buah-buahan alih-alih minum jus buah. Buah utuh mengandung serat yang memperlambat penyerapan gula.",
+            "🧂 Baca label nutrisi! Perhatikan ukuran porsi, kandungan natrium, dan gula tambahan.",
+            "🍖 Pilih protein tanpa lemak seperti dada ayam, ikan, kacang-kacangan, dan tahu. Batasi daging merah hingga 2-3 kali per minggu.",
+            "🥬 Makanlah berbagai warna! Sayuran berwarna berbeda menyediakan antioksidan dan fitonutrien yang berbeda.",
+            "⏰ Cobalah makan malam setidaknya 2-3 jam sebelum tidur untuk meningkatkan pencernaan dan kualitas tidur.",
+            "🍫 Boleh sesekali makan camilan! Targetkan aturan 80/20 - makan makanan bergizi 80% dari waktu."
         )
 
         val conditionSpecificTips = mutableListOf<String>()
 
         if (userConditions.contains("Diabetes")) {
             conditionSpecificTips.addAll(listOf(
-                "🩺 Pair carbohydrates with protein or fat to slow glucose absorption and prevent blood sugar spikes.",
-                "🩺 Choose high-fiber foods like oatmeal, beans, and vegetables to help manage blood sugar levels.",
-                "🩺 Monitor portion sizes of starchy foods. A portion of rice or pasta should be about the size of your fist."
+                "🩺 Pasangkan karbohidrat dengan protein atau lemak untuk memperlambat penyerapan glukosa dan mencegah lonjakan gula darah.",
+                "🩺 Pilih makanan tinggi serat seperti oatmeal, kacang-kacangan, dan sayuran untuk membantu mengelola kadar gula darah.",
+                "🩺 Pantau ukuran porsi makanan bertepung. Seporsi nasi atau pasta harus seukuran kepalan tangan Anda."
             ))
         }
 
         if (userConditions.contains("Hypertension")) {
             conditionSpecificTips.addAll(listOf(
-                "💓 Use herbs and spices instead of salt to flavor your food. Try garlic, lemon, or fresh herbs.",
-                "💓 Include potassium-rich foods like bananas, oranges, and leafy greens to help lower blood pressure.",
-                "💓 Limit processed and packaged foods which are typically high in sodium."
+                "💓 Gunakan rempah-rempah alih-alih garam untuk membumbui makanan Anda. Coba bawang putih, lemon, atau rempah segar.",
+                "💓 Sertakan makanan kaya kalium seperti pisang, jeruk, dan sayuran hijau untuk membantu menurunkan tekanan darah.",
+                "💓 Batasi makanan olahan dan kemasan yang biasanya tinggi natrium."
             ))
         }
 
@@ -303,65 +304,65 @@ class RecommendationsActivity : AppCompatActivity() {
         // Based on conditions
         if (userConditions.contains("Diabetes")) {
             avoidList.addAll(listOf(
-                "• Sugary drinks (soda, sweetened tea, energy drinks)",
-                "• White bread, white rice, refined pasta",
-                "• Candy, pastries, and desserts with added sugar",
-                "• Fruit juices and dried fruits (high sugar)"
+                "• Minuman manis (soda, teh manis, minuman energi)",
+                "• Roti putih, nasi putih, pasta olahan",
+                "• Permen, kue kering, dan makanan penutup dengan gula tambahan",
+                "• Jus buah dan buah kering (tinggi gula)"
             ))
         }
 
         if (userConditions.contains("Hypertension")) {
             avoidList.addAll(listOf(
-                "• High-sodium foods (pickles, soy sauce, processed meats)",
-                "• Canned soups and processed foods",
-                "• Fast food and restaurant meals",
-                "• Salty snacks (chips, pretzels, salted nuts)"
+                "• Makanan tinggi natrium (acar, kecap asin, daging olahan)",
+                "• Sup kalengan dan makanan olahan",
+                "• Makanan cepat saji dan restoran",
+                "• Camilan asin (keripik, pretzel, kacang asin)"
             ))
         }
 
         if (userConditions.contains("Cholesterol")) {
             avoidList.addAll(listOf(
-                "• Fried foods and trans fats",
-                "• Full-fat dairy products",
-                "• Fatty cuts of red meat",
-                "• Baked goods with butter/shortening"
+                "• Makanan gorengan dan lemak trans",
+                "• Produk susu penuh lemak",
+                "• Potongan daging merah berlemak",
+                "• Kue kering dengan mentega/shortening"
             ))
         }
 
         if (userConditions.contains("Gastritis")) {
             avoidList.addAll(listOf(
-                "• Spicy foods (chili, hot peppers, curry)",
-                "• Citrus fruits and acidic foods",
-                "• Coffee and caffeinated beverages",
-                "• Alcohol and carbonated drinks",
-                "• Fried and fatty foods"
+                "• Makanan pedas (cabai, lada, kari)",
+                "• Buah jeruk dan makanan asam",
+                "• Kopi dan minuman berkafein",
+                "• Alkohol dan minuman berkarbonasi",
+                "• Makanan gorengan dan berlemak"
             ))
         }
 
         // Based on allergies
         userAllergies.forEach { allergy ->
             when (allergy.lowercase()) {
-                "gluten" -> avoidList.add("• Wheat, barley, rye, and products containing gluten")
-                "dairy", "lactose" -> avoidList.add("• Milk, cheese, yogurt, and dairy products")
-                "nuts" -> avoidList.add("• All tree nuts and nut-containing products")
-                "peanuts" -> avoidList.add("• Peanuts and peanut-containing products")
-                "eggs" -> avoidList.add("• Eggs and egg-containing products")
-                "shellfish" -> avoidList.add("• Shrimp, crab, lobster, and other shellfish")
-                "soy" -> avoidList.add("• Soy products including tofu, soy sauce, edamame")
+                "gluten" -> avoidList.add("• Gandum, barley, gandum hitam, dan produk mengandung gluten")
+                "dairy", "lactose" -> avoidList.add("• Susu, keju, yogurt, dan produk susu")
+                "nuts" -> avoidList.add("• Semua kacang pohon dan produk mengandung kacang")
+                "peanuts" -> avoidList.add("• Kacang tanah dan produk mengandung kacang tanah")
+                "eggs" -> avoidList.add("• Telur dan produk mengandung telur")
+                "shellfish" -> avoidList.add("• Udang, kepiting, lobster, dan kerang lainnya")
+                "soy" -> avoidList.add("• Produk kedelai termasuk tahu, kecap asin, edamame")
             }
         }
 
         // Diet goal specific
         when (dietGoal) {
             "Lose Weight" -> avoidList.addAll(listOf(
-                "• High-calorie beverages and alcohol",
-                "• Fried foods and excessive oil",
-                "• Large portions of starchy foods"
+                "• Minuman berkalori tinggi dan alkohol",
+                "• Makanan gorengan dan minyak berlebih",
+                "• Porsi besar makanan bertepung"
             ))
         }
 
         if (avoidList.isEmpty()) {
-            tvFoodsToAvoid.text = "No specific foods to avoid based on your profile.\n\nGeneral advice:\n• Limit processed foods\n• Reduce added sugar intake\n• Avoid excessive alcohol"
+            tvFoodsToAvoid.text = "Tidak ada makanan khusus yang harus dihindari berdasarkan profil Anda.\n\nSaran umum:\n• Batasi makanan olahan\n• Kurangi asupan gula tambahan\n• Hindari alkohol berlebihan"
         } else {
             tvFoodsToAvoid.text = avoidList.distinct().joinToString("\n")
         }
@@ -372,55 +373,55 @@ class RecommendationsActivity : AppCompatActivity() {
 
         // General healthy foods
         consumeList.addAll(listOf(
-            "• Leafy greens (spinach, kale, lettuce)",
-            "• Colorful vegetables (broccoli, carrots, bell peppers)",
-            "• Fresh fruits (berries, apples, bananas)"
+            "• Sayuran hijau (bayam, kale, selada)",
+            "• Sayuran berwarna (brokoli, wortel, paprika)",
+            "• Buah segar (beri, apel, pisang)"
         ))
 
         // Based on conditions
         if (userConditions.contains("Diabetes")) {
             consumeList.addAll(listOf(
-                "• Low glycemic foods (oatmeal, sweet potatoes)",
-                "• High-fiber vegetables (broccoli, green beans)",
-                "• Lean proteins (chicken, fish, tofu)"
+                "• Makanan glikemik rendah (oatmeal, ubi jalar)",
+                "• Sayuran tinggi serat (brokoli, buncis)",
+                "• Protein tanpa lemak (ayam, ikan, tahu)"
             ))
         }
 
         if (userConditions.contains("Hypertension")) {
             consumeList.addAll(listOf(
-                "• Potassium-rich foods (bananas, spinach, avocado)",
-                "• Garlic and herbs for flavoring",
-                "• Low-fat dairy products"
+                "• Makanan kaya kalium (pisang, bayam, alpukat)",
+                "• Bawang putih dan rempah untuk perasa",
+                "• Produk susu rendah lemak"
             ))
         }
 
         if (userConditions.contains("Cholesterol")) {
             consumeList.addAll(listOf(
-                "• Oily fish (salmon, mackerel) - omega 3",
-                "• Oats and barley (beta-glucan fiber)",
-                "• Nuts (almonds, walnuts) in moderation"
+                "• Ikan berminyak (salmon, makarel) - omega 3",
+                "• Oat dan barley (serat beta-glukan)",
+                "• Kacang-kacangan (almond, kenari) dalam jumlah sedang"
             ))
         }
 
         if (userConditions.contains("Gastritis")) {
             consumeList.addAll(listOf(
-                "• Probiotic foods (yogurt, kefir)",
-                "• Lean proteins (chicken, fish)",
-                "• Cooked vegetables (non-acidic)"
+                "• Makanan probiotik (yogurt, kefir)",
+                "• Protein tanpa lemak (ayam, ikan)",
+                "• Sayuran matang (tidak asam)"
             ))
         }
 
         // Diet goal specific
         when (dietGoal) {
             "Lose Weight" -> consumeList.addAll(listOf(
-                "• High-protein foods for satiety",
-                "• Water-rich vegetables (cucumber, celery)",
-                "• Whole grains in moderate portions"
+                "• Makanan tinggi protein untuk rasa kenyang",
+                "• Sayuran kaya air (mentimun, seledri)",
+                "• Biji-bijian utuh dalam porsi sedang"
             ))
             "Gain Weight" -> consumeList.addAll(listOf(
-                "• Calorie-dense healthy foods (nuts, avocado)",
-                "• Protein shakes and smoothies",
-                "• Whole grain pasta and rice"
+                "• Makanan sehat padat kalori (kacang-kacangan, alpukat)",
+                "• Protein shake dan smoothie",
+                "• Pasta gandum utuh dan nasi"
             ))
         }
 
@@ -436,19 +437,19 @@ class RecommendationsActivity : AppCompatActivity() {
 
         // Breakfast suggestions based on conditions and goal
         val breakfastOptions = getBreakfastSuggestions()
-        tvBreakfastSuggestion.text = "$breakfastOptions\n\n💡 Suggested: ~$breakfastCal kcal"
+        tvBreakfastSuggestion.text = "$breakfastOptions\n\n💡 Disarankan: ~$breakfastCal kkal"
 
         // Lunch suggestions
         val lunchOptions = getLunchSuggestions()
-        tvLunchSuggestion.text = "$lunchOptions\n\n💡 Suggested: ~$lunchCal kcal"
+        tvLunchSuggestion.text = "$lunchOptions\n\n💡 Disarankan: ~$lunchCal kkal"
 
         // Dinner suggestions
         val dinnerOptions = getDinnerSuggestions()
-        tvDinnerSuggestion.text = "$dinnerOptions\n\n💡 Suggested: ~$dinnerCal kcal"
+        tvDinnerSuggestion.text = "$dinnerOptions\n\n💡 Disarankan: ~$dinnerCal kkal"
 
         // Snack suggestions
         val snackOptions = getSnackSuggestions()
-        tvSnackSuggestion.text = "$snackOptions\n\n💡 Suggested: ~$snackCal kcal"
+        tvSnackSuggestion.text = "$snackOptions\n\n💡 Disarankan: ~$snackCal kkal"
     }
 
     private fun getBreakfastSuggestions(): String {
@@ -457,37 +458,37 @@ class RecommendationsActivity : AppCompatActivity() {
         when {
             userConditions.contains("Diabetes") -> {
                 suggestions.addAll(listOf(
-                    "• Oatmeal with cinnamon and almonds",
-                    "• Scrambled eggs with vegetables",
-                    "• Greek yogurt with berries (no sugar)"
+                    "• Oatmeal dengan kayu manis dan almond",
+                    "• Telur orak-arik dengan sayuran",
+                    "• Yogurt Yunani dengan beri (tanpa gula)"
                 ))
             }
             userConditions.contains("Gastritis") -> {
                 suggestions.addAll(listOf(
-                    "• Oatmeal with banana",
-                    "• Whole grain toast with avocado",
-                    "• Smoothie with non-acidic fruits"
+                    "• Oatmeal dengan pisang",
+                    "• Roti gandum utuh dengan alpukat",
+                    "• Smoothie dengan buah tidak asam"
                 ))
             }
             dietGoal == "Lose Weight" -> {
                 suggestions.addAll(listOf(
-                    "• Egg white omelet with spinach",
-                    "• Greek yogurt with a few berries",
-                    "• Protein smoothie with greens"
+                    "• Omelet putih telur dengan bayam",
+                    "• Yogurt Yunani dengan sedikit beri",
+                    "• Smoothie protein dengan sayuran hijau"
                 ))
             }
             dietGoal == "Gain Weight" -> {
                 suggestions.addAll(listOf(
-                    "• Whole eggs with avocado toast",
-                    "• Oatmeal with peanut butter and banana",
-                    "• Protein pancakes with nuts"
+                    "• Telur utuh dengan roti bakar alpukat",
+                    "• Oatmeal dengan selai kacang dan pisang",
+                    "• Pancake protein dengan kacang-kacangan"
                 ))
             }
             else -> {
                 suggestions.addAll(listOf(
-                    "• Whole grain toast with eggs",
-                    "• Oatmeal with fruits and nuts",
-                    "• Yogurt parfait with granola"
+                    "• Roti gandum utuh dengan telur",
+                    "• Oatmeal dengan buah dan kacang",
+                    "• Parfait yogurt dengan granola"
                 ))
             }
         }
@@ -501,37 +502,37 @@ class RecommendationsActivity : AppCompatActivity() {
         when {
             userConditions.contains("Hypertension") -> {
                 suggestions.addAll(listOf(
-                    "• Grilled chicken salad (no salt dressing)",
-                    "• Vegetable stir-fry with brown rice",
-                    "• Lentil soup with herbs"
+                    "• Salad ayam panggang (dressing tanpa garam)",
+                    "• Tumis sayuran dengan nasi merah",
+                    "• Sup lentil dengan rempah-rempah"
                 ))
             }
             userConditions.contains("Cholesterol") -> {
                 suggestions.addAll(listOf(
-                    "• Grilled salmon with vegetables",
-                    "• Quinoa salad with chickpeas",
-                    "• Turkey breast wrap with greens"
+                    "• Salmon panggang dengan sayuran",
+                    "• Salad quinoa dengan buncis",
+                    "• Wrap dada kalkun dengan sayuran hijau"
                 ))
             }
             dietGoal == "Lose Weight" -> {
                 suggestions.addAll(listOf(
-                    "• Large salad with grilled chicken",
-                    "• Vegetable soup with lean protein",
-                    "• Grilled fish with steamed veggies"
+                    "• Salad besar dengan ayam panggang",
+                    "• Sup sayuran dengan protein tanpa lemak",
+                    "• Ikan panggang dengan sayuran kukus"
                 ))
             }
             dietGoal == "Gain Weight" -> {
                 suggestions.addAll(listOf(
-                    "• Chicken breast with rice and avocado",
-                    "• Pasta with lean meat sauce",
-                    "• Rice bowl with salmon and vegetables"
+                    "• Dada ayam dengan nasi dan alpukat",
+                    "• Pasta dengan saus daging tanpa lemak",
+                    "• Rice bowl dengan salmon dan sayuran"
                 ))
             }
             else -> {
                 suggestions.addAll(listOf(
-                    "• Grilled chicken with mixed vegetables",
-                    "• Brown rice bowl with beans",
-                    "• Whole wheat sandwich with lean meat"
+                    "• Ayam panggang dengan sayuran campur",
+                    "• Rice bowl merah dengan kacang-kacangan",
+                    "• Sandwich gandum utuh dengan daging tanpa lemak"
                 ))
             }
         }
@@ -545,30 +546,30 @@ class RecommendationsActivity : AppCompatActivity() {
         when {
             userConditions.contains("Gastritis") -> {
                 suggestions.addAll(listOf(
-                    "• Baked chicken with mashed potatoes",
-                    "• Steamed fish with rice",
-                    "• Light vegetable soup with bread"
+                    "• Ayam panggang dengan kentang tumbuk",
+                    "• Ikan kukus dengan nasi",
+                    "• Sup sayuran ringan dengan roti"
                 ))
             }
             dietGoal == "Lose Weight" -> {
                 suggestions.addAll(listOf(
-                    "• Grilled fish with roasted vegetables",
-                    "• Chicken stir-fry with minimal oil",
-                    "• Vegetable curry with small rice portion"
+                    "• Ikan panggang dengan sayuran panggang",
+                    "• Tumis ayam dengan sedikit minyak",
+                    "• Kari sayuran dengan porsi nasi kecil"
                 ))
             }
             dietGoal == "Gain Weight" -> {
                 suggestions.addAll(listOf(
-                    "• Steak with sweet potato",
-                    "• Chicken with pasta and vegetables",
-                    "• Rice with grilled fish and salad"
+                    "• Steak dengan ubi jalar",
+                    "• Ayam dengan pasta dan sayuran",
+                    "• Nasi dengan ikan panggang dan salad"
                 ))
             }
             else -> {
                 suggestions.addAll(listOf(
-                    "• Baked salmon with asparagus",
-                    "• Chicken breast with quinoa",
-                    "• Vegetable stir-fry with tofu"
+                    "• Salmon panggang dengan asparagus",
+                    "• Dada ayam dengan quinoa",
+                    "• Tumis sayuran dengan tahu"
                 ))
             }
         }
@@ -582,30 +583,30 @@ class RecommendationsActivity : AppCompatActivity() {
         when {
             userConditions.contains("Diabetes") -> {
                 suggestions.addAll(listOf(
-                    "• Handful of almonds (10-15)",
-                    "• Celery with peanut butter",
-                    "• Hard-boiled egg"
+                    "• Segenggam almond (10-15)",
+                    "• Seledri dengan selai kacang",
+                    "• Telur rebus"
                 ))
             }
             dietGoal == "Lose Weight" -> {
                 suggestions.addAll(listOf(
-                    "• Fresh vegetables with hummus",
-                    "• Apple slices",
-                    "• Greek yogurt (plain)"
+                    "• Sayuran segar dengan hummus",
+                    "• Irisan apel",
+                    "• Yogurt Yunani (tawar)"
                 ))
             }
             dietGoal == "Gain Weight" -> {
                 suggestions.addAll(listOf(
-                    "• Trail mix with dried fruits",
-                    "• Peanut butter banana smoothie",
-                    "• Cheese with whole grain crackers"
+                    "• Trail mix dengan buah kering",
+                    "• Smoothie pisang selai kacang",
+                    "• Keju dengan biskuit gandum utuh"
                 ))
             }
             else -> {
                 suggestions.addAll(listOf(
-                    "• Fresh fruits",
-                    "• Mixed nuts (small handful)",
-                    "• Yogurt with honey"
+                    "• Buah segar",
+                    "• Kacang campur (segenggam kecil)",
+                    "• Yogurt dengan madu"
                 ))
             }
         }
@@ -616,7 +617,7 @@ class RecommendationsActivity : AppCompatActivity() {
     private fun updateMealPlan() {
         llMealPlanDays.removeAllViews()
 
-        val daysOfWeek = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+        val daysOfWeek = listOf("Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu")
         val mealPlans = generateWeeklyMealPlan()
 
         daysOfWeek.forEachIndexed { index, day ->
@@ -656,25 +657,25 @@ class RecommendationsActivity : AppCompatActivity() {
 
     private fun generateWeeklyMealPlan(): List<String> {
         val basePlans = listOf(
-            "🌅 Oatmeal + berries | 🌤️ Grilled chicken salad | 🌙 Salmon + vegetables",
-            "🌅 Eggs + whole toast | 🌤️ Quinoa bowl + chickpeas | 🌙 Stir-fry tofu + rice",
-            "🌅 Greek yogurt + granola | 🌤️ Turkey wrap + salad | 🌙 Baked fish + potatoes",
-            "🌅 Smoothie bowl | 🌤️ Lentil soup + bread | 🌙 Grilled chicken + veggies",
-            "🌅 Avocado toast + eggs | 🌤️ Rice bowl + beans | 🌙 Pasta + lean meat",
-            "🌅 Pancakes + fruit | 🌤️ Chicken sandwich | 🌙 Homemade pizza (veggie)",
-            "🌅 Full breakfast | 🌤️ Grilled fish + salad | 🌙 Light soup + bread"
+            "🌅 Oatmeal + beri | 🌤️ Salad ayam panggang | 🌙 Salmon + sayuran",
+            "🌅 Telur + roti gandum | 🌤️ Quinoa bowl + buncis | 🌙 Tumis tahu + nasi",
+            "🌅 Yogurt Yunani + granola | 🌤️ Wrap kalkun + salad | 🌙 Ikan panggang + kentang",
+            "🌅 Smoothie bowl | 🌤️ Sup lentil + roti | 🌙 Ayam panggang + sayuran",
+            "🌅 Roti bakar alpukat + telur | 🌤️ Rice bowl + kacang | 🌙 Pasta + daging tanpa lemak",
+            "🌅 Pancake + buah | 🌤️ Sandwich ayam | 🌙 Pizza buatan sendiri (sayur)",
+            "🌅 Sarapan lengkap | 🌤️ Ikan panggang + salad | 🌙 Sup ringan + roti"
         )
 
         // Customize based on conditions (simplified)
         return if (userConditions.contains("Diabetes")) {
             listOf(
-                "🌅 Oatmeal + nuts | 🌤️ Grilled chicken + veggies | 🌙 Fish + green beans",
-                "🌅 Eggs + avocado | 🌤️ Salad + chickpeas | 🌙 Tofu stir-fry",
-                "🌅 Greek yogurt + seeds | 🌤️ Lentil soup | 🌙 Baked chicken + broccoli",
-                "🌅 Veggie omelet | 🌤️ Turkey + salad | 🌙 Grilled salmon + asparagus",
-                "🌅 Chia pudding | 🌤️ Quinoa + vegetables | 🌙 Lean beef + mushrooms",
-                "🌅 Cottage cheese + berries | 🌤️ Chicken wrap (low carb) | 🌙 Fish + cauliflower",
-                "🌅 Smoothie (no sugar) | 🌤️ Bean salad | 🌙 Light protein + vegetables"
+                "🌅 Oatmeal + kacang | 🌤️ Ayam panggang + sayuran | 🌙 Ikan + buncis",
+                "🌅 Telur + alpukat | 🌤️ Salad + buncis | 🌙 Tumis tahu",
+                "🌅 Yogurt Yunani + biji-bijian | 🌤️ Sup lentil | 🌙 Ayam panggang + brokoli",
+                "🌅 Omelet sayur | 🌤️ Kalkun + salad | 🌙 Salmon panggang + asparagus",
+                "🌅 Puding chia | 🌤️ Quinoa + sayuran | 🌙 Daging sapi tanpa lemak + jamur",
+                "🌅 Keju cottage + beri | 🌤️ Wrap ayam (rendah karbo) | 🌙 Ikan + kembang kol",
+                "🌅 Smoothie (tanpa gula) | 🌤️ Salad kacang | 🌙 Protein ringan + sayuran"
             )
         } else {
             basePlans
@@ -724,68 +725,68 @@ class RecommendationsActivity : AppCompatActivity() {
 
         // Base healthy recipes
         recipes.add(Pair(
-            "🥗 Mediterranean Salad",
-            "Mixed greens, cherry tomatoes, cucumber, olives, feta cheese with olive oil dressing. ~250 kcal"
+            "🥗 Salad Mediterania",
+            "Sayuran hijau campur, tomat ceri, mentimun, zaitun, keju feta dengan dressing minyak zaitun. ~250 kkal"
         ))
 
         recipes.add(Pair(
-            "🍳 Veggie Omelet",
-            "3 eggs with spinach, mushrooms, and bell peppers. Serve with whole wheat toast. ~300 kcal"
+            "🍳 Omelet Sayuran",
+            "3 telur dengan bayam, jamur, dan paprika. Sajikan dengan roti gandum utuh. ~300 kkal"
         ))
 
         // Condition specific
         if (userConditions.contains("Diabetes")) {
             recipes.add(Pair(
-                "🥣 Overnight Oats (Diabetic-Friendly)",
-                "Rolled oats, chia seeds, unsweetened almond milk, cinnamon, and a few berries. Low GI breakfast. ~280 kcal"
+                "🥣 Overnight Oats (Ramah Diabetes)",
+                "Oat gulung, biji chia, susu almond tanpa pemanis, kayu manis, dan sedikit beri. Sarapan GI rendah. ~280 kkal"
             ))
         }
 
         if (userConditions.contains("Hypertension")) {
             recipes.add(Pair(
-                "🐟 Herb-Crusted Salmon",
-                "Salmon fillet with fresh herbs, lemon, and garlic (no salt). Serve with steamed vegetables. ~350 kcal"
+                "🐟 Salmon Berbalut Rempah",
+                "Fillet salmon dengan rempah segar, lemon, dan bawang putih (tanpa garam). Sajikan dengan sayuran kukus. ~350 kkal"
             ))
         }
 
         if (userConditions.contains("Cholesterol")) {
             recipes.add(Pair(
-                "🥑 Avocado Toast with Seeds",
-                "Whole grain bread with mashed avocado, hemp seeds, and a poached egg. Heart-healthy fats. ~320 kcal"
+                "🥑 Roti Bakar Alpukat dengan Biji-bijian",
+                "Roti gandum utuh dengan alpukat tumbuk, biji rami, dan telur rebus. Lemak sehat jantung. ~320 kkal"
             ))
         }
 
         if (userConditions.contains("Gastritis")) {
             recipes.add(Pair(
-                "🍲 Gentle Chicken Soup",
-                "Tender chicken, carrots, potatoes in a mild broth. Easy on the stomach. ~200 kcal"
+                "🍲 Sup Ayam Lembut",
+                "Ayam empuk, wortel, kentang dalam kaldu ringan. Mudah dicerna. ~200 kkal"
             ))
         }
 
         // Diet goal specific
         if (dietGoal == "Lose Weight") {
             recipes.add(Pair(
-                "🥒 Zucchini Noodles with Pesto",
-                "Spiralized zucchini with homemade basil pesto and cherry tomatoes. Low-carb alternative. ~180 kcal"
+                "🥒 Mie Zucchini dengan Pesto",
+                "Zucchini spiral dengan pesto kemangi buatan sendiri dan tomat ceri. Alternatif rendah karbohidrat. ~180 kkal"
             ))
         }
 
         if (dietGoal == "Gain Weight") {
             recipes.add(Pair(
-                "🍌 Protein Smoothie Bowl",
-                "Banana, peanut butter, protein powder, oats, and almond milk. Topped with granola and nuts. ~500 kcal"
+                "🍌 Smoothie Bowl Protein",
+                "Pisang, selai kacang, bubuk protein, oat, dan susu almond. Taburi dengan granola dan kacang. ~500 kkal"
             ))
         }
 
         // General healthy recipes
         recipes.add(Pair(
-            "🍗 Grilled Chicken & Quinoa",
-            "Seasoned chicken breast with fluffy quinoa and roasted vegetables. Balanced and nutritious. ~400 kcal"
+            "🍗 Ayam Panggang & Quinoa",
+            "Dada ayam berbumbu dengan quinoa empuk dan sayuran panggang. Seimbang dan bergizi. ~400 kkal"
         ))
 
         recipes.add(Pair(
-            "🥙 Hummus Veggie Wrap",
-            "Whole wheat wrap with hummus, mixed greens, cucumber, tomatoes, and grilled vegetables. ~350 kcal"
+            "🥙 Wrap Sayuran Hummus",
+            "Wrap gandum utuh dengan hummus, sayuran hijau campur, mentimun, tomat, dan sayuran panggang. ~350 kkal"
         ))
 
         return recipes

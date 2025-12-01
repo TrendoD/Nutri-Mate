@@ -34,14 +34,14 @@
                         android:id="@+id/tvWelcome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hello, User!"
+                        android:text="Halo, Pengguna!"
                         android:textSize="20sp"
                         android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Let's reach your goals today"
+                        android:text="Mari capai tujuan Anda hari ini"
                         android:textSize="14sp"
                         android:textColor="#757575"/>
                 </LinearLayout>
@@ -50,7 +50,7 @@
                     android:id="@+id/btnLogout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Logout"
+                    android:text="Keluar"
                     style="@style/Widget.MaterialComponents.Button.TextButton"/>
             </LinearLayout>
 
@@ -59,7 +59,7 @@
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Friday, November 28, 2025"
+                android:text="Jumat, 28 November 2025"
                 android:textSize="14sp"
                 android:textColor="#4CAF50"
                 android:layout_marginBottom="16dp"/>
@@ -81,7 +81,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Calories Today"
+                        android:text="Kalori Hari Ini"
                         android:textSize="16sp"
                         android:textColor="#757575"/>
 
@@ -105,7 +105,7 @@
                             android:id="@+id/tvCalorieTarget"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="/ 2000 kcal"
+                            android:text="/ 2000 kkal"
                             android:textSize="18sp"
                             android:textColor="#757575"
                             android:layout_marginBottom="8dp"
@@ -150,7 +150,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Carbs"
+                            android:text="Karbo"
                             android:textStyle="bold"
                             android:textColor="#FF9800"/>
                         <TextView
@@ -212,7 +212,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Fat"
+                            android:text="Lemak"
                             android:textStyle="bold"
                             android:textColor="#9C27B0"/>
                         <TextView
@@ -250,7 +250,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="💧 Water Intake"
+                            android:text="💧 Asupan Air"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="#2196F3"/>
@@ -336,7 +336,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="🥗 Diet Recommendations"
+                            android:text="🥗 Rekomendasi Diet"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="#2E7D32"/>
@@ -344,7 +344,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Personalized meal plans and nutrition tips based on your health profile"
+                            android:text="Rencana makan yang dipersonalisasi dan tips nutrisi berdasarkan profil kesehatan Anda"
                             android:textSize="12sp"
                             android:textColor="#558B2F"
                             android:layout_marginTop="4dp"/>
@@ -363,7 +363,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Insights"
+                android:text="Wawasan"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp"/>
@@ -387,7 +387,7 @@
                         android:id="@+id/tvAlertTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Daily Tip"
+                        android:text="Tips Harian"
                         android:textStyle="bold"
                         android:textColor="#1565C0"
                         android:layout_marginBottom="4dp"/>
@@ -396,7 +396,7 @@
                         android:id="@+id/tvAlertBody"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Track your meals to get personalized insights based on your health conditions."
+                        android:text="Lacak makanan Anda untuk mendapatkan wawasan yang dipersonalisasi berdasarkan kondisi kesehatan Anda."
                         android:textColor="#0D47A1"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -413,7 +413,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="72dp"
         android:src="@android:drawable/ic_input_add"
-        android:contentDescription="Quick add food"
+        android:contentDescription="Tambah makanan cepat"
         app:backgroundTint="#4CAF50"/>
 
     <!-- Bottom Navigation -->

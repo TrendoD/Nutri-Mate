@@ -17,7 +17,8 @@ class StatisticsActivity : AppCompatActivity() {
 
     private lateinit var database: AppDatabase
     private var currentUsername: String = ""
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    private val localeID = Locale("id", "ID")
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", localeID)
     
     // Views
     private lateinit var bottomNavigation: BottomNavigationView
@@ -76,7 +77,7 @@ class StatisticsActivity : AppCompatActivity() {
         tvNoData = findViewById(R.id.tvNoData)
         
         // Setup spinner
-        val timeRanges = arrayOf("Last 7 Days", "Last 14 Days", "Last 30 Days", "All Time")
+        val timeRanges = arrayOf("7 Hari Terakhir", "14 Hari Terakhir", "30 Hari Terakhir", "Semua Waktu")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, timeRanges)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerTimeRange.adapter = adapter
@@ -248,7 +249,7 @@ class StatisticsActivity : AppCompatActivity() {
         targetCalories: Int
     ) {
         tvTotalDays.text = "$totalDays"
-        tvAvgCalories.text = "${avgCalories.roundToInt()} kcal"
+        tvAvgCalories.text = "${avgCalories.roundToInt()} kkal"
         tvAvgCarbs.text = "${avgCarbs.roundToInt()}g"
         tvAvgProtein.text = "${avgProtein.roundToInt()}g"
         tvAvgFat.text = "${avgFat.roundToInt()}g"
@@ -258,33 +259,33 @@ class StatisticsActivity : AppCompatActivity() {
 
         // Best day
         if (bestDay != null) {
-            val displayFormat = SimpleDateFormat("MMM dd", Locale.getDefault())
+            val displayFormat = SimpleDateFormat("MMM dd", localeID)
             try {
                 val date = dateFormat.parse(bestDay.key)
                 tvBestDay.text = if (date != null) displayFormat.format(date) else bestDay.key
             } catch (e: Exception) {
                 tvBestDay.text = bestDay.key
             }
-            tvBestDayCalories.text = "${bestDay.value.roundToInt()} kcal"
+            tvBestDayCalories.text = "${bestDay.value.roundToInt()} kkal"
         }
 
         // Worst day
         if (worstDay != null) {
-            val displayFormat = SimpleDateFormat("MMM dd", Locale.getDefault())
+            val displayFormat = SimpleDateFormat("MMM dd", localeID)
             try {
                 val date = dateFormat.parse(worstDay.key)
                 tvWorstDay.text = if (date != null) displayFormat.format(date) else worstDay.key
             } catch (e: Exception) {
                 tvWorstDay.text = worstDay.key
             }
-            tvWorstDayCalories.text = "${worstDay.value.roundToInt()} kcal"
+            tvWorstDayCalories.text = "${worstDay.value.roundToInt()} kkal"
         }
 
         // Trend
         val trendText = when {
-            trendPercent > 5 -> "↑ Increasing ($trendPercent%)"
-            trendPercent < -5 -> "↓ Decreasing ($trendPercent%)"
-            else -> "→ Stable"
+            trendPercent > 5 -> "↑ Meningkat ($trendPercent%)"
+            trendPercent < -5 -> "↓ Menurun ($trendPercent%)"
+            else -> "→ Stabil"
         }
         tvCalorieTrend.text = trendText
         tvCalorieTrend.setTextColor(
@@ -305,7 +306,7 @@ class StatisticsActivity : AppCompatActivity() {
         val maxCalories = dailyCalories.values.maxOrNull() ?: targetCalories.toFloat()
         val chartMax = maxOf(maxCalories, targetCalories.toFloat()) * 1.1f
 
-        val displayFormat = SimpleDateFormat("EEE", Locale.getDefault())
+        val displayFormat = SimpleDateFormat("EEE", localeID)
 
         for (dateStr in sortedDates) {
             val calories = dailyCalories[dateStr] ?: 0f

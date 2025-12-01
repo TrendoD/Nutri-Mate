@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
             val password = etPassword.text.toString() // Don't trim password
 
             if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Harap isi semua kolom", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -65,7 +65,7 @@ class LoginActivity : AppCompatActivity() {
                         val userCount = database.userDao().getUserCount()
                         Log.d("LoginActivity", "Total users in database: $userCount")
                         
-                        Toast.makeText(this@LoginActivity, "Username not found. Please register first.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@LoginActivity, "Nama pengguna tidak ditemukan. Harap daftar terlebih dahulu.", Toast.LENGTH_LONG).show()
                         return@launch
                     }
                     
@@ -82,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
                         val sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
                         sharedPreferences.edit().putString(KEY_LOGGED_IN_USER, user.username).apply()
                         
-                        Toast.makeText(this@LoginActivity, "Login successful! Welcome ${user.fullName}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@LoginActivity, "Berhasil masuk! Selamat datang ${user.fullName}", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         intent.putExtra("USER_NAME", user.fullName)
                         intent.putExtra("USERNAME", user.username)
@@ -91,12 +91,12 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         // User exists but password is wrong
                         Log.d("LoginActivity", "Password mismatch. Expected length: ${userExists.password.length}, Provided length: ${password.length}")
-                        Toast.makeText(this@LoginActivity, "Invalid password. Please try again.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@LoginActivity, "Kata sandi salah. Silakan coba lagi.", Toast.LENGTH_LONG).show()
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Log.e("LoginActivity", "Login error: ${e.message}", e)
-                    Toast.makeText(this@LoginActivity, "Login error: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@LoginActivity, "Gagal masuk: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
         }

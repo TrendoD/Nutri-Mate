@@ -33,10 +33,8 @@ class SettingsActivity : AppCompatActivity() {
     
     // Preferences
     private lateinit var llUnitPreferences: LinearLayout
-    private lateinit var llLanguage: LinearLayout
     private lateinit var switchDarkMode: SwitchMaterial
     private lateinit var tvUnitSystem: TextView
-    private lateinit var tvLanguage: TextView
     
     // Data Management
     private lateinit var llBackupData: LinearLayout
@@ -61,7 +59,6 @@ class SettingsActivity : AppCompatActivity() {
         const val KEY_LUNCH_TIME = "lunch_time"
         const val KEY_DINNER_TIME = "dinner_time"
         const val KEY_UNIT_SYSTEM = "unit_system"
-        const val KEY_LANGUAGE = "language"
         const val KEY_DARK_MODE = "dark_mode"
         
         // Login session
@@ -78,7 +75,7 @@ class SettingsActivity : AppCompatActivity() {
         username = intent.getStringExtra("USERNAME") ?: ""
         
         if (username.isEmpty()) {
-            Toast.makeText(this, "Error: User not identified", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Kesalahan: Pengguna tidak teridentifikasi", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -102,10 +99,8 @@ class SettingsActivity : AppCompatActivity() {
         
         // Preferences
         llUnitPreferences = findViewById(R.id.llUnitPreferences)
-        llLanguage = findViewById(R.id.llLanguage)
         switchDarkMode = findViewById(R.id.switchDarkMode)
         tvUnitSystem = findViewById(R.id.tvUnitSystem)
-        tvLanguage = findViewById(R.id.tvLanguage)
         
         // Data Management
         llBackupData = findViewById(R.id.llBackupData)
@@ -122,9 +117,9 @@ class SettingsActivity : AppCompatActivity() {
         // Set app version
         try {
             val pInfo = packageManager.getPackageInfo(packageName, 0)
-            tvAppVersion.text = "Version ${pInfo.versionName}"
+            tvAppVersion.text = "Versi ${pInfo.versionName}"
         } catch (e: Exception) {
-            tvAppVersion.text = "Version 1.0.0"
+            tvAppVersion.text = "Versi 1.0.0"
         }
     }
     
@@ -137,10 +132,7 @@ class SettingsActivity : AppCompatActivity() {
         
         // Load preferences
         val unitSystem = sharedPreferences.getString(KEY_UNIT_SYSTEM, "metric")
-        tvUnitSystem.text = if (unitSystem == "metric") "Metric (kg, cm)" else "Imperial (lbs, inch)"
-        
-        val language = sharedPreferences.getString(KEY_LANGUAGE, "en")
-        tvLanguage.text = if (language == "en") "English" else "Bahasa Indonesia"
+        tvUnitSystem.text = if (unitSystem == "metric") "Metrik (kg, cm)" else "Imperial (lbs, inci)"
         
         switchDarkMode.isChecked = sharedPreferences.getBoolean(KEY_DARK_MODE, false)
         
@@ -168,39 +160,34 @@ class SettingsActivity : AppCompatActivity() {
             sharedPreferences.edit().putBoolean(KEY_NOTIFICATIONS_ENABLED, isChecked).apply()
             updateReminderItemsEnabled()
             if (isChecked) {
-                Toast.makeText(this, "Notifications enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Notifikasi diaktifkan", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Notifications disabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Notifikasi dinonaktifkan", Toast.LENGTH_SHORT).show()
             }
         }
         
         // Meal reminders
         llBreakfastReminder.setOnClickListener {
             if (switchNotifications.isChecked) {
-                showTimePickerDialog("Breakfast", KEY_BREAKFAST_TIME, tvBreakfastTime)
+                showTimePickerDialog("Sarapan", KEY_BREAKFAST_TIME, tvBreakfastTime)
             }
         }
         
         llLunchReminder.setOnClickListener {
             if (switchNotifications.isChecked) {
-                showTimePickerDialog("Lunch", KEY_LUNCH_TIME, tvLunchTime)
+                showTimePickerDialog("Makan Siang", KEY_LUNCH_TIME, tvLunchTime)
             }
         }
         
         llDinnerReminder.setOnClickListener {
             if (switchNotifications.isChecked) {
-                showTimePickerDialog("Dinner", KEY_DINNER_TIME, tvDinnerTime)
+                showTimePickerDialog("Makan Malam", KEY_DINNER_TIME, tvDinnerTime)
             }
         }
         
         // Unit preferences
         llUnitPreferences.setOnClickListener {
             showUnitSystemDialog()
-        }
-        
-        // Language
-        llLanguage.setOnClickListener {
-            showLanguageDialog()
         }
         
         // Dark mode toggle
@@ -271,86 +258,68 @@ class SettingsActivity : AppCompatActivity() {
             textView.text = timeString
             sharedPreferences.edit().putString(prefKey, timeString).apply()
             
-            Toast.makeText(this, "$mealType reminder set to $timeString", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Pengingat $mealType diatur ke $timeString", Toast.LENGTH_SHORT).show()
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show()
     }
     
     private fun showUnitSystemDialog() {
-        val options = arrayOf("Metric (kg, cm)", "Imperial (lbs, inch)")
+        val options = arrayOf("Metrik (kg, cm)", "Imperial (lbs, inci)")
         val currentUnit = sharedPreferences.getString(KEY_UNIT_SYSTEM, "metric")
         val selectedIndex = if (currentUnit == "metric") 0 else 1
         
         AlertDialog.Builder(this)
-            .setTitle("Select Unit System")
+            .setTitle("Pilih Sistem Satuan")
             .setSingleChoiceItems(options, selectedIndex) { dialog, which ->
                 val selectedUnit = if (which == 0) "metric" else "imperial"
                 sharedPreferences.edit().putString(KEY_UNIT_SYSTEM, selectedUnit).apply()
                 tvUnitSystem.text = options[which]
-                Toast.makeText(this, "Unit system changed to ${options[which]}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Sistem satuan diubah ke ${options[which]}", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-    
-    private fun showLanguageDialog() {
-        val options = arrayOf("English", "Bahasa Indonesia")
-        val currentLang = sharedPreferences.getString(KEY_LANGUAGE, "en")
-        val selectedIndex = if (currentLang == "en") 0 else 1
-        
-        AlertDialog.Builder(this)
-            .setTitle("Select Language")
-            .setSingleChoiceItems(options, selectedIndex) { dialog, which ->
-                val selectedLang = if (which == 0) "en" else "id"
-                sharedPreferences.edit().putString(KEY_LANGUAGE, selectedLang).apply()
-                tvLanguage.text = options[which]
-                Toast.makeText(this, "Language changed to ${options[which]}. Please restart the app for full effect.", Toast.LENGTH_LONG).show()
-                dialog.dismiss()
-            }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Batal", null)
             .show()
     }
     
     private fun showBackupDataDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Backup Data")
-            .setMessage("This feature will export your data to a local file.\n\nNote: This feature is coming soon in a future update.")
+            .setTitle("Cadangkan Data")
+            .setMessage("Fitur ini akan mengekspor data Anda ke file lokal.\n\nCatatan: Fitur ini akan segera hadir dalam pembaruan mendatang.")
             .setPositiveButton("OK", null)
             .show()
     }
     
     private fun showRestoreDataDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Restore Data")
-            .setMessage("This feature will import data from a backup file.\n\nNote: This feature is coming soon in a future update.")
+            .setTitle("Pulihkan Data")
+            .setMessage("Fitur ini akan mengimpor data dari file cadangan.\n\nCatatan: Fitur ini akan segera hadir dalam pembaruan mendatang.")
             .setPositiveButton("OK", null)
             .show()
     }
     
     private fun showClearFoodLogDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Clear All Food Logs")
-            .setMessage("Are you sure you want to delete all your food log history? This action cannot be undone.")
-            .setPositiveButton("Delete All") { _, _ ->
+            .setTitle("Hapus Semua Catatan Makanan")
+            .setMessage("Apakah Anda yakin ingin menghapus semua riwayat catatan makanan Anda? Tindakan ini tidak dapat dibatalkan.")
+            .setPositiveButton("Hapus Semua") { _, _ ->
                 lifecycleScope.launch {
                     try {
                         database.foodDao().deleteAllFoodLogsByUser(username)
                         database.waterIntakeDao().deleteAllWaterIntakeByUser(username)
-                        Toast.makeText(this@SettingsActivity, "All food logs have been cleared", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SettingsActivity, "Semua catatan makanan telah dihapus", Toast.LENGTH_SHORT).show()
                     } catch (e: Exception) {
-                        Toast.makeText(this@SettingsActivity, "Error clearing data: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SettingsActivity, "Gagal menghapus data: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Batal", null)
             .show()
     }
     
     private fun showDeleteAccountDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Delete Account")
-            .setMessage("Are you sure you want to permanently delete your account and all associated data? This action cannot be undone.")
-            .setPositiveButton("Delete Account") { _, _ ->
+            .setTitle("Hapus Akun")
+            .setMessage("Apakah Anda yakin ingin menghapus akun dan semua data terkait secara permanen? Tindakan ini tidak dapat dibatalkan.")
+            .setPositiveButton("Hapus Akun") { _, _ ->
                 lifecycleScope.launch {
                     try {
                         // Delete all user data
@@ -364,7 +333,7 @@ class SettingsActivity : AppCompatActivity() {
                         val loginPrefs = getSharedPreferences(LOGIN_PREF_NAME, Context.MODE_PRIVATE)
                         loginPrefs.edit().remove(KEY_LOGGED_IN_USER).apply()
                         
-                        Toast.makeText(this@SettingsActivity, "Account deleted successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SettingsActivity, "Akun berhasil dihapus", Toast.LENGTH_SHORT).show()
                         
                         // Navigate to login screen
                         val intent = Intent(this@SettingsActivity, LoginActivity::class.java)
@@ -372,32 +341,32 @@ class SettingsActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     } catch (e: Exception) {
-                        Toast.makeText(this@SettingsActivity, "Error deleting account: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SettingsActivity, "Gagal menghapus akun: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Batal", null)
             .show()
     }
     
     private fun showAboutDialog() {
         AlertDialog.Builder(this)
-            .setTitle("About NutriMate")
+            .setTitle("Tentang NutriMate")
             .setMessage("""
-                NutriMate - Healthy Food, Healthy Life
+                NutriMate - Makanan Sehat, Hidup Sehat
                 
-                Version: 1.0.0
+                Versi: 1.0.0
                 
-                NutriMate is a comprehensive nutrition tracking app designed to help you manage your diet and achieve your health goals.
+                NutriMate adalah aplikasi pelacakan nutrisi komprehensif yang dirancang untuk membantu Anda mengelola diet dan mencapai tujuan kesehatan Anda.
                 
-                Features:
-                • Track daily food intake
-                • Monitor calories and macronutrients
-                • Set personalized nutrition targets
-                • Get diet recommendations based on your health profile
-                • View detailed statistics and progress
+                Fitur:
+                • Lacak asupan makanan harian
+                • Pantau kalori dan makronutrisi
+                • Tetapkan target nutrisi yang dipersonalisasi
+                • Dapatkan rekomendasi diet berdasarkan profil kesehatan Anda
+                • Lihat statistik dan kemajuan terperinci
                 
-                Made with ❤️ for a healthier you!
+                Dibuat dengan ❤️ untuk Anda yang lebih sehat!
             """.trimIndent())
             .setPositiveButton("OK", null)
             .show()
@@ -405,26 +374,26 @@ class SettingsActivity : AppCompatActivity() {
     
     private fun showPrivacyPolicyDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Privacy Policy")
+            .setTitle("Kebijakan Privasi")
             .setMessage("""
-                Privacy Policy for NutriMate
+                Kebijakan Privasi untuk NutriMate
                 
-                Your privacy is important to us.
+                Privasi Anda penting bagi kami.
                 
-                Data Storage:
-                • All your data is stored locally on your device
-                • We do not collect or transmit any personal information to external servers
-                • Your health data remains private and under your control
+                Penyimpanan Data:
+                • Semua data Anda disimpan secara lokal di perangkat Anda
+                • Kami tidak mengumpulkan atau mengirimkan informasi pribadi apa pun ke server eksternal
+                • Data kesehatan Anda tetap pribadi dan di bawah kendali Anda
                 
-                Data Security:
-                • Your data is protected by your device's security measures
-                • We recommend using device-level security (PIN, fingerprint, etc.)
+                Keamanan Data:
+                • Data Anda dilindungi oleh langkah-langkah keamanan perangkat Anda
+                • Kami menyarankan menggunakan keamanan tingkat perangkat (PIN, sidik jari, dll.)
                 
-                Data Deletion:
-                • You can delete all your data at any time through the Settings menu
-                • Deleting the app will remove all associated data
+                Penghapusan Data:
+                • Anda dapat menghapus semua data Anda kapan saja melalui menu Pengaturan
+                • Menghapus aplikasi akan menghapus semua data terkait
                 
-                By using NutriMate, you agree to this privacy policy.
+                Dengan menggunakan NutriMate, Anda menyetujui kebijakan privasi ini.
             """.trimIndent())
             .setPositiveButton("OK", null)
             .show()
@@ -432,29 +401,29 @@ class SettingsActivity : AppCompatActivity() {
     
     private fun showHelpFaqDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Help & FAQ")
+            .setTitle("Bantuan & FAQ")
             .setMessage("""
-                Frequently Asked Questions
+                Pertanyaan yang Sering Diajukan
                 
-                Q: How do I track my meals?
-                A: Go to Food Log from the bottom navigation and tap the + button to add food to your meals.
+                T: Bagaimana cara melacak makanan saya?
+                J: Buka Catatan Makanan dari navigasi bawah dan ketuk tombol + untuk menambahkan makanan.
                 
-                Q: How are my calorie targets calculated?
-                A: Your targets are calculated based on your profile information (age, weight, height, activity level, and goals) using the Mifflin-St Jeor equation.
+                T: Bagaimana target kalori saya dihitung?
+                J: Target Anda dihitung berdasarkan informasi profil Anda (usia, berat badan, tinggi badan, tingkat aktivitas, dan tujuan) menggunakan persamaan Mifflin-St Jeor.
                 
-                Q: Can I create custom foods?
-                A: Yes! In the Add Food screen, tap "Create Custom Food" to add your own foods with custom nutrition values.
+                T: Bisakah saya membuat makanan khusus?
+                J: Ya! Di layar Tambah Makanan, ketuk "Buat Makanan Kustom" untuk menambahkan makanan Anda sendiri dengan nilai nutrisi kustom.
                 
-                Q: How do I change my nutrition targets?
-                A: Go to Profile > Nutrition Targets to customize your daily goals.
+                T: Bagaimana cara mengubah target nutrisi saya?
+                J: Buka Profil > Target Nutrisi untuk menyesuaikan tujuan harian Anda.
                 
-                Q: Is my data backed up?
-                A: Currently, data is stored locally on your device. Cloud backup feature is coming soon.
+                T: Apakah data saya dicadangkan?
+                J: Saat ini, data disimpan secara lokal di perangkat Anda. Fitur cadangan cloud akan segera hadir.
                 
-                Q: How do I reset my password?
-                A: Since NutriMate uses local storage only, there's no password reset feature. Please remember your credentials.
+                T: Bagaimana cara mengatur ulang kata sandi saya?
+                J: Karena NutriMate hanya menggunakan penyimpanan lokal, tidak ada fitur pengaturan ulang kata sandi. Harap ingat kredensial Anda.
                 
-                Need more help? Contact us at support@nutrimate.app
+                Butuh bantuan lebih lanjut? Hubungi kami di support@nutrimate.app
             """.trimIndent())
             .setPositiveButton("OK", null)
             .show()

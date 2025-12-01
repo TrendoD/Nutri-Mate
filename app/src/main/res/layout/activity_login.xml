@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Don't have an account? Get Started"
+        android:text="Belum punya akun? Mulai"
         android:textColor="@color/white"
         android:textSize="12sp"
         android:padding="8dp"
@@ -67,7 +67,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Welcome Back"
+                android:text="Selamat Datang Kembali"
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:textColor="@color/green_dark"
@@ -76,7 +76,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Enter your details below"
+                android:text="Masukkan detail Anda di bawah"
                 android:textSize="14sp"
                 android:textColor="@color/gray_text"
                 android:layout_marginBottom="32dp"/>
@@ -84,7 +84,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email Address"
+                android:text="Alamat Email"
                 android:textSize="12sp"
                 android:textColor="@color/gray_text"
                 android:layout_marginBottom="8dp"/>
@@ -117,7 +117,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Password"
+                android:text="Kata Sandi"
                 android:textSize="12sp"
                 android:textColor="@color/gray_text"
                 android:layout_marginBottom="8dp"/>
@@ -152,7 +152,7 @@
                 android:id="@+id/tvForgotPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Forgot your password?"
+                android:text="Lupa kata sandi?"
                 android:textColor="@color/green_primary"
                 android:textSize="13sp"
                 android:layout_marginBottom="32dp"
@@ -164,7 +164,7 @@
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="Sign in"
+                android:text="Masuk"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:backgroundTint="@color/green_primary"
@@ -174,7 +174,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Or sign in with"
+                android:text="Atau masuk dengan"
                 android:textColor="@color/gray_text"
                 android:textSize="13sp"
                 android:layout_gravity="center"

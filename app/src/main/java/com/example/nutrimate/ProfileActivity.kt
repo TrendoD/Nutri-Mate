@@ -49,11 +49,11 @@ class ProfileActivity : AppCompatActivity() {
     private var profilePictureUri: String = ""
 
     private val activityLevels = arrayOf(
-        "Sedentary (little or no exercise)",
-        "Lightly active (light exercise 1-3 days/week)",
-        "Moderately active (moderate exercise 3-5 days/week)",
-        "Active (hard exercise 6-7 days/week)",
-        "Very active (very hard exercise & physical job)"
+        "Sedenter (sedikit atau tidak ada olahraga)",
+        "Sedikit aktif (olahraga ringan 1-3 hari/minggu)",
+        "Cukup aktif (olahraga sedang 3-5 hari/minggu)",
+        "Aktif (olahraga berat 6-7 hari/minggu)",
+        "Sangat aktif (olahraga sangat berat & pekerjaan fisik)"
     )
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -71,7 +71,7 @@ class ProfileActivity : AppCompatActivity() {
         username = intent.getStringExtra("USERNAME") ?: ""
 
         if (username.isEmpty()) {
-            Toast.makeText(this, "Error: User not identified", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Kesalahan: Pengguna tidak teridentifikasi", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -150,10 +150,10 @@ class ProfileActivity : AppCompatActivity() {
                 tvBMI.text = String.format("BMI: %.1f", bmi)
 
                 val status = when {
-                    bmi < 18.5 -> "Underweight"
-                    bmi < 25 -> "Normal Weight"
-                    bmi < 30 -> "Overweight"
-                    else -> "Obese"
+                    bmi < 18.5 -> "Berat Badan Kurang"
+                    bmi < 25 -> "Berat Badan Normal"
+                    bmi < 30 -> "Berat Badan Lebih"
+                    else -> "Obesitas"
                 }
                 tvBMIStatus.text = "($status)"
                 
@@ -222,7 +222,7 @@ class ProfileActivity : AppCompatActivity() {
                 // Trigger BMI calc
                 calculateBMI()
 
-                btnSaveProfile.text = "Update Profile"
+                btnSaveProfile.text = "Perbarui Profil"
             }
         }
     }
@@ -236,7 +236,7 @@ class ProfileActivity : AppCompatActivity() {
         val targetWeightStr = etTargetWeight.text.toString()
         
         if (fullName.isEmpty() || email.isEmpty() || ageStr.isEmpty() || weightStr.isEmpty() || heightStr.isEmpty()) {
-            Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Harap isi semua kolom yang wajib", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -246,13 +246,13 @@ class ProfileActivity : AppCompatActivity() {
         val targetWeight = targetWeightStr.toFloatOrNull() ?: 0f
 
         if (age == null || weight == null || height == null) {
-            Toast.makeText(this, "Invalid number format", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Format angka tidak valid", Toast.LENGTH_SHORT).show()
             return
         }
 
         val selectedGenderId = rgGender.checkedRadioButtonId
         if (selectedGenderId == -1) {
-            Toast.makeText(this, "Please select a gender", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Harap pilih jenis kelamin", Toast.LENGTH_SHORT).show()
             return
         }
         val gender = if (selectedGenderId == R.id.rbMale) "Male" else "Female"
@@ -330,7 +330,7 @@ class ProfileActivity : AppCompatActivity() {
                 email
             )
 
-            Toast.makeText(this@ProfileActivity, "Profile updated! Daily Target: $tdee kcal", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@ProfileActivity, "Profil diperbarui! Target Harian: $tdee kkal", Toast.LENGTH_LONG).show()
             
             val intent = Intent(this@ProfileActivity, MainActivity::class.java)
             intent.putExtra("USERNAME", username)

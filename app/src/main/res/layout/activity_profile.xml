@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Complete Your Profile"
+            android:text="Lengkapi Profil Anda"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginBottom="24dp"/>
@@ -33,14 +33,14 @@
             android:id="@+id/btnChangePhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Change Photo"
+            android:text="Ubah Foto"
             android:layout_marginBottom="24dp"/>
 
         <!-- Personal Info Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Full Name"
+            android:text="Nama Lengkap"
             android:textStyle="bold"
             android:layout_marginBottom="4dp"/>
         <EditText
@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="Full Name"
+            android:hint="Nama Lengkap"
             android:layout_marginBottom="16dp"/>
 
         <TextView
@@ -69,14 +69,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Age"
+            android:text="Usia"
             android:layout_marginBottom="4dp"/>
         <EditText
             android:id="@+id/etAge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:hint="Enter your age"
+            android:hint="Masukkan usia Anda"
             android:layout_marginBottom="16dp"/>
 
         <LinearLayout
@@ -94,7 +94,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Weight (kg)"
+                    android:text="Berat (kg)"
                     android:layout_marginBottom="4dp"/>
                 <EditText
                     android:id="@+id/etWeight"
@@ -113,7 +113,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Height (cm)"
+                    android:text="Tinggi (cm)"
                     android:layout_marginBottom="4dp"/>
                 <EditText
                     android:id="@+id/etHeight"
@@ -145,20 +145,20 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Target Weight (kg)"
+            android:text="Target Berat (kg)"
             android:layout_marginBottom="4dp"/>
         <EditText
             android:id="@+id/etTargetWeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:hint="Enter target weight"
+            android:hint="Masukkan target berat"
             android:layout_marginBottom="16dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Gender"
+            android:text="Jenis Kelamin"
             android:layout_marginBottom="4dp"/>
         <RadioGroup
             android:id="@+id/rgGender"
@@ -170,20 +170,20 @@
                 android:id="@+id/rbMale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Male"
+                android:text="Pria"
                 android:layout_marginEnd="16dp"/>
             <RadioButton
                 android:id="@+id/rbFemale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Female"/>
+                android:text="Wanita"/>
         </RadioGroup>
 
         <!-- Activity Level -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Activity Level"
+            android:text="Tingkat Aktivitas"
             android:layout_marginBottom="4dp"/>
         <Spinner
             android:id="@+id/spActivityLevel"
@@ -196,7 +196,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Diet Goal"
+            android:text="Tujuan Diet"
             android:layout_marginBottom="4dp"/>
         <RadioGroup
             android:id="@+id/rgDietGoal"
@@ -208,24 +208,24 @@
                 android:id="@+id/rbLoseWeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lose Weight"/>
+                android:text="Turunkan Berat Badan"/>
             <RadioButton
                 android:id="@+id/rbMaintain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Maintain Weight"/>
+                android:text="Pertahankan Berat Badan"/>
             <RadioButton
                 android:id="@+id/rbGainWeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Gain Weight"/>
+                android:text="Naikkan Berat Badan"/>
         </RadioGroup>
 
         <!-- Medical Conditions -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Medical Conditions"
+            android:text="Kondisi Medis"
             android:layout_marginBottom="4dp"/>
         <CheckBox
             android:id="@+id/cbDiabetes"
@@ -236,23 +236,23 @@
             android:id="@+id/cbHypertension"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Hypertension (High Blood Pressure)"/>
+            android:text="Hipertensi (Tekanan Darah Tinggi)"/>
         <CheckBox
             android:id="@+id/cbCholesterol"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="High Cholesterol"/>
+            android:text="Kolesterol Tinggi"/>
         <CheckBox
             android:id="@+id/cbGastritis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Gastritis/GERD"/>
+            android:text="Maag/GERD"/>
 
         <!-- Allergies -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Allergies / Food Restrictions"
+            android:text="Alergi / Pantangan Makanan"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="4dp"/>
         <EditText
@@ -262,7 +262,7 @@
             android:inputType="textMultiLine"
             android:minLines="2"
             android:gravity="top|start"
-            android:hint="e.g. Peanuts, Shellfish, Gluten..."
+            android:hint="mis. Kacang, Kerang, Gluten..."
             android:layout_marginBottom="16dp"/>
 
         <!-- Nutrition Targets Button -->
@@ -270,7 +270,7 @@
             android:id="@+id/btnNutritionTargets"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="🎯 Set Nutrition Targets"
+            android:text="🎯 Atur Target Nutrisi"
             android:backgroundTint="#2196F3"
             android:textColor="#FFFFFF"
             android:layout_marginBottom="8dp"/>
@@ -279,7 +279,7 @@
             android:id="@+id/btnSaveProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Calculate &amp; Save Profile"
+            android:text="Hitung &amp; Simpan Profil"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="32dp"/>
 

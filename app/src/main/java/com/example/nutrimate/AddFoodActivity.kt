@@ -72,7 +72,14 @@ class AddFoodActivity : AppCompatActivity() {
 
     private fun initViews() {
         tvMealType = findViewById(R.id.tvMealType)
-        tvMealType.text = "Add to $mealType"
+        val displayMealType = when(mealType) {
+            "Breakfast" -> "Sarapan"
+            "Lunch" -> "Makan Siang"
+            "Dinner" -> "Makan Malam"
+            "Snack" -> "Camilan"
+            else -> mealType
+        }
+        tvMealType.text = "Tambah ke $displayMealType"
 
         etSearch = findViewById(R.id.etSearch)
         rvFoodSearch = findViewById(R.id.rvFoodSearch)
@@ -199,13 +206,13 @@ class AddFoodActivity : AppCompatActivity() {
                 // Remove from favorites
                 database.foodDao().deleteFavorite(username, food.id)
                 favoriteIds.remove(food.id)
-                Toast.makeText(this@AddFoodActivity, "Removed from favorites", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AddFoodActivity, "Dihapus dari favorit", Toast.LENGTH_SHORT).show()
             } else {
                 // Add to favorites
                 val favorite = FavoriteFood(username = username, foodId = food.id)
                 database.foodDao().insertFavorite(favorite)
                 favoriteIds.add(food.id)
-                Toast.makeText(this@AddFoodActivity, "Added to favorites", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AddFoodActivity, "Ditambahkan ke favorit", Toast.LENGTH_SHORT).show()
             }
             adapter.updateFavorites(favoriteIds)
             
@@ -228,7 +235,7 @@ class AddFoodActivity : AppCompatActivity() {
         val tvUnit = dialog.findViewById<TextView>(R.id.tvUnit)
         val tvNutritionPreview = dialog.findViewById<TextView>(R.id.tvNutritionPreview)
         
-        tvTitle.text = "Add ${food.name}"
+        tvTitle.text = "Tambah ${food.name}"
         tvUnit.text = food.servingUnit
         
         // Update nutrition preview when quantity changes
@@ -239,7 +246,7 @@ class AddFoodActivity : AppCompatActivity() {
             val protein = (food.protein * qty).toInt()
             val fat = (food.fat * qty).toInt()
             
-            tvNutritionPreview.text = "Calories: $calories kcal\nCarbs: ${carbs}g | Protein: ${protein}g | Fat: ${fat}g"
+            tvNutritionPreview.text = "Kalori: $calories kkal\nKarbo: ${carbs}g | Protein: ${protein}g | Lemak: ${fat}g"
         }
         
         updateNutritionPreview() // Initial update
@@ -255,7 +262,7 @@ class AddFoodActivity : AppCompatActivity() {
             val qty = qtyStr.toFloatOrNull() ?: 1.0f
             
             if (qty <= 0) {
-                Toast.makeText(this, "Please enter a valid quantity", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Harap masukkan jumlah yang valid", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             
@@ -287,7 +294,7 @@ class AddFoodActivity : AppCompatActivity() {
         val btnCancel = dialog.findViewById<Button>(R.id.btnCancelCustom)
         
         // Setup category spinner
-        val categories = arrayOf("Fruit", "Vegetable", "Protein", "Grain", "Dairy", "Other")
+        val categories = arrayOf("Buah", "Sayur", "Protein", "Biji-bijian", "Produk Susu", "Lainnya")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategory.adapter = adapter
@@ -304,7 +311,7 @@ class AddFoodActivity : AppCompatActivity() {
             
             // Validation
             if (name.isEmpty() || servingUnit.isEmpty() || servingSize <= 0 || calories <= 0) {
-                Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Harap isi semua kolom yang wajib", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             
@@ -318,14 +325,18 @@ class AddFoodActivity : AppCompatActivity() {
                 fat = fat,
                 servingSize = servingSize,
                 servingUnit = servingUnit,
-                category = category,
+                // Map back to English category for DB consistency if needed, or keep Indonesian if DB supports strings. 
+                // Assuming DB stores string and filtering uses string matches.
+                // But `AddFoodActivity` filters use English strings ("Fruit", etc).
+                // So I should map the display category to internal category.
+                category = mapCategoryToInternal(category),
                 isCustom = true,
                 createdBy = username
             )
             
             lifecycleScope.launch {
                 database.foodDao().insertFood(customFood)
-                Toast.makeText(this@AddFoodActivity, "Custom food created!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AddFoodActivity, "Makanan kustom dibuat!", Toast.LENGTH_SHORT).show()
                 loadFilteredFoods() // Refresh list
                 dialog.dismiss()
             }
@@ -338,6 +349,17 @@ class AddFoodActivity : AppCompatActivity() {
         dialog.show()
     }
     
+    private fun mapCategoryToInternal(displayCategory: String): String {
+        return when(displayCategory) {
+            "Buah" -> "Fruit"
+            "Sayur" -> "Vegetable"
+            "Protein" -> "Protein"
+            "Biji-bijian" -> "Grain"
+            "Produk Susu" -> "Dairy"
+            else -> "Other"
+        }
+    }
+    
     private fun saveFoodLog(food: Food, qty: Float) {
         lifecycleScope.launch {
             val log = FoodLog(
@@ -348,7 +370,7 @@ class AddFoodActivity : AppCompatActivity() {
                 date = selectedDate
             )
             database.foodDao().insertFoodLog(log)
-            Toast.makeText(this@AddFoodActivity, "Added ${food.name}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@AddFoodActivity, "Ditambahkan ${food.name}", Toast.LENGTH_SHORT).show()
             finish()
         }
     }

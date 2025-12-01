@@ -25,13 +25,13 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@android:drawable/ic_menu_revert"
-                android:contentDescription="Back"
+                android:contentDescription="Kembali"
                 android:padding="4dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Settings"
+                android:text="Pengaturan"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_marginStart="16dp"/>
@@ -41,7 +41,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Notifications"
+            android:text="Notifikasi"
             android:textSize="14sp"
             android:textColor="#757575"
             android:textStyle="bold"
@@ -75,12 +75,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Enable Notifications"
+                            android:text="Aktifkan Notifikasi"
                             android:textSize="16sp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Receive reminders to log your meals"
+                            android:text="Terima pengingat untuk mencatat makanan Anda"
                             android:textSize="12sp"
                             android:textColor="#757575"/>
                     </LinearLayout>
@@ -113,7 +113,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Breakfast Reminder"
+                            android:text="Pengingat Sarapan"
                             android:textSize="16sp"/>
                         <TextView
                             android:id="@+id/tvBreakfastTime"
@@ -153,7 +153,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Lunch Reminder"
+                            android:text="Pengingat Makan Siang"
                             android:textSize="16sp"/>
                         <TextView
                             android:id="@+id/tvLunchTime"
@@ -193,7 +193,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Dinner Reminder"
+                            android:text="Pengingat Makan Malam"
                             android:textSize="16sp"/>
                         <TextView
                             android:id="@+id/tvDinnerTime"
@@ -217,7 +217,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Preferences"
+            android:text="Preferensi"
             android:textSize="14sp"
             android:textColor="#757575"
             android:textStyle="bold"
@@ -252,53 +252,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Unit System"
+                            android:text="Sistem Satuan"
                             android:textSize="16sp"/>
                         <TextView
                             android:id="@+id/tvUnitSystem"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Metric (kg, cm)"
-                            android:textSize="12sp"
-                            android:textColor="#757575"/>
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_more"
-                        android:contentDescription="Edit"/>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#E0E0E0"/>
-
-                <!-- Language -->
-                <LinearLayout
-                    android:id="@+id/llLanguage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="16dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Language"
-                            android:textSize="16sp"/>
-                        <TextView
-                            android:id="@+id/tvLanguage"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="English"
+                            android:text="Metrik (kg, cm)"
                             android:textSize="12sp"
                             android:textColor="#757575"/>
                     </LinearLayout>
@@ -331,12 +291,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Dark Mode"
+                            android:text="Mode Gelap"
                             android:textSize="16sp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Switch to dark theme"
+                            android:text="Beralih ke tema gelap"
                             android:textSize="12sp"
                             android:textColor="#757575"/>
                     </LinearLayout>
@@ -353,7 +313,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Data Management"
+            android:text="Manajemen Data"
             android:textSize="14sp"
             android:textColor="#757575"
             android:textStyle="bold"
@@ -389,12 +349,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Backup Data"
+                            android:text="Cadangkan Data"
                             android:textSize="16sp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Export your data to a file"
+                            android:text="Ekspor data Anda ke file"
                             android:textSize="12sp"
                             android:textColor="#757575"/>
                     </LinearLayout>
@@ -403,7 +363,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@android:drawable/ic_menu_upload"
-                        android:contentDescription="Backup"/>
+                        android:contentDescription="Cadangkan"/>
                 </LinearLayout>
 
                 <View
@@ -429,12 +389,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Restore Data"
+                            android:text="Pulihkan Data"
                             android:textSize="16sp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Import data from a backup file"
+                            android:text="Impor data dari file cadangan"
                             android:textSize="12sp"
                             android:textColor="#757575"/>
                     </LinearLayout>
@@ -443,7 +403,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@android:drawable/ic_menu_revert"
-                        android:contentDescription="Restore"/>
+                        android:contentDescription="Pulihkan"/>
                 </LinearLayout>
 
                 <View
@@ -469,13 +429,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Clear All Food Logs"
+                            android:text="Hapus Semua Catatan Makanan"
                             android:textSize="16sp"
                             android:textColor="#FF5722"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Delete all your food log history"
+                            android:text="Hapus semua riwayat catatan makanan Anda"
                             android:textSize="12sp"
                             android:textColor="#757575"/>
                     </LinearLayout>
@@ -504,13 +464,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Delete Account"
+                            android:text="Hapus Akun"
                             android:textSize="16sp"
                             android:textColor="#F44336"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Permanently delete your account and all data"
+                            android:text="Hapus akun dan semua data Anda secara permanen"
                             android:textSize="12sp"
                             android:textColor="#757575"/>
                     </LinearLayout>
@@ -522,7 +482,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="About"
+            android:text="Tentang"
             android:textSize="14sp"
             android:textColor="#757575"
             android:textStyle="bold"
@@ -558,13 +518,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="About NutriMate"
+                            android:text="Tentang NutriMate"
                             android:textSize="16sp"/>
                         <TextView
                             android:id="@+id/tvAppVersion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Version 1.0.0"
+                            android:text="Versi 1.0.0"
                             android:textSize="12sp"
                             android:textColor="#757575"/>
                     </LinearLayout>
@@ -573,7 +533,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@android:drawable/ic_menu_info_details"
-                        android:contentDescription="About"/>
+                        android:contentDescription="Tentang"/>
                 </LinearLayout>
 
                 <View
@@ -595,14 +555,14 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Privacy Policy"
+                        android:text="Kebijakan Privasi"
                         android:textSize="16sp"/>
 
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@android:drawable/ic_menu_more"
-                        android:contentDescription="View"/>
+                        android:contentDescription="Lihat"/>
                 </LinearLayout>
 
                 <View
@@ -624,14 +584,14 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Help &amp; FAQ"
+                        android:text="Bantuan &amp; FAQ"
                         android:textSize="16sp"/>
 
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@android:drawable/ic_menu_help"
-                        android:contentDescription="Help"/>
+                        android:contentDescription="Bantuan"/>
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -640,7 +600,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="NutriMate - Healthy Food, Healthy Life"
+            android:text="NutriMate - Makanan Sehat, Hidup Sehat"
             android:textSize="12sp"
             android:textColor="#9E9E9E"
             android:gravity="center"

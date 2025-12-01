@@ -30,7 +30,7 @@
                 android:id="@+id/tvDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="1 piring | 300 kcal"
+                android:text="1 piring | 300 kkal"
                 android:textColor="#757575"
                 android:layout_marginTop="2dp"/>
             
@@ -38,7 +38,7 @@
                 android:id="@+id/tvNutrition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="C: 45g | P: 8g | F: 10g"
+                android:text="K: 45g | P: 8g | L: 10g"
                 android:textColor="#9E9E9E"
                 android:textSize="12sp"
                 android:layout_marginTop="2dp"/>
@@ -47,7 +47,7 @@
                 android:id="@+id/tvCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Grain"
+                android:text="Biji-bijian"
                 android:textSize="11sp"
                 android:textColor="#4CAF50"
                 android:background="#E8F5E9"
@@ -64,7 +64,7 @@
             android:layout_height="24dp"
             android:src="@android:drawable/star_big_off"
             android:layout_marginEnd="8dp"
-            android:contentDescription="Favorite"/>
+            android:contentDescription="Favorit"/>
 
         <TextView
             android:layout_width="wrap_content"

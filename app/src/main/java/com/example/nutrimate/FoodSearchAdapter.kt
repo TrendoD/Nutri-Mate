@@ -32,9 +32,18 @@ class FoodSearchAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val food = foods[position]
         holder.tvName.text = food.name
-        holder.tvDetails.text = "${food.servingSize} ${food.servingUnit} | ${food.calories.toInt()} kcal"
-        holder.tvNutrition.text = "C: ${food.carbs.toInt()}g | P: ${food.protein.toInt()}g | F: ${food.fat.toInt()}g"
-        holder.tvCategory.text = food.category
+        holder.tvDetails.text = "${food.servingSize} ${food.servingUnit} | ${food.calories.toInt()} kkal"
+        holder.tvNutrition.text = "K: ${food.carbs.toInt()}g | P: ${food.protein.toInt()}g | L: ${food.fat.toInt()}g"
+        
+        // Translate category for display
+        holder.tvCategory.text = when(food.category) {
+            "Fruit" -> "Buah"
+            "Vegetable" -> "Sayur"
+            "Protein" -> "Protein"
+            "Grain" -> "Biji-bijian"
+            "Dairy" -> "Produk Susu"
+            else -> "Lainnya"
+        }
         
         // Set favorite icon
         val isFav = favorites.contains(food.id)

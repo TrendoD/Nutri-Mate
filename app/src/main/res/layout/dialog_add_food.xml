@@ -9,7 +9,7 @@
         android:id="@+id/tvDialogTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Food"
+        android:text="Tambah Makanan"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"/>
@@ -17,7 +17,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Serving Quantity:"
+        android:text="Jumlah Porsi:"
         android:layout_marginBottom="8dp"/>
 
     <LinearLayout
@@ -61,7 +61,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nutrition Preview:"
+                android:text="Pratinjau Nutrisi:"
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:layout_marginBottom="8dp"/>
@@ -70,7 +70,7 @@
                 android:id="@+id/tvNutritionPreview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Calories: 300 kcal\nCarbs: 45g | Protein: 8g | Fat: 10g"
+                android:text="Kalori: 300 kkal\nKarbo: 45g | Protein: 8g | Lemak: 10g"
                 android:textSize="13sp"
                 android:lineSpacingMultiplier="1.2"/>
         </LinearLayout>
@@ -87,7 +87,7 @@
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:text="Batal"
             style="?android:attr/buttonBarButtonStyle"
             android:textColor="#757575"/>
 
@@ -95,7 +95,7 @@
             android:id="@+id/btnAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add to Log"
+            android:text="Tambahkan ke Log"
             android:layout_marginStart="8dp"/>
     </LinearLayout>
 

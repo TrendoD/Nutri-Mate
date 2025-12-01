@@ -57,8 +57,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var database: AppDatabase
     private var currentUsername: String = ""
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    private val displayDateFormat = SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault())
+    private val localeID = Locale("id", "ID")
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", localeID)
+    private val displayDateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", localeID)
     
     private val waterTarget = 2000 // 2000ml daily target
 
@@ -219,7 +220,7 @@ class MainActivity : AppCompatActivity() {
             database.waterIntakeDao().insertWaterIntake(waterIntake)
             loadWaterIntake(currentUsername)
             
-            Toast.makeText(this@MainActivity, "+${amount}ml water added!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainActivity, "+${amount}ml air ditambahkan!", Toast.LENGTH_SHORT).show()
         }
     }
     
@@ -246,9 +247,9 @@ class MainActivity : AppCompatActivity() {
                     return@launch
                 }
 
-                tvWelcome.text = "Hello, ${user.fullName}!"
+                tvWelcome.text = "Halo, ${user.fullName}!"
                 val target = user.dailyCalorieTarget
-                tvCalorieTarget.text = "/ $target kcal"
+                tvCalorieTarget.text = "/ $target kkal"
 
                 // Calculate Consumed
                 val dateStr = dateFormat.format(Date())
@@ -286,37 +287,37 @@ class MainActivity : AppCompatActivity() {
 
     private fun generateInsights(conditions: String, currentCals: Float, targetCals: Int, carbs: Float, fat: Float, protein: Float) {
         val conditionList = conditions.split(",").map { it.trim() }
-        var title = "Daily Tip"
-        var body = "Stay hydrated and eat balanced meals!"
+        var title = "Tips Harian"
+        var body = "Tetap terhidrasi dan makan makanan seimbang!"
         var isWarning = false
 
         if (currentCals > targetCals) {
-            title = "⚠️ Calorie Alert"
-            body = "You have exceeded your daily calorie limit. Try to eat lighter for the rest of the day."
+            title = "⚠️ Peringatan Kalori"
+            body = "Anda telah melebihi batas kalori harian Anda. Cobalah makan lebih ringan untuk sisa hari ini."
             isWarning = true
         } else if (conditionList.contains("Diabetes") && carbs > 250) {
             // Simple threshold for example
-            title = "⚠️ Diabetes Alert"
-            body = "Your carb intake is high (${carbs.toInt()}g). Monitor your blood sugar closely."
+            title = "⚠️ Peringatan Diabetes"
+            body = "Asupan karbohidrat Anda tinggi (${carbs.toInt()}g). Pantau gula darah Anda dengan cermat."
             isWarning = true
         } else if ((conditionList.contains("Hypertension") || conditionList.contains("Cholesterol")) && fat > 70) {
-            title = "⚠️ Heart Health Alert"
-            body = "Fat intake is high (${fat.toInt()}g). Reduce fried foods to manage your condition."
+            title = "⚠️ Peringatan Kesehatan Jantung"
+            body = "Asupan lemak tinggi (${fat.toInt()}g). Kurangi makanan gorengan untuk mengelola kondisi Anda."
             isWarning = true
         } else if (conditionList.contains("Gastritis")) {
             // Gastritis alert - always show advice for gastritis patients
-            title = "🍃 Gastritis Reminder"
-            body = "Avoid spicy, acidic, and fried foods. Eat smaller, more frequent meals and avoid eating late at night."
+            title = "🍃 Pengingat Maag"
+            body = "Hindari makanan pedas, asam, dan gorengan. Makan dalam porsi kecil namun sering dan hindari makan larut malam."
             isWarning = true
         } else {
             // Daily tips rotation based on current intake
             val tips = listOf(
-                "💧 Stay hydrated! Aim for at least 8 glasses of water today.",
-                "🥗 Try to fill half your plate with vegetables at each meal.",
-                "🚶 A 30-minute walk after meals can help with digestion.",
-                "🍎 Include fiber-rich foods to keep you feeling full longer.",
-                "😴 Good sleep is essential for maintaining a healthy metabolism.",
-                "🥦 Eating a variety of colorful vegetables ensures diverse nutrients."
+                "💧 Tetap terhidrasi! Targetkan setidaknya 8 gelas air hari ini.",
+                "🥗 Cobalah mengisi setengah piring Anda dengan sayuran setiap kali makan.",
+                "🚶 Jalan kaki 30 menit setelah makan dapat membantu pencernaan.",
+                "🍎 Sertakan makanan kaya serat agar Anda merasa kenyang lebih lama.",
+                "😴 Tidur yang cukup penting untuk menjaga metabolisme yang sehat.",
+                "🥦 Mengonsumsi berbagai sayuran berwarna memastikan nutrisi yang beragam."
             )
             val tipIndex = (System.currentTimeMillis() / 60000).toInt() % tips.size
             body = tips[tipIndex]
