@@ -18,4 +18,17 @@
     <color name="strength_medium">#FF9800</color>
     <color name="strength_strong">#4CAF50</color>
     <color name="gray_light">#E0E0E0</color>
+    
+    <!-- New Profile Colors -->
+    <color name="chip_selected_bg">#4CAF50</color>
+    <color name="chip_selected_text">#FFFFFF</color>
+    <color name="chip_unselected_bg">#FFFFFF</color>
+    <color name="chip_unselected_stroke">#E0E0E0</color>
+    <color name="chip_unselected_text">#757575</color>
+    
+    <!-- BMI Colors -->
+    <color name="bmi_underweight">#2196F3</color>
+    <color name="bmi_normal">#4CAF50</color>
+    <color name="bmi_overweight">#FFC107</color>
+    <color name="bmi_obese">#F44336</color>
 </resources>

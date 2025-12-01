@@ -5,10 +5,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -19,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.nutrimate.data.AppDatabase
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,7 +29,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var ivProfilePicture: ImageView
-    private lateinit var btnChangePhoto: Button
+    private lateinit var btnChangePhoto: FloatingActionButton
     private lateinit var etFullName: EditText
     private lateinit var etEmail: EditText
     private lateinit var etAge: EditText
@@ -34,6 +37,8 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var etHeight: EditText
     private lateinit var tvBMI: TextView
     private lateinit var tvBMIStatus: TextView
+    private lateinit var flBMIContainer: FrameLayout
+    private lateinit var ivBMIMarker: ImageView
     private lateinit var etTargetWeight: EditText
     private lateinit var rgGender: RadioGroup
     private lateinit var spActivityLevel: Spinner
@@ -94,6 +99,8 @@ class ProfileActivity : AppCompatActivity() {
         etHeight = findViewById(R.id.etHeight)
         tvBMI = findViewById(R.id.tvBMI)
         tvBMIStatus = findViewById(R.id.tvBMIStatus)
+        flBMIContainer = findViewById(R.id.flBMIContainer)
+        ivBMIMarker = findViewById(R.id.ivBMIMarker)
         etTargetWeight = findViewById(R.id.etTargetWeight)
         rgGender = findViewById(R.id.rgGender)
         spActivityLevel = findViewById(R.id.spActivityLevel)
@@ -193,13 +200,35 @@ class ProfileActivity : AppCompatActivity() {
                     else -> "Obesitas"
                 }
                 tvBMIStatus.text = "($status)"
-                
-                // Set color based on status (optional, simple logic)
-                // tvBMIStatus.setTextColor(...) 
+
+                // Update Marker Position
+                updateBMIMarker(bmi)
             }
         } else {
             tvBMI.text = "BMI: --"
             tvBMIStatus.text = "(Normal)"
+            updateBMIMarker(22.0f) // Default to middle/normal
+        }
+    }
+
+    private fun updateBMIMarker(bmi: Float) {
+        flBMIContainer.post {
+            val minBMI = 15f
+            val maxBMI = 40f
+            val width = flBMIContainer.width.toFloat()
+            
+            // Calculate percentage (0.0 to 1.0)
+            val percentage = (bmi - minBMI).coerceIn(0f, maxBMI - minBMI) / (maxBMI - minBMI)
+            
+            // Calculate X position
+            // Subtract half of marker width to center it on the value
+            val markerWidth = ivBMIMarker.width.toFloat()
+            val xPos = (percentage * width) - (markerWidth / 2)
+            
+            ivBMIMarker.animate()
+                .translationX(xPos)
+                .setDuration(300)
+                .start()
         }
     }
 
