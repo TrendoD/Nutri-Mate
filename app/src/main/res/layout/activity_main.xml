@@ -99,7 +99,7 @@
                             android:text="0"
                             android:textSize="48sp"
                             android:textStyle="bold"
-                            android:textColor="@color/design_default_color_primary"/>
+                            android:textColor="@color/green_primary"/>
 
                         <TextView
                             android:id="@+id/tvCalorieTarget"
@@ -253,7 +253,7 @@
                             android:text="💧 Asupan Air"
                             android:textSize="16sp"
                             android:textStyle="bold"
-                            android:textColor="#2196F3"/>
+                            android:textColor="@color/teal_700"/>
 
                         <TextView
                             android:id="@+id/tvWaterIntake"
@@ -373,7 +373,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="12dp"
-                app:cardBackgroundColor="#E3F2FD"
+                app:cardBackgroundColor="@color/green_light"
                 app:cardElevation="0dp"
                 android:layout_marginBottom="80dp">
 
@@ -389,7 +389,7 @@
                         android:layout_height="wrap_content"
                         android:text="Tips Harian"
                         android:textStyle="bold"
-                        android:textColor="#1565C0"
+                        android:textColor="@color/green_dark"
                         android:layout_marginBottom="4dp"/>
 
                     <TextView
@@ -397,7 +397,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Lacak makanan Anda untuk mendapatkan wawasan yang dipersonalisasi berdasarkan kondisi kesehatan Anda."
-                        android:textColor="#0D47A1"/>
+                        android:textColor="@color/green_dark"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

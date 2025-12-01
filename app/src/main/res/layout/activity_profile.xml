@@ -271,7 +271,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="🎯 Atur Target Nutrisi"
-            android:backgroundTint="#2196F3"
+            android:backgroundTint="@color/green_primary"
             android:textColor="#FFFFFF"
             android:layout_marginBottom="8dp"/>
 
