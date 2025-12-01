@@ -1,5 +1,6 @@
 package com.example.nutrimate
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -17,7 +18,7 @@ class StatisticsActivity : AppCompatActivity() {
 
     private lateinit var database: AppDatabase
     private var currentUsername: String = ""
-    private val localeID = Locale("id", "ID")
+    private val localeID = Locale.forLanguageTag("id-ID")
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", localeID)
     
     // Views
@@ -89,15 +90,24 @@ class StatisticsActivity : AppCompatActivity() {
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    finish()
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_food_log -> {
+                    startActivity(Intent(this, FoodLogActivity::class.java).putExtra("USERNAME", currentUsername))
                     finish()
                     true
                 }
                 R.id.nav_stats -> true
                 R.id.nav_profile -> {
+                    startActivity(Intent(this, ProfileActivity::class.java).putExtra("USERNAME", currentUsername))
+                    finish()
+                    true
+                }
+                R.id.nav_settings -> {
+                    startActivity(Intent(this, SettingsActivity::class.java).putExtra("USERNAME", currentUsername))
                     finish()
                     true
                 }

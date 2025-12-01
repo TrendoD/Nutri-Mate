@@ -21,6 +21,8 @@ import androidx.lifecycle.lifecycleScope
 import com.example.nutrimate.data.AppDatabase
 import kotlinx.coroutines.launch
 
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var ivProfilePicture: ImageView
@@ -43,6 +45,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var etAllergies: EditText
     private lateinit var btnNutritionTargets: Button
     private lateinit var btnSaveProfile: Button
+    private lateinit var bottomNavigation: BottomNavigationView
     
     private lateinit var database: AppDatabase
     private var username: String = ""
@@ -102,6 +105,7 @@ class ProfileActivity : AppCompatActivity() {
         etAllergies = findViewById(R.id.etAllergies)
         btnNutritionTargets = findViewById(R.id.btnNutritionTargets)
         btnSaveProfile = findViewById(R.id.btnSaveProfile)
+        bottomNavigation = findViewById(R.id.bottomNavigation)
 
         // Setup Spinner
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, activityLevels)
@@ -124,6 +128,8 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        setupBottomNavigation()
+
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -134,6 +140,37 @@ class ProfileActivity : AppCompatActivity() {
 
         etWeight.addTextChangedListener(textWatcher)
         etHeight.addTextChangedListener(textWatcher)
+    }
+
+    private fun setupBottomNavigation() {
+        bottomNavigation.selectedItemId = R.id.nav_profile
+        bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    startActivity(intent)
+                    true
+                }
+                R.id.nav_food_log -> {
+                    startActivity(Intent(this, FoodLogActivity::class.java).putExtra("USERNAME", username))
+                    finish()
+                    true
+                }
+                R.id.nav_stats -> {
+                    startActivity(Intent(this, StatisticsActivity::class.java).putExtra("USERNAME", username))
+                    finish()
+                    true
+                }
+                R.id.nav_profile -> true
+                R.id.nav_settings -> {
+                    startActivity(Intent(this, SettingsActivity::class.java).putExtra("USERNAME", username))
+                    finish()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun calculateBMI() {

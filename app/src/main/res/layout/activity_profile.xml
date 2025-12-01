@@ -1,287 +1,305 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:padding="16dp">
+    android:background="#F5F5F5">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lengkapi Profil Anda"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="24dp"/>
-
-        <!-- Profile Picture Section -->
-        <ImageView
-            android:id="@+id/ivProfilePicture"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@drawable/ic_launcher_foreground"
-            android:background="@drawable/ic_launcher_background"
-            android:scaleType="centerCrop"
-            android:layout_marginBottom="8dp"/>
-
-        <Button
-            android:id="@+id/btnChangePhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ubah Foto"
-            android:layout_marginBottom="24dp"/>
-
-        <!-- Personal Info Section -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nama Lengkap"
-            android:textStyle="bold"
-            android:layout_marginBottom="4dp"/>
-        <EditText
-            android:id="@+id/etFullName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="Nama Lengkap"
-            android:layout_marginBottom="16dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Email"
-            android:textStyle="bold"
-            android:layout_marginBottom="4dp"/>
-        <EditText
-            android:id="@+id/etEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:hint="Email"
-            android:layout_marginBottom="16dp"/>
-
-        <!-- Physical Stats Section -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Usia"
-            android:layout_marginBottom="4dp"/>
-        <EditText
-            android:id="@+id/etAge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="Masukkan usia Anda"
-            android:layout_marginBottom="16dp"/>
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:padding="16dp"
+        android:layout_marginBottom="56dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginEnd="8dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Berat (kg)"
-                    android:layout_marginBottom="4dp"/>
-                <EditText
-                    android:id="@+id/etWeight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:hint="kg"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginStart="8dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tinggi (cm)"
-                    android:layout_marginBottom="4dp"/>
-                <EditText
-                    android:id="@+id/etHeight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:hint="cm"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- BMI Result -->
-        <TextView
-            android:id="@+id/tvBMI"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="BMI: --"
-            android:textStyle="bold"
-            android:layout_marginTop="8dp"
-            android:gravity="center"/>
-        <TextView
-            android:id="@+id/tvBMIStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="(Normal)"
-            android:textColor="@color/black"
-            android:layout_marginBottom="16dp"
-            android:gravity="center"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Target Berat (kg)"
-            android:layout_marginBottom="4dp"/>
-        <EditText
-            android:id="@+id/etTargetWeight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:hint="Masukkan target berat"
-            android:layout_marginBottom="16dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Jenis Kelamin"
-            android:layout_marginBottom="4dp"/>
-        <RadioGroup
-            android:id="@+id/rgGender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
-            <RadioButton
-                android:id="@+id/rbMale"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pria"
-                android:layout_marginEnd="16dp"/>
-            <RadioButton
-                android:id="@+id/rbFemale"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Wanita"/>
-        </RadioGroup>
-
-        <!-- Activity Level -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tingkat Aktivitas"
-            android:layout_marginBottom="4dp"/>
-        <Spinner
-            android:id="@+id/spActivityLevel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:layout_marginBottom="16dp"/>
-
-        <!-- Diet Goal -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tujuan Diet"
-            android:layout_marginBottom="4dp"/>
-        <RadioGroup
-            android:id="@+id/rgDietGoal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginBottom="16dp">
-            <RadioButton
-                android:id="@+id/rbLoseWeight"
+            android:gravity="center_horizontal">
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Turunkan Berat Badan"/>
-            <RadioButton
-                android:id="@+id/rbMaintain"
+                android:text="Lengkapi Profil Anda"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Profile Picture Section -->
+            <ImageView
+                android:id="@+id/ivProfilePicture"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/ic_launcher_foreground"
+                android:background="@drawable/ic_launcher_background"
+                android:scaleType="centerCrop"
+                android:layout_marginBottom="8dp"/>
+
+            <Button
+                android:id="@+id/btnChangePhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pertahankan Berat Badan"/>
-            <RadioButton
-                android:id="@+id/rbGainWeight"
-                android:layout_width="wrap_content"
+                android:text="Ubah Foto"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Personal Info Section -->
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Naikkan Berat Badan"/>
-        </RadioGroup>
+                android:text="Nama Lengkap"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"/>
+            <EditText
+                android:id="@+id/etFullName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:hint="Nama Lengkap"
+                android:layout_marginBottom="16dp"/>
 
-        <!-- Medical Conditions -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Kondisi Medis"
-            android:layout_marginBottom="4dp"/>
-        <CheckBox
-            android:id="@+id/cbDiabetes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Diabetes"/>
-        <CheckBox
-            android:id="@+id/cbHypertension"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Hipertensi (Tekanan Darah Tinggi)"/>
-        <CheckBox
-            android:id="@+id/cbCholesterol"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Kolesterol Tinggi"/>
-        <CheckBox
-            android:id="@+id/cbGastritis"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Maag/GERD"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"/>
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:hint="Email"
+                android:layout_marginBottom="16dp"/>
 
-        <!-- Allergies -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Alergi / Pantangan Makanan"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"/>
-        <EditText
-            android:id="@+id/etAllergies"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:minLines="2"
-            android:gravity="top|start"
-            android:hint="mis. Kacang, Kerang, Gluten..."
-            android:layout_marginBottom="16dp"/>
+            <!-- Physical Stats Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Usia"
+                android:layout_marginBottom="4dp"/>
+            <EditText
+                android:id="@+id/etAge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Masukkan usia Anda"
+                android:layout_marginBottom="16dp"/>
 
-        <!-- Nutrition Targets Button -->
-        <Button
-            android:id="@+id/btnNutritionTargets"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="🎯 Atur Target Nutrisi"
-            android:backgroundTint="@color/green_primary"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="8dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-        <Button
-            android:id="@+id/btnSaveProfile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Hitung &amp; Simpan Profil"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="32dp"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Berat (kg)"
+                        android:layout_marginBottom="4dp"/>
+                    <EditText
+                        android:id="@+id/etWeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:hint="kg"/>
+                </LinearLayout>
 
-    </LinearLayout>
-</ScrollView>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tinggi (cm)"
+                        android:layout_marginBottom="4dp"/>
+                    <EditText
+                        android:id="@+id/etHeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:hint="cm"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- BMI Result -->
+            <TextView
+                android:id="@+id/tvBMI"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="BMI: --"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/tvBMIStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="(Normal)"
+                android:textColor="@color/black"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Target Berat (kg)"
+                android:layout_marginBottom="4dp"/>
+            <EditText
+                android:id="@+id/etTargetWeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:hint="Masukkan target berat"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jenis Kelamin"
+                android:layout_marginBottom="4dp"/>
+            <RadioGroup
+                android:id="@+id/rgGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <RadioButton
+                    android:id="@+id/rbMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pria"
+                    android:layout_marginEnd="16dp"/>
+                <RadioButton
+                    android:id="@+id/rbFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wanita"/>
+            </RadioGroup>
+
+            <!-- Activity Level -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tingkat Aktivitas"
+                android:layout_marginBottom="4dp"/>
+            <Spinner
+                android:id="@+id/spActivityLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Diet Goal -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tujuan Diet"
+                android:layout_marginBottom="4dp"/>
+            <RadioGroup
+                android:id="@+id/rgDietGoal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+                <RadioButton
+                    android:id="@+id/rbLoseWeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Turunkan Berat Badan"/>
+                <RadioButton
+                    android:id="@+id/rbMaintain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pertahankan Berat Badan"/>
+                <RadioButton
+                    android:id="@+id/rbGainWeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Naikkan Berat Badan"/>
+            </RadioGroup>
+
+            <!-- Medical Conditions -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kondisi Medis"
+                android:layout_marginBottom="4dp"/>
+            <CheckBox
+                android:id="@+id/cbDiabetes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Diabetes"/>
+            <CheckBox
+                android:id="@+id/cbHypertension"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hipertensi (Tekanan Darah Tinggi)"/>
+            <CheckBox
+                android:id="@+id/cbCholesterol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kolesterol Tinggi"/>
+            <CheckBox
+                android:id="@+id/cbGastritis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Maag/GERD"/>
+
+            <!-- Allergies -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Alergi / Pantangan Makanan"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"/>
+            <EditText
+                android:id="@+id/etAllergies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="2"
+                android:gravity="top|start"
+                android:hint="mis. Kacang, Kerang, Gluten..."
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Nutrition Targets Button -->
+            <Button
+                android:id="@+id/btnNutritionTargets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🎯 Atur Target Nutrisi"
+                android:backgroundTint="@color/green_primary"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="8dp"/>
+
+            <Button
+                android:id="@+id/btnSaveProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hitung &amp; Simpan Profil"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="32dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom"
+        android:background="@android:color/white"
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="labeled"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

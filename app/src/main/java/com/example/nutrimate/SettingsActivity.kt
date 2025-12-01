@@ -8,13 +8,14 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.appcompat.widget.SwitchCompat
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
 import com.example.nutrimate.data.AppDatabase
-import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -23,7 +24,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var ivBack: ImageView
     
     // Notification Settings
-    private lateinit var switchNotifications: SwitchMaterial
+    private lateinit var switchNotifications: SwitchCompat
     private lateinit var llBreakfastReminder: LinearLayout
     private lateinit var llLunchReminder: LinearLayout
     private lateinit var llDinnerReminder: LinearLayout
@@ -33,7 +34,7 @@ class SettingsActivity : AppCompatActivity() {
     
     // Preferences
     private lateinit var llUnitPreferences: LinearLayout
-    private lateinit var switchDarkMode: SwitchMaterial
+    private lateinit var switchDarkMode: SwitchCompat
     private lateinit var tvUnitSystem: TextView
     
     // Data Management
@@ -47,6 +48,8 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var llPrivacyPolicy: LinearLayout
     private lateinit var llHelpFaq: LinearLayout
     private lateinit var tvAppVersion: TextView
+    
+    private lateinit var bottomNavigation: BottomNavigationView
     
     private lateinit var database: AppDatabase
     private lateinit var sharedPreferences: SharedPreferences
@@ -114,6 +117,8 @@ class SettingsActivity : AppCompatActivity() {
         llHelpFaq = findViewById(R.id.llHelpFaq)
         tvAppVersion = findViewById(R.id.tvAppVersion)
         
+        bottomNavigation = findViewById(R.id.bottomNavigation)
+        
         // Set app version
         try {
             val pInfo = packageManager.getPackageInfo(packageName, 0)
@@ -154,6 +159,8 @@ class SettingsActivity : AppCompatActivity() {
         ivBack.setOnClickListener {
             finish()
         }
+        
+        setupBottomNavigation()
         
         // Notification toggle
         switchNotifications.setOnCheckedChangeListener { _, isChecked ->
@@ -231,6 +238,37 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
     
+    private fun setupBottomNavigation() {
+        bottomNavigation.selectedItemId = R.id.nav_settings
+        bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    startActivity(intent)
+                    true
+                }
+                R.id.nav_food_log -> {
+                    startActivity(Intent(this, FoodLogActivity::class.java).putExtra("USERNAME", username))
+                    finish()
+                    true
+                }
+                R.id.nav_stats -> {
+                    startActivity(Intent(this, StatisticsActivity::class.java).putExtra("USERNAME", username))
+                    finish()
+                    true
+                }
+                R.id.nav_profile -> {
+                    startActivity(Intent(this, ProfileActivity::class.java).putExtra("USERNAME", username))
+                    finish()
+                    true
+                }
+                R.id.nav_settings -> true
+                else -> false
+            }
+        }
+    }
+
     private fun showTimePickerDialog(mealType: String, prefKey: String, textView: TextView) {
         val calendar = Calendar.getInstance()
         val currentTime = textView.text.toString()

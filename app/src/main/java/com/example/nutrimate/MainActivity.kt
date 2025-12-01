@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var database: AppDatabase
     private var currentUsername: String = ""
-    private val localeID = Locale("id", "ID")
+    private val localeID = Locale.forLanguageTag("id-ID")
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", localeID)
     private val displayDateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", localeID)
     
