@@ -240,7 +240,7 @@ class MainActivity : AppCompatActivity() {
             val user = database.userDao().getUserByUsername(username)
             if (user != null) {
                 if (user.age == 0) {
-                    val intent = Intent(this@MainActivity, ProfileActivity::class.java)
+                    val intent = Intent(this@MainActivity, com.example.nutrimate.onboarding.OnboardingActivity::class.java)
                     intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     finish()

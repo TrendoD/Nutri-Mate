@@ -18,6 +18,7 @@
     <color name="strength_medium">#FF9800</color>
     <color name="strength_strong">#4CAF50</color>
     <color name="gray_light">#E0E0E0</color>
+    <color name="gray_dark">#424242</color>
     
     <!-- New Profile Colors -->
     <color name="chip_selected_bg">#4CAF50</color>

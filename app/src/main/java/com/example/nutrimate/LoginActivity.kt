@@ -83,7 +83,14 @@ class LoginActivity : AppCompatActivity() {
                         sharedPreferences.edit().putString(KEY_LOGGED_IN_USER, user.username).apply()
                         
                         Toast.makeText(this@LoginActivity, "Berhasil masuk! Selamat datang ${user.fullName}", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        
+                        // Check if user profile is complete (using age as proxy)
+                        val intent = if (user.age == 0) {
+                            Intent(this@LoginActivity, com.example.nutrimate.onboarding.OnboardingActivity::class.java)
+                        } else {
+                            Intent(this@LoginActivity, MainActivity::class.java)
+                        }
+                        
                         intent.putExtra("USER_NAME", user.fullName)
                         intent.putExtra("USERNAME", user.username)
                         startActivity(intent)
