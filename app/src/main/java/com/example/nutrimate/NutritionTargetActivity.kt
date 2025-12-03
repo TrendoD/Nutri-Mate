@@ -177,13 +177,6 @@ class NutritionTargetActivity : AppCompatActivity() {
                     finish()
                     true
                 }
-                R.id.nav_profile -> {
-                    val intent = Intent(this, ProfileActivity::class.java)
-                    intent.putExtra("USERNAME", currentUsername)
-                    startActivity(intent)
-                    finish()
-                    true
-                }
                 else -> false
             }
         }

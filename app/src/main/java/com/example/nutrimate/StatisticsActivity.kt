@@ -167,11 +167,6 @@ class StatisticsActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_stats -> true
-                R.id.nav_profile -> {
-                    startActivity(Intent(this, ProfileActivity::class.java).putExtra("USERNAME", currentUsername))
-                    finish()
-                    true
-                }
                 R.id.nav_settings -> {
                     startActivity(Intent(this, SettingsActivity::class.java).putExtra("USERNAME", currentUsername))
                     finish()

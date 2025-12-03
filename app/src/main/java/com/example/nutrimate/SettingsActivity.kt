@@ -23,6 +23,9 @@ class SettingsActivity : AppCompatActivity() {
 
     private lateinit var ivBack: ImageView
     
+    // Account
+    private lateinit var llMyProfile: LinearLayout
+    
     // Notification Settings
     private lateinit var switchNotifications: SwitchCompat
     private lateinit var llBreakfastReminder: LinearLayout
@@ -90,6 +93,9 @@ class SettingsActivity : AppCompatActivity() {
     
     private fun initViews() {
         ivBack = findViewById(R.id.ivBack)
+        
+        // Account
+        llMyProfile = findViewById(R.id.llMyProfile)
         
         // Notifications
         switchNotifications = findViewById(R.id.switchNotifications)
@@ -161,6 +167,11 @@ class SettingsActivity : AppCompatActivity() {
         }
         
         setupBottomNavigation()
+        
+        // Account
+        llMyProfile.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java).putExtra("USERNAME", username))
+        }
         
         // Notification toggle
         switchNotifications.setOnCheckedChangeListener { _, isChecked ->
@@ -255,11 +266,6 @@ class SettingsActivity : AppCompatActivity() {
                 }
                 R.id.nav_stats -> {
                     startActivity(Intent(this, StatisticsActivity::class.java).putExtra("USERNAME", username))
-                    finish()
-                    true
-                }
-                R.id.nav_profile -> {
-                    startActivity(Intent(this, ProfileActivity::class.java).putExtra("USERNAME", username))
                     finish()
                     true
                 }

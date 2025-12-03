@@ -218,12 +218,6 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent, options.toBundle())
                     true
                 }
-                R.id.nav_profile -> {
-                    val intent = Intent(this, ProfileActivity::class.java)
-                    intent.putExtra("USERNAME", currentUsername)
-                    startActivity(intent)
-                    true
-                }
                 R.id.nav_settings -> {
                     val intent = Intent(this, SettingsActivity::class.java)
                     intent.putExtra("USERNAME", currentUsername)
