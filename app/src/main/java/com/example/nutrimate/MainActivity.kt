@@ -138,7 +138,9 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, AddFoodActivity::class.java)
             intent.putExtra("USERNAME", currentUsername)
             intent.putExtra("MEAL_TYPE", "Breakfast")
-            startActivity(intent)
+            
+            val options = android.app.ActivityOptions.makeSceneTransitionAnimation(this, fabQuickAdd, "fab_transition")
+            startActivity(intent, options.toBundle())
         }
 
         btnLogout.setOnClickListener {
@@ -160,11 +162,35 @@ class MainActivity : AppCompatActivity() {
         }
         
         // Water intake buttons
-        btnWater100.setOnClickListener { addWaterIntake(100) }
-        btnWater250.setOnClickListener { addWaterIntake(250) }
-        btnWater500.setOnClickListener { addWaterIntake(500) }
+        btnWater100.setOnClickListener { 
+            animateButton(it)
+            addWaterIntake(100) 
+        }
+        btnWater250.setOnClickListener { 
+            animateButton(it)
+            addWaterIntake(250) 
+        }
+        btnWater500.setOnClickListener { 
+            animateButton(it)
+            addWaterIntake(500) 
+        }
     }
     
+    private fun animateButton(view: android.view.View) {
+        view.animate()
+            .scaleX(0.9f)
+            .scaleY(0.9f)
+            .setDuration(100)
+            .withEndAction {
+                view.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(100)
+                    .start()
+            }
+            .start()
+    }
+
     private fun setupBottomNavigation() {
         bottomNavigation.selectedItemId = R.id.nav_home
         
@@ -179,13 +205,17 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_food_log -> {
                     val intent = Intent(this, FoodLogActivity::class.java)
                     intent.putExtra("USERNAME", currentUsername)
-                    startActivity(intent)
+                    
+                    val options = android.app.ActivityOptions.makeSceneTransitionAnimation(this)
+                    startActivity(intent, options.toBundle())
                     true
                 }
                 R.id.nav_stats -> {
                     val intent = Intent(this, StatisticsActivity::class.java)
                     intent.putExtra("USERNAME", currentUsername)
-                    startActivity(intent)
+                    
+                    val options = android.app.ActivityOptions.makeSceneTransitionAnimation(this)
+                    startActivity(intent, options.toBundle())
                     true
                 }
                 R.id.nav_profile -> {
@@ -231,7 +261,12 @@ class MainActivity : AppCompatActivity() {
             
             tvWaterIntake.text = "$totalWater / $waterTarget ml"
             pbWater.max = waterTarget
-            pbWater.progress = totalWater.coerceAtMost(waterTarget)
+            
+            // Animate progress
+            val animation = android.animation.ObjectAnimator.ofInt(pbWater, "progress", pbWater.progress, totalWater.coerceAtMost(waterTarget))
+            animation.duration = 500
+            animation.interpolator = android.view.animation.DecelerateInterpolator()
+            animation.start()
         }
     }
 
@@ -273,7 +308,12 @@ class MainActivity : AppCompatActivity() {
                 // Update UI
                 tvCalorieProgress.text = totalCals.toInt().toString()
                 pbCalories.max = target
-                pbCalories.progress = totalCals.toInt()
+                
+                // Animate progress
+                val animation = android.animation.ObjectAnimator.ofInt(pbCalories, "progress", pbCalories.progress, totalCals.toInt())
+                animation.duration = 1000
+                animation.interpolator = android.view.animation.DecelerateInterpolator()
+                animation.start()
                 
                 tvCarbs.text = "${totalCarbs.toInt()}g"
                 tvProtein.text = "${totalProtein.toInt()}g"

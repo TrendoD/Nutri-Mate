@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@color/page_background">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -24,6 +24,7 @@
                 android:text="Statistik &amp; Riwayat"
                 android:textSize="24sp"
                 android:textStyle="bold"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="8dp"/>
 
             <TextView
@@ -31,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:text="Lacak kemajuan Anda dari waktu ke waktu"
                 android:textSize="14sp"
-                android:textColor="#757575"
+                android:textColor="@color/text_secondary"
                 android:layout_marginBottom="16dp"/>
 
             <!-- Time Range Selector -->
@@ -39,6 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
@@ -54,6 +56,7 @@
                         android:layout_height="wrap_content"
                         android:text="Rentang Waktu:"
                         android:textStyle="bold"
+                        android:textColor="@color/text_primary"
                         android:layout_marginEnd="12dp"/>
 
                     <Spinner
@@ -72,7 +75,7 @@
                 android:text="Tidak ada data untuk periode yang dipilih.
 Mulai catat makanan Anda untuk melihat statistik!"
                 android:textSize="16sp"
-                android:textColor="#757575"
+                android:textColor="@color/text_secondary"
                 android:gravity="center"
                 android:padding="32dp"
                 android:visibility="gone"/>
@@ -83,6 +86,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
@@ -98,25 +102,171 @@ Mulai catat makanan Anda untuk melihat statistik!"
                         android:text="📊 Grafik Kalori Harian"
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        android:textColor="@color/text_primary"
                         android:layout_marginBottom="12dp"/>
 
-                    <LinearLayout
-                        android:id="@+id/llWeeklyBars"
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/chartWeeklyCalories"
                         android:layout_width="match_parent"
-                        android:layout_height="180dp"
-                        android:orientation="horizontal"
-                        android:gravity="bottom"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"/>
+                        android:layout_height="200dp"
+                        android:layout_marginBottom="8dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🟢 Sesuai Target  🟠 Berlebih  ⚫ Kurang"
+                        android:text="Target Harian (Garis Putus-putus)"
                         android:textSize="12sp"
-                        android:textColor="#757575"
+                        android:textColor="@color/text_secondary"
                         android:layout_marginTop="8dp"
                         android:gravity="center"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Macronutrient Pie Chart Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvMacroChart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/card_background"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🍰 Distribusi Makronutrisi"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginBottom="12dp"/>
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/chartMacros"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginBottom="16dp"/>
+
+                    <!-- Legend Layout -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:baselineAligned="false">
+
+                        <!-- Carbs Legend -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="● Karbo"
+                                android:textColor="#FF9800"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="4dp"/>
+
+                            <TextView
+                                android:id="@+id/tvLegendCarbsVal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0g"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"/>
+
+                            <TextView
+                                android:id="@+id/tvLegendCarbsPct"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0%"
+                                android:textSize="12sp"
+                                android:textColor="@color/text_secondary"/>
+                        </LinearLayout>
+
+                        <!-- Protein Legend -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="● Protein"
+                                android:textColor="#E91E63"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="4dp"/>
+
+                            <TextView
+                                android:id="@+id/tvLegendProteinVal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0g"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"/>
+
+                            <TextView
+                                android:id="@+id/tvLegendProteinPct"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0%"
+                                android:textSize="12sp"
+                                android:textColor="@color/text_secondary"/>
+                        </LinearLayout>
+
+                        <!-- Fat Legend -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="● Lemak"
+                                android:textColor="#9C27B0"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="4dp"/>
+
+                            <TextView
+                                android:id="@+id/tvLegendFatVal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0g"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"/>
+
+                            <TextView
+                                android:id="@+id/tvLegendFatPct"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0%"
+                                android:textSize="12sp"
+                                android:textColor="@color/text_secondary"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -126,6 +276,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
@@ -141,6 +292,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                         android:text="📈 Rata-rata Asupan Harian"
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        android:textColor="@color/text_primary"
                         android:layout_marginBottom="12dp"/>
 
                     <LinearLayout
@@ -161,7 +313,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                                 android:layout_height="wrap_content"
                                 android:text="Hari Tercatat"
                                 android:textSize="12sp"
-                                android:textColor="#757575"/>
+                                android:textColor="@color/text_secondary"/>
 
                             <TextView
                                 android:id="@+id/tvTotalDays"
@@ -185,7 +337,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                                 android:layout_height="wrap_content"
                                 android:text="Rata-rata Kalori"
                                 android:textSize="12sp"
-                                android:textColor="#757575"/>
+                                android:textColor="@color/text_secondary"/>
 
                             <TextView
                                 android:id="@+id/tvAvgCalories"
@@ -221,7 +373,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                                 android:layout_height="wrap_content"
                                 android:text="Karbo"
                                 android:textSize="12sp"
-                                android:textColor="#757575"/>
+                                android:textColor="@color/text_secondary"/>
 
                             <TextView
                                 android:id="@+id/tvAvgCarbs"
@@ -229,7 +381,8 @@ Mulai catat makanan Anda untuk melihat statistik!"
                                 android:layout_height="wrap_content"
                                 android:text="0g"
                                 android:textSize="16sp"
-                                android:textStyle="bold"/>
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -244,7 +397,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                                 android:layout_height="wrap_content"
                                 android:text="Protein"
                                 android:textSize="12sp"
-                                android:textColor="#757575"/>
+                                android:textColor="@color/text_secondary"/>
 
                             <TextView
                                 android:id="@+id/tvAvgProtein"
@@ -252,7 +405,8 @@ Mulai catat makanan Anda untuk melihat statistik!"
                                 android:layout_height="wrap_content"
                                 android:text="0g"
                                 android:textSize="16sp"
-                                android:textStyle="bold"/>
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -267,7 +421,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                                 android:layout_height="wrap_content"
                                 android:text="Lemak"
                                 android:textSize="12sp"
-                                android:textColor="#757575"/>
+                                android:textColor="@color/text_secondary"/>
 
                             <TextView
                                 android:id="@+id/tvAvgFat"
@@ -275,7 +429,8 @@ Mulai catat makanan Anda untuk melihat statistik!"
                                 android:layout_height="wrap_content"
                                 android:text="0g"
                                 android:textSize="16sp"
-                                android:textStyle="bold"/>
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -287,6 +442,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
@@ -302,6 +458,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                         android:text="🎯 Pencapaian Tujuan"
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        android:textColor="@color/text_primary"
                         android:layout_marginBottom="12dp"/>
 
                     <TextView
@@ -309,7 +466,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                         android:layout_height="wrap_content"
                         android:text="Hari dalam target kalori (90-110%)"
                         android:textSize="12sp"
-                        android:textColor="#757575"
+                        android:textColor="@color/text_secondary"
                         android:layout_marginBottom="8dp"/>
 
                     <LinearLayout
@@ -347,6 +504,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
@@ -362,6 +520,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                         android:text="🏆 Hari Terbaik &amp; Terendah"
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        android:textColor="@color/text_primary"
                         android:layout_marginBottom="12dp"/>
 
                     <LinearLayout
@@ -394,6 +553,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                                 android:text="---"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
+                                android:textColor="#1B5E20"
                                 android:layout_marginBottom="2dp"/>
 
                             <TextView
@@ -430,6 +590,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                                 android:text="---"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
+                                android:textColor="#BF360C"
                                 android:layout_marginBottom="2dp"/>
 
                             <TextView
@@ -450,6 +611,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
@@ -465,6 +627,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                         android:text="📉 Tren Kalori"
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        android:textColor="@color/text_primary"
                         android:layout_marginBottom="8dp"/>
 
                     <TextView
@@ -472,7 +635,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
                         android:layout_height="wrap_content"
                         android:text="Membandingkan paruh pertama vs paruh kedua periode"
                         android:textSize="12sp"
-                        android:textColor="#757575"
+                        android:textColor="@color/text_secondary"
                         android:layout_marginBottom="8dp"/>
 
                     <TextView
@@ -495,7 +658,7 @@ Mulai catat makanan Anda untuk melihat statistik!"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_gravity="bottom"
-        android:background="@android:color/white"
+        android:background="@color/card_background"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"/>
 

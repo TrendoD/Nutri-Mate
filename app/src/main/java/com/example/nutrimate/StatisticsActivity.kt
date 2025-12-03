@@ -1,13 +1,22 @@
 package com.example.nutrimate
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.nutrimate.data.AppDatabase
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.LimitLine
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -37,8 +46,18 @@ class StatisticsActivity : AppCompatActivity() {
     private lateinit var tvWorstDayCalories: TextView
     private lateinit var tvCalorieTrend: TextView
     private lateinit var cvWeeklyChart: CardView
-    private lateinit var llWeeklyBars: LinearLayout
+    private lateinit var chartWeeklyCalories: BarChart
+    private lateinit var cvMacroChart: CardView
+    private lateinit var chartMacros: PieChart
     private lateinit var tvNoData: TextView
+    
+    // Macro Legend Views
+    private lateinit var tvLegendCarbsVal: TextView
+    private lateinit var tvLegendCarbsPct: TextView
+    private lateinit var tvLegendProteinVal: TextView
+    private lateinit var tvLegendProteinPct: TextView
+    private lateinit var tvLegendFatVal: TextView
+    private lateinit var tvLegendFatPct: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +73,7 @@ class StatisticsActivity : AppCompatActivity() {
         currentUsername = username
 
         initViews()
+        setupCharts()
         setupListeners()
         loadStatistics("7") // Default to 7 days
     }
@@ -73,15 +93,61 @@ class StatisticsActivity : AppCompatActivity() {
         tvWorstDay = findViewById(R.id.tvWorstDay)
         tvWorstDayCalories = findViewById(R.id.tvWorstDayCalories)
         tvCalorieTrend = findViewById(R.id.tvCalorieTrend)
+        
         cvWeeklyChart = findViewById(R.id.cvWeeklyChart)
-        llWeeklyBars = findViewById(R.id.llWeeklyBars)
+        chartWeeklyCalories = findViewById(R.id.chartWeeklyCalories)
+        cvMacroChart = findViewById(R.id.cvMacroChart)
+        chartMacros = findViewById(R.id.chartMacros)
+        
         tvNoData = findViewById(R.id.tvNoData)
+        
+        tvLegendCarbsVal = findViewById(R.id.tvLegendCarbsVal)
+        tvLegendCarbsPct = findViewById(R.id.tvLegendCarbsPct)
+        tvLegendProteinVal = findViewById(R.id.tvLegendProteinVal)
+        tvLegendProteinPct = findViewById(R.id.tvLegendProteinPct)
+        tvLegendFatVal = findViewById(R.id.tvLegendFatVal)
+        tvLegendFatPct = findViewById(R.id.tvLegendFatPct)
         
         // Setup spinner
         val timeRanges = arrayOf("7 Hari Terakhir", "14 Hari Terakhir", "30 Hari Terakhir", "Semua Waktu")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, timeRanges)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerTimeRange.adapter = adapter
+    }
+
+    private fun setupCharts() {
+        // Setup Bar Chart
+        chartWeeklyCalories.description.isEnabled = false
+        chartWeeklyCalories.setDrawGridBackground(false)
+        chartWeeklyCalories.setDrawBarShadow(false)
+        chartWeeklyCalories.setDrawBorders(false)
+        chartWeeklyCalories.legend.isEnabled = false
+        
+        val xAxis = chartWeeklyCalories.xAxis
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.setDrawGridLines(false)
+        xAxis.granularity = 1f
+        xAxis.textColor = ContextCompat.getColor(this, R.color.gray_text)
+        
+        val leftAxis = chartWeeklyCalories.axisLeft
+        leftAxis.setDrawGridLines(true)
+        leftAxis.textColor = ContextCompat.getColor(this, R.color.gray_text)
+        leftAxis.axisMinimum = 0f // Start at 0
+        
+        chartWeeklyCalories.axisRight.isEnabled = false
+        chartWeeklyCalories.animateY(1000)
+
+        // Setup Pie Chart
+        chartMacros.description.isEnabled = false
+        chartMacros.isDrawHoleEnabled = true
+        chartMacros.holeRadius = 40f
+        chartMacros.transparentCircleRadius = 45f
+        chartMacros.setHoleColor(Color.WHITE)
+        chartMacros.setEntryLabelColor(Color.TRANSPARENT) // Hide labels
+        chartMacros.setEntryLabelTextSize(0f) // Hide labels
+        chartMacros.legend.isEnabled = false // Disable default legend as we have custom one
+        chartMacros.setTouchEnabled(false) // Disable touch interaction
+        chartMacros.animateY(1400)
     }
 
     private fun setupListeners() {
@@ -145,7 +211,7 @@ class StatisticsActivity : AppCompatActivity() {
             val endDate = Date()
             val startDate = if (daysStr == "all") {
                 // Get first log date
-                Date(0) // Very old date
+                Date(0) 
             } else {
                 val calendar = Calendar.getInstance()
                 calendar.add(Calendar.DAY_OF_YEAR, -daysStr.toInt())
@@ -206,17 +272,17 @@ class StatisticsActivity : AppCompatActivity() {
             val avgProtein = dailyProtein.values.average().toFloat()
             val avgFat = dailyFat.values.average().toFloat()
 
-            // Goal achievement (days within 90-110% of target)
+            // Goal achievement
             val daysOnTarget = dailyCalories.values.count { 
                 it >= targetCalories * 0.9 && it <= targetCalories * 1.1 
             }
-            val achievementPercent = (daysOnTarget.toFloat() / totalDays * 100).roundToInt()
+            val achievementPercent = if (totalDays > 0) (daysOnTarget.toFloat() / totalDays * 100).roundToInt() else 0
 
             // Best and worst days
             val bestDay = dailyCalories.maxByOrNull { it.value }
             val worstDay = dailyCalories.minByOrNull { it.value }
 
-            // Calorie trend (compare first half vs second half)
+            // Calorie trend
             val sortedDates = dailyCalories.keys.sorted()
             val trendPercent = if (sortedDates.size < 2) {
                 0
@@ -232,8 +298,8 @@ class StatisticsActivity : AppCompatActivity() {
                 }
             }
 
-            // Update UI
-            updateUI(
+            // Update UI Text
+            updateUIText(
                 totalDays,
                 avgCalories,
                 avgCarbs,
@@ -242,19 +308,16 @@ class StatisticsActivity : AppCompatActivity() {
                 achievementPercent,
                 bestDay,
                 worstDay,
-                trendPercent,
-                dailyCalories,
-                targetCalories
+                trendPercent
             )
 
-            // Draw weekly chart
-            if (daysStr == "7" || daysStr == "14") {
-                drawWeeklyChart(dailyCalories, targetCalories)
-            }
+            // Update Charts
+            updateBarChart(dailyCalories, targetCalories)
+            updatePieChart(avgCarbs, avgProtein, avgFat)
         }
     }
 
-    private fun updateUI(
+    private fun updateUIText(
         totalDays: Int,
         avgCalories: Float,
         avgCarbs: Float,
@@ -263,9 +326,7 @@ class StatisticsActivity : AppCompatActivity() {
         achievementPercent: Int,
         bestDay: Map.Entry<String, Float>?,
         worstDay: Map.Entry<String, Float>?,
-        trendPercent: Int,
-        dailyCalories: Map<String, Float>,
-        targetCalories: Int
+        trendPercent: Int
     ) {
         tvTotalDays.text = "$totalDays"
         tvAvgCalories.text = "${avgCalories.roundToInt()} kkal"
@@ -278,25 +339,13 @@ class StatisticsActivity : AppCompatActivity() {
 
         // Best day
         if (bestDay != null) {
-            val displayFormat = SimpleDateFormat("MMM dd", localeID)
-            try {
-                val date = dateFormat.parse(bestDay.key)
-                tvBestDay.text = if (date != null) displayFormat.format(date) else bestDay.key
-            } catch (e: Exception) {
-                tvBestDay.text = bestDay.key
-            }
+            tvBestDay.text = formatDate(bestDay.key)
             tvBestDayCalories.text = "${bestDay.value.roundToInt()} kkal"
         }
 
         // Worst day
         if (worstDay != null) {
-            val displayFormat = SimpleDateFormat("MMM dd", localeID)
-            try {
-                val date = dateFormat.parse(worstDay.key)
-                tvWorstDay.text = if (date != null) displayFormat.format(date) else worstDay.key
-            } catch (e: Exception) {
-                tvWorstDay.text = worstDay.key
-            }
+            tvWorstDay.text = formatDate(worstDay.key)
             tvWorstDayCalories.text = "${worstDay.value.roundToInt()} kkal"
         }
 
@@ -309,104 +358,118 @@ class StatisticsActivity : AppCompatActivity() {
         tvCalorieTrend.text = trendText
         tvCalorieTrend.setTextColor(
             when {
-                trendPercent > 5 -> getColor(android.R.color.holo_red_dark)
-                trendPercent < -5 -> getColor(android.R.color.holo_green_dark)
-                else -> getColor(android.R.color.darker_gray)
+                trendPercent > 5 -> ContextCompat.getColor(this, R.color.bmi_overweight) // Orange/Red
+                trendPercent < -5 -> ContextCompat.getColor(this, R.color.green_primary)
+                else -> ContextCompat.getColor(this, R.color.gray_text)
             }
         )
     }
 
-    private fun drawWeeklyChart(dailyCalories: Map<String, Float>, targetCalories: Int) {
-        llWeeklyBars.removeAllViews()
+    private fun updateBarChart(dailyCalories: Map<String, Float>, targetCalories: Int) {
+        val sortedDates = dailyCalories.keys.sorted().takeLast(7) // Show last 7 days relevant for chart
+        val entries = ArrayList<BarEntry>()
+        val labels = ArrayList<String>()
         
-        val sortedDates = dailyCalories.keys.sorted().takeLast(7)
-        if (sortedDates.isEmpty()) return
-
-        val maxCalories = dailyCalories.values.maxOrNull() ?: targetCalories.toFloat()
-        val chartMax = maxOf(maxCalories, targetCalories.toFloat()) * 1.1f
-
-        val displayFormat = SimpleDateFormat("EEE", localeID)
-
-        for (dateStr in sortedDates) {
-            val calories = dailyCalories[dateStr] ?: 0f
-            val barContainer = LinearLayout(this).apply {
-                orientation = LinearLayout.VERTICAL
-                layoutParams = LinearLayout.LayoutParams(
-                    0,
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    1f
-                ).apply {
-                    marginEnd = 8
-                }
-                gravity = android.view.Gravity.BOTTOM or android.view.Gravity.CENTER_HORIZONTAL
-            }
-
-            // Calorie amount text
-            val tvAmount = TextView(this).apply {
-                text = calories.roundToInt().toString()
-                textSize = 10f
-                gravity = android.view.Gravity.CENTER
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-            }
-
-            // Bar view
-            val barHeight = if (chartMax > 0) {
-                (calories / chartMax * 150).coerceAtLeast(10f).toInt()
-            } else {
-                10
-            }
-            val bar = View(this).apply {
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    barHeight
-                ).apply {
-                    topMargin = 4
-                }
-                setBackgroundColor(
-                    if (calories >= targetCalories * 0.9 && calories <= targetCalories * 1.1) {
-                        getColor(R.color.green_primary)
-                    } else if (calories > targetCalories * 1.1) {
-                        getColor(android.R.color.holo_orange_dark)
-                    } else {
-                        getColor(android.R.color.darker_gray)
-                    }
-                )
-            }
-
-            // Day label
-            val tvDay = TextView(this).apply {
-                try {
-                    val date = dateFormat.parse(dateStr)
-                    text = if (date != null) displayFormat.format(date) else dateStr
-                } catch (e: Exception) {
-                    text = dateStr
-                }
-                textSize = 10f
-                gravity = android.view.Gravity.CENTER
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    topMargin = 4
-                }
-            }
-
-            barContainer.addView(tvAmount)
-            barContainer.addView(bar)
-            barContainer.addView(tvDay)
-            llWeeklyBars.addView(barContainer)
+        sortedDates.forEachIndexed { index, date ->
+            entries.add(BarEntry(index.toFloat(), dailyCalories[date] ?: 0f))
+            labels.add(formatDate(date, "EEE")) // Mon, Tue, etc.
         }
 
-        cvWeeklyChart.visibility = View.VISIBLE
+        val set = BarDataSet(entries, "Kalori Harian")
+        set.color = ContextCompat.getColor(this, R.color.green_primary)
+        set.valueTextColor = ContextCompat.getColor(this, R.color.gray_text)
+        set.valueTextSize = 10f
+        set.setDrawValues(true)
+        
+        // Highlight over-budget days
+        val colors = ArrayList<Int>()
+        for (entry in entries) {
+            if (entry.y > targetCalories) {
+                colors.add(ContextCompat.getColor(this, R.color.bmi_overweight)) // Orange/Red
+            } else {
+                colors.add(ContextCompat.getColor(this, R.color.green_primary))
+            }
+        }
+        set.colors = colors
+
+        val data = BarData(set)
+        data.barWidth = 0.6f
+        
+        chartWeeklyCalories.data = data
+        chartWeeklyCalories.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+        
+        // Add LimitLine for Target
+        val leftAxis = chartWeeklyCalories.axisLeft
+        leftAxis.removeAllLimitLines()
+        val ll = LimitLine(targetCalories.toFloat(), "Target")
+        ll.lineColor = ContextCompat.getColor(this, R.color.gray_text)
+        ll.lineWidth = 1f
+        ll.enableDashedLine(10f, 10f, 0f)
+        ll.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
+        ll.textSize = 10f
+        leftAxis.addLimitLine(ll)
+        
+        chartWeeklyCalories.invalidate() // refresh
+    }
+
+    private fun updatePieChart(avgCarbs: Float, avgProtein: Float, avgFat: Float) {
+        val entries = ArrayList<PieEntry>()
+        if (avgCarbs > 0) entries.add(PieEntry(avgCarbs, "Karbo"))
+        if (avgProtein > 0) entries.add(PieEntry(avgProtein, "Protein"))
+        if (avgFat > 0) entries.add(PieEntry(avgFat, "Lemak"))
+
+        val set = PieDataSet(entries, "")
+        set.colors = listOf(
+            Color.parseColor("#FF9800"), // Carbs - Orange
+            Color.parseColor("#E91E63"), // Protein - Pink/Red
+            Color.parseColor("#9C27B0")  // Fat - Purple
+        )
+        set.sliceSpace = 3f
+        set.setDrawValues(false) // Disable drawing values on slices
+
+        val data = PieData(set)
+        chartMacros.data = data
+        chartMacros.invalidate() // refresh
+
+        // Update Legend Views
+        val total = avgCarbs + avgProtein + avgFat
+        if (total > 0) {
+            val carbsPct = (avgCarbs / total * 100).roundToInt()
+            val proteinPct = (avgProtein / total * 100).roundToInt()
+            val fatPct = (avgFat / total * 100).roundToInt()
+
+            tvLegendCarbsVal.text = "${avgCarbs.roundToInt()}g"
+            tvLegendCarbsPct.text = "($carbsPct%)"
+
+            tvLegendProteinVal.text = "${avgProtein.roundToInt()}g"
+            tvLegendProteinPct.text = "($proteinPct%)"
+
+            tvLegendFatVal.text = "${avgFat.roundToInt()}g"
+            tvLegendFatPct.text = "($fatPct%)"
+        } else {
+            tvLegendCarbsVal.text = "0g"
+            tvLegendCarbsPct.text = "(0%)"
+            tvLegendProteinVal.text = "0g"
+            tvLegendProteinPct.text = "(0%)"
+            tvLegendFatVal.text = "0g"
+            tvLegendFatPct.text = "(0%)"
+        }
+    }
+
+    private fun formatDate(dateStr: String, pattern: String = "MMM dd"): String {
+        return try {
+            val date = dateFormat.parse(dateStr)
+            val displayFormat = SimpleDateFormat(pattern, localeID)
+            if (date != null) displayFormat.format(date) else dateStr
+        } catch (e: Exception) {
+            dateStr
+        }
     }
 
     private fun showNoData() {
         tvNoData.visibility = View.VISIBLE
         cvWeeklyChart.visibility = View.GONE
-        // Hide all stat cards
+        cvMacroChart.visibility = View.GONE
         findViewById<CardView>(R.id.cvAverageStats).visibility = View.GONE
         findViewById<CardView>(R.id.cvGoalAchievement).visibility = View.GONE
         findViewById<CardView>(R.id.cvBestWorst).visibility = View.GONE
@@ -415,6 +478,8 @@ class StatisticsActivity : AppCompatActivity() {
 
     private fun hideNoData() {
         tvNoData.visibility = View.GONE
+        cvWeeklyChart.visibility = View.VISIBLE
+        cvMacroChart.visibility = View.VISIBLE
         findViewById<CardView>(R.id.cvAverageStats).visibility = View.VISIBLE
         findViewById<CardView>(R.id.cvGoalAchievement).visibility = View.VISIBLE
         findViewById<CardView>(R.id.cvBestWorst).visibility = View.VISIBLE
