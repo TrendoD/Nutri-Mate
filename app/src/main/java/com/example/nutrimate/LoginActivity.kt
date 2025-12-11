@@ -53,27 +53,13 @@ class LoginActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 try {
                     // Debug: Log the credentials being used
-                    Log.d("LoginActivity", "Attempting login with username: '$username', password length: ${password.length}")
+                    Log.d("LoginActivity", "Attempting login with identifier: '$username'")
                     
-                    // First check if user exists
-                    val userExists = database.userDao().getUserByUsername(username)
+                    // Hash the provided password
+                    val hashedPassword = com.example.nutrimate.utils.SecurityUtils.hashPassword(password)
                     
-                    if (userExists == null) {
-                        Log.d("LoginActivity", "User '$username' not found in database")
-                        
-                        // Debug: Show how many users exist
-                        val userCount = database.userDao().getUserCount()
-                        Log.d("LoginActivity", "Total users in database: $userCount")
-                        
-                        Toast.makeText(this@LoginActivity, "Nama pengguna tidak ditemukan. Harap daftar terlebih dahulu.", Toast.LENGTH_LONG).show()
-                        return@launch
-                    }
-                    
-                    // Debug: Log found user info (password length only for security)
-                    Log.d("LoginActivity", "User found: ${userExists.username}, stored password length: ${userExists.password.length}")
-                    
-                    // Now try to login with password
-                    val user = database.userDao().login(username, password)
+                    // Try to login with username/email and hashed password
+                    val user = database.userDao().login(username, hashedPassword)
 
                     if (user != null) {
                         Log.d("LoginActivity", "Login successful for user: ${user.username}")
@@ -96,9 +82,8 @@ class LoginActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     } else {
-                        // User exists but password is wrong
-                        Log.d("LoginActivity", "Password mismatch. Expected length: ${userExists.password.length}, Provided length: ${password.length}")
-                        Toast.makeText(this@LoginActivity, "Kata sandi salah. Silakan coba lagi.", Toast.LENGTH_LONG).show()
+                        // User not found or password wrong
+                        Toast.makeText(this@LoginActivity, "Email/Username atau kata sandi salah.", Toast.LENGTH_LONG).show()
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()

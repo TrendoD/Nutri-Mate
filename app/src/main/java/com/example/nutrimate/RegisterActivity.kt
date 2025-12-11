@@ -100,11 +100,12 @@ class RegisterActivity : AppCompatActivity() {
                     }
 
                     // Create new user
+                    val hashedPassword = com.example.nutrimate.utils.SecurityUtils.hashPassword(password)
                     val newUser = User(
                         fullName = fullName,
                         email = email,
                         username = username,
-                        password = password // Store password as-is
+                        password = hashedPassword
                     )
                     
                     database.userDao().insertUser(newUser)
@@ -112,11 +113,21 @@ class RegisterActivity : AppCompatActivity() {
                     // Verify the user was actually saved
                     val verifyUser = database.userDao().getUserByUsername(username)
                     if (verifyUser != null) {
-                        Toast.makeText(this@RegisterActivity, "Pendaftaran berhasil! Silakan masuk dengan:\nUsername: $username", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@RegisterActivity, "Pendaftaran berhasil! Selamat datang $fullName", Toast.LENGTH_SHORT).show()
+                        
+                        // Save login session
+                        val sharedPreferences = getSharedPreferences("NutriMatePrefs", android.content.Context.MODE_PRIVATE)
+                        sharedPreferences.edit().putString("logged_in_user", username).apply()
+                        
+                        // Navigate to Onboarding (Setup Profile)
+                        val intent = android.content.Intent(this@RegisterActivity, com.example.nutrimate.onboarding.OnboardingActivity::class.java)
+                        intent.putExtra("USER_NAME", fullName)
+                        intent.putExtra("USERNAME", username)
+                        startActivity(intent)
+                        finish()
                     } else {
                         Toast.makeText(this@RegisterActivity, "Kesalahan: Pengguna tidak tersimpan dengan benar", Toast.LENGTH_SHORT).show()
                     }
-                    finish()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Toast.makeText(this@RegisterActivity, "Gagal mendaftar: ${e.message}", Toast.LENGTH_LONG).show()
