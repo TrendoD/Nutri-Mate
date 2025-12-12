@@ -319,38 +319,21 @@ class ProfileActivity : AppCompatActivity() {
         // Allergies
         val allergies = etAllergies.text.toString()
 
-        // Calculate BMR (Mifflin-St Jeor)
-        var bmr = (10 * weight) + (6.25 * height) - (5 * age)
-        if (gender == "Male") {
-            bmr += 5
-        } else {
-            bmr -= 161
-        }
-
-        // Calculate TDEE based on Activity Level
-        val activityMultiplier = when (spActivityLevel.selectedItemPosition) {
-            0 -> 1.2   // Sedentary
-            1 -> 1.375 // Light
-            2 -> 1.55  // Moderate
-            3 -> 1.725 // Active
-            4 -> 1.9   // Very Active
-            else -> 1.2
-        }
+        // Use centralized NutritionCalculator
+        val result = com.example.nutrimate.utils.NutritionCalculator.calculateNutrition(
+            weight = weight,
+            height = height,
+            age = age,
+            gender = gender,
+            activityLevel = selectedActivity,
+            goal = dietGoal,
+            conditions = conditions
+        )
         
-        var tdee = (bmr * activityMultiplier).toInt()
-
-        // Adjust TDEE based on Goal
-        // Lose: -500, Gain: +500 (Standard rule of thumb)
-        when (dietGoal) {
-            "Lose Weight" -> tdee -= 500
-            "Gain Weight" -> tdee += 500
-        }
-        
-        // Safety check: Don't let calories go too low
-        if (tdee < 1200) tdee = 1200
+        val tdee = result.dailyCalories
 
         lifecycleScope.launch {
-            database.userDao().updateProfile(
+            database.userDao().updateFullProfile(
                 username,
                 age,
                 weight,
@@ -364,7 +347,13 @@ class ProfileActivity : AppCompatActivity() {
                 allergies,
                 profilePictureUri,
                 fullName,
-                email
+                email,
+                result.carbsTarget,
+                result.proteinTarget,
+                result.fatTarget,
+                result.sugarLimit,
+                result.sodiumLimit,
+                result.fiberTarget
             )
 
             Toast.makeText(this@ProfileActivity, "Profil diperbarui! Target Harian: $tdee kkal", Toast.LENGTH_LONG).show()

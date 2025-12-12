@@ -52,57 +52,67 @@ class OnboardingViewModel(application: Application) : AndroidViewModel(applicati
         val g = gender.value ?: "Male"
         val act = activityLevel.value ?: "Sedentary"
         val goal = dietGoal.value ?: "Maintain"
+        val conds = medicalConditions.value?.toList() ?: emptyList()
 
-        // Mifflin-St Jeor Equation
-        var bmr = (10 * w) + (6.25 * h) - (5 * a)
-        if (g == "Male") {
-            bmr += 5
-        } else {
-            bmr -= 161
-        }
-
-        val activityMultiplier = when {
-            act.startsWith("Sedenter") -> 1.2
-            act.startsWith("Sedikit") -> 1.375
-            act.startsWith("Cukup") -> 1.55
-            act.startsWith("Aktif") -> 1.725
-            act.startsWith("Sangat") -> 1.9
-            else -> 1.2
-        }
-
-        var tdee = (bmr * activityMultiplier).toInt()
-
-        when (goal) {
-            "Lose Weight" -> tdee -= 500
-            "Gain Weight" -> tdee += 500
-        }
-
-        if (tdee < 1200) tdee = 1200
+        val result = com.example.nutrimate.utils.NutritionCalculator.calculateNutrition(
+            weight = w,
+            height = h,
+            age = a,
+            gender = g,
+            activityLevel = act,
+            goal = goal,
+            conditions = conds
+        )
         
-        _dailyCalories.value = tdee
+        _dailyCalories.value = result.dailyCalories
     }
 
     fun saveUserData(username: String, onComplete: () -> Unit) {
         viewModelScope.launch {
             val currentConditions = medicalConditions.value?.joinToString(",") ?: ""
             
+            val w = weight.value ?: 60f
+            val h = height.value?.toFloat() ?: 170f
+            val a = age.value ?: 25
+            val g = gender.value ?: "Male"
+            val act = activityLevel.value ?: "Sedentary"
+            val goal = dietGoal.value ?: "Maintain"
+            val conds = medicalConditions.value?.toList() ?: emptyList()
+
+            // Recalculate to ensure we have the full result object for macros
+            val result = com.example.nutrimate.utils.NutritionCalculator.calculateNutrition(
+                weight = w,
+                height = h,
+                age = a,
+                gender = g,
+                activityLevel = act,
+                goal = goal,
+                conditions = conds
+            )
+            
             val user = userDao.getUserByUsername(username)
             if (user != null) {
-                userDao.updateProfile(
+                userDao.updateFullProfile(
                     username = username,
-                    age = age.value ?: 0,
-                    weight = weight.value ?: 0f,
-                    height = (height.value ?: 0).toFloat(),
-                    gender = gender.value ?: "",
+                    age = a,
+                    weight = w,
+                    height = h.toInt().toFloat(), // Ensure float format
+                    gender = g,
                     conditions = currentConditions,
-                    calories = _dailyCalories.value ?: 2000,
-                    activityLevel = activityLevel.value?.split(" ")?.get(0) ?: "Sedentary",
-                    dietGoal = dietGoal.value ?: "Maintain",
+                    dailyCalories = result.dailyCalories,
+                    activityLevel = act.split(" ")[0], // Store key
+                    dietGoal = goal,
                     targetWeight = user.targetWeight,
                     allergies = allergies.value ?: "",
                     profilePicture = user.profilePicture,
                     fullName = user.fullName,
-                    email = user.email
+                    email = user.email,
+                    carbs = result.carbsTarget,
+                    protein = result.proteinTarget,
+                    fat = result.fatTarget,
+                    sugar = result.sugarLimit,
+                    sodium = result.sodiumLimit,
+                    fiber = result.fiberTarget
                 )
             }
             
