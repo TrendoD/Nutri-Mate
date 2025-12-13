@@ -38,4 +38,9 @@
     <color name="card_background">#FFFFFF</color>
     <color name="text_primary">#000000</color>
     <color name="text_secondary">#757575</color>
+
+    <!-- Health Status Colors -->
+    <color name="colorStateSafe">#4CAF50</color>   <!-- Green -->
+    <color name="colorStateWarning">#FF9800</color> <!-- Orange -->
+    <color name="colorStateDanger">#F44336</color>  <!-- Red -->
 </resources>

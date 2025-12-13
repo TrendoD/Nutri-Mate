@@ -13,6 +13,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -50,6 +51,9 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
     private lateinit var tvTotalCarbs: TextView
     private lateinit var tvTotalProtein: TextView
     private lateinit var tvTotalFat: TextView
+    private lateinit var tvTotalSugar: TextView
+    private lateinit var tvTotalSodium: TextView
+    private lateinit var tvTotalFiber: TextView
     
     private var username: String = ""
     private val localeID = Locale.forLanguageTag("id-ID")
@@ -94,6 +98,9 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
         tvTotalCarbs = findViewById(R.id.tvTotalCarbs)
         tvTotalProtein = findViewById(R.id.tvTotalProtein)
         tvTotalFat = findViewById(R.id.tvTotalFat)
+        tvTotalSugar = findViewById(R.id.tvTotalSugar)
+        tvTotalSodium = findViewById(R.id.tvTotalSodium)
+        tvTotalFiber = findViewById(R.id.tvTotalFiber)
         
         updateDateDisplay()
 
@@ -288,6 +295,15 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
             val dateStr = dateFormat.format(currentCalendar.time)
             val logs = database.foodDao().getFoodLogsByDate(username, dateStr)
             
+            // Get user data for limits
+            val user = database.userDao().getUserByUsername(username)
+            val sugarLimit = user?.sugarLimit ?: 50f
+            val sodiumLimit = user?.sodiumLimit ?: 2300f
+            val fiberTarget = user?.fiberTarget ?: 30f
+            val calorieLimit = user?.dailyCalorieTarget?.toFloat() ?: 2000f
+            val fatLimit = user?.fatTarget ?: 65f
+            val carbsLimit = user?.carbsTarget ?: 300f
+            
             val breakfastList = mutableListOf<FoodLogItem>()
             val lunchList = mutableListOf<FoodLogItem>()
             val dinnerList = mutableListOf<FoodLogItem>()
@@ -297,6 +313,9 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
             var totalCarbs = 0f
             var totalProtein = 0f
             var totalFat = 0f
+            var totalSugar = 0f
+            var totalSodium = 0f
+            var totalFiber = 0f
             
             for (log in logs) {
                 val food = database.foodDao().getFoodById(log.foodId)
@@ -305,11 +324,17 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
                     val itemCarbs = food.carbs * log.servingQty
                     val itemProtein = food.protein * log.servingQty
                     val itemFat = food.fat * log.servingQty
+                    val itemSugar = food.sugar * log.servingQty
+                    val itemSodium = food.sodium * log.servingQty
+                    val itemFiber = food.fiber * log.servingQty
                     
                     totalCalories += totalCals
                     totalCarbs += itemCarbs
                     totalProtein += itemProtein
                     totalFat += itemFat
+                    totalSugar += itemSugar
+                    totalSodium += itemSodium
+                    totalFiber += itemFiber
                     
                     val item = FoodLogItem(
                         id = log.id,
@@ -339,6 +364,26 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
                 tvTotalCarbs.text = "${totalCarbs.toInt()}g"
                 tvTotalProtein.text = "${totalProtein.toInt()}g"
                 tvTotalFat.text = "${totalFat.toInt()}g"
+                
+                // Update new nutrients - SHOW ONLY CURRENT VALUE
+                tvTotalSugar.text = "${totalSugar.toInt()}g"
+                tvTotalSodium.text = "${totalSodium.toInt()}mg"
+                tvTotalFiber.text = "${totalFiber.toInt()}g"
+                
+                // Apply dynamic health colors (Green -> Orange -> Red)
+                // Calories
+                tvTotalCalories.setTextColor(getHealthColor(totalCalories, calorieLimit))
+                
+                // Macros (Treating targets as limits for color coding purposes based on request)
+                tvTotalFat.setTextColor(getHealthColor(totalFat, fatLimit))
+                tvTotalCarbs.setTextColor(getHealthColor(totalCarbs, carbsLimit))
+                
+                // Micros (Limits)
+                tvTotalSugar.setTextColor(getHealthColor(totalSugar, sugarLimit))
+                tvTotalSodium.setTextColor(getHealthColor(totalSodium, sodiumLimit))
+                
+                // Fiber and Protein usually are minimum targets, so we don't apply "Danger" red for exceeding.
+                // We keep them default or green.
                 
                 // Update lists
                 (rvBreakfast.adapter as FoodLogAdapter).submitList(breakfastList)
@@ -431,5 +476,13 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
             }
             .setNegativeButton("Batal", null)
             .show()
+    }
+
+    private fun getHealthColor(current: Float, max: Float): Int {
+        return when {
+            current > max -> ContextCompat.getColor(this, R.color.colorStateDanger)
+            current >= (max * 0.8f) -> ContextCompat.getColor(this, R.color.colorStateWarning)
+            else -> ContextCompat.getColor(this, R.color.colorStateSafe)
+        }
     }
 }
