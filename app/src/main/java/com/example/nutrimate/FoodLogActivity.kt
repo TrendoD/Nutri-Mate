@@ -47,7 +47,9 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
     private lateinit var bottomNavigation: BottomNavigationView
 
     // Daily Summary TextViews
-    private lateinit var tvTotalCalories: TextView
+    private lateinit var tvCalorieProgress: TextView
+    private lateinit var tvCalorieTarget: TextView
+    private lateinit var pbCalories: android.widget.ProgressBar
     private lateinit var tvTotalCarbs: TextView
     private lateinit var tvTotalProtein: TextView
     private lateinit var tvTotalFat: TextView
@@ -94,7 +96,9 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
         bottomNavigation = findViewById(R.id.bottomNavigation)
         
         // Daily Summary
-        tvTotalCalories = findViewById(R.id.tvTotalCalories)
+        tvCalorieProgress = findViewById(R.id.tvCalorieProgress)
+        tvCalorieTarget = findViewById(R.id.tvCalorieTarget)
+        pbCalories = findViewById(R.id.pbCalories)
         tvTotalCarbs = findViewById(R.id.tvTotalCarbs)
         tvTotalProtein = findViewById(R.id.tvTotalProtein)
         tvTotalFat = findViewById(R.id.tvTotalFat)
@@ -360,7 +364,14 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
             
             runOnUiThread {
                 // Update daily summary
-                tvTotalCalories.text = totalCalories.toInt().toString()
+                tvCalorieProgress.text = totalCalories.toInt().toString()
+                tvCalorieTarget.text = "/ ${calorieLimit.toInt()} kkal"
+
+                pbCalories.max = calorieLimit.toInt()
+                android.animation.ObjectAnimator.ofInt(pbCalories, "progress", totalCalories.toInt())
+                    .setDuration(1000)
+                    .start()
+
                 tvTotalCarbs.text = "${totalCarbs.toInt()}g"
                 tvTotalProtein.text = "${totalProtein.toInt()}g"
                 tvTotalFat.text = "${totalFat.toInt()}g"
@@ -372,7 +383,7 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
                 
                 // Apply dynamic health colors (Green -> Orange -> Red)
                 // Calories
-                tvTotalCalories.setTextColor(getHealthColor(totalCalories, calorieLimit))
+                tvCalorieProgress.setTextColor(getHealthColor(totalCalories, calorieLimit))
                 
                 // Macros (Treating targets as limits for color coding purposes based on request)
                 tvTotalFat.setTextColor(getHealthColor(totalFat, fatLimit))
