@@ -19,6 +19,7 @@ class FoodSearchAdapter(
         val tvName: TextView = view.findViewById(R.id.tvName)
         val tvDetails: TextView = view.findViewById(R.id.tvDetails)
         val tvNutrition: TextView = view.findViewById(R.id.tvNutrition)
+        val tvNutritionExtra: TextView = view.findViewById(R.id.tvNutritionExtra)
         val tvCategory: TextView = view.findViewById(R.id.tvCategory)
         val ivFavorite: ImageView = view.findViewById(R.id.ivFavorite)
     }
@@ -34,6 +35,7 @@ class FoodSearchAdapter(
         holder.tvName.text = food.name
         holder.tvDetails.text = "${food.servingSize} ${food.servingUnit} | ${food.calories.toInt()} kkal"
         holder.tvNutrition.text = "K: ${food.carbs.toInt()}g | P: ${food.protein.toInt()}g | L: ${food.fat.toInt()}g"
+        holder.tvNutritionExtra.text = "Gula: ${food.sugar.toInt()}g | Srt: ${food.fiber.toInt()}g | Na: ${food.sodium.toInt()}mg"
         
         // Translate category for display
         holder.tvCategory.text = when(food.category) {

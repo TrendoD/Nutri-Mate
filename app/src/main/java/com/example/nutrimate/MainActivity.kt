@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.lifecycleScope
 import com.example.nutrimate.data.AppDatabase
+import com.example.nutrimate.data.User
 import com.example.nutrimate.data.WaterIntake
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -288,6 +289,8 @@ class MainActivity : AppCompatActivity() {
                 var totalCarbs = 0f
                 var totalProtein = 0f
                 var totalFat = 0f
+                var totalSugar = 0f
+                var totalSodium = 0f
 
                 for (log in logs) {
                     val food = database.foodDao().getFoodById(log.foodId)
@@ -296,6 +299,8 @@ class MainActivity : AppCompatActivity() {
                         totalCarbs += food.carbs * log.servingQty
                         totalProtein += food.protein * log.servingQty
                         totalFat += food.fat * log.servingQty
+                        totalSugar += food.sugar * log.servingQty
+                        totalSodium += food.sodium * log.servingQty
                     }
                 }
 
@@ -314,12 +319,13 @@ class MainActivity : AppCompatActivity() {
                 tvFat.text = "${totalFat.toInt()}g"
 
                 // Generate Insights/Warnings
-                generateInsights(user.medicalConditions, totalCals, target, totalCarbs, totalFat, totalProtein)
+                generateInsights(user, totalCals, target, totalCarbs, totalFat, totalProtein, totalSugar, totalSodium)
             }
         }
     }
 
-    private fun generateInsights(conditions: String, currentCals: Float, targetCals: Int, carbs: Float, fat: Float, protein: Float) {
+    private fun generateInsights(user: User, currentCals: Float, targetCals: Int, carbs: Float, fat: Float, protein: Float, sugar: Float, sodium: Float) {
+        val conditions = user.medicalConditions
         val conditionList = conditions.split(",").map { it.trim() }
         var title = "Tips Harian"
         var body = "Tetap terhidrasi dan makan makanan seimbang!"
@@ -329,14 +335,23 @@ class MainActivity : AppCompatActivity() {
             title = "⚠️ Peringatan Kalori"
             body = "Anda telah melebihi batas kalori harian Anda. Cobalah makan lebih ringan untuk sisa hari ini."
             isWarning = true
-        } else if (conditionList.contains("Diabetes") && carbs > 250) {
-            // Simple threshold for example
-            title = "⚠️ Peringatan Diabetes"
-            body = "Asupan karbohidrat Anda tinggi (${carbs.toInt()}g). Pantau gula darah Anda dengan cermat."
-            isWarning = true
-        } else if ((conditionList.contains("Hypertension") || conditionList.contains("Cholesterol")) && fat > 70) {
+        } else if (conditionList.contains("Diabetes")) {
+            if (user.carbsTarget > 0 && carbs > user.carbsTarget) {
+                title = "⚠️ Peringatan Diabetes"
+                body = "Asupan karbohidrat (${carbs.toInt()}g) melebihi target (${user.carbsTarget.toInt()}g). Pantau gula darah Anda."
+                isWarning = true
+            } else if (user.sugarLimit > 0 && sugar > user.sugarLimit) {
+                title = "⚠️ Peringatan Gula"
+                body = "Asupan gula (${sugar.toInt()}g) melebihi batas (${user.sugarLimit.toInt()}g). Mohon berhati-hati."
+                isWarning = true
+            }
+        } else if (conditionList.contains("Hypertension") && user.sodiumLimit > 0 && sodium > user.sodiumLimit) {
+             title = "⚠️ Peringatan Hipertensi"
+             body = "Asupan garam (${sodium.toInt()}mg) melebihi batas (${user.sodiumLimit.toInt()}mg). Kurangi makanan asin."
+             isWarning = true
+        } else if ((conditionList.contains("Hypertension") || conditionList.contains("Cholesterol")) && user.fatTarget > 0 && fat > user.fatTarget) {
             title = "⚠️ Peringatan Kesehatan Jantung"
-            body = "Asupan lemak tinggi (${fat.toInt()}g). Kurangi makanan gorengan untuk mengelola kondisi Anda."
+            body = "Asupan lemak (${fat.toInt()}g) tinggi. Kurangi makanan gorengan."
             isWarning = true
         } else if (conditionList.contains("Gastritis")) {
             // Gastritis alert - always show advice for gastritis patients

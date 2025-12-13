@@ -245,8 +245,11 @@ class AddFoodActivity : AppCompatActivity() {
             val carbs = (food.carbs * qty).toInt()
             val protein = (food.protein * qty).toInt()
             val fat = (food.fat * qty).toInt()
+            val sugar = (food.sugar * qty).toInt()
+            val fiber = (food.fiber * qty).toInt()
+            val sodium = (food.sodium * qty).toInt()
             
-            tvNutritionPreview.text = "Kalori: $calories kkal\nKarbo: ${carbs}g | Protein: ${protein}g | Lemak: ${fat}g"
+            tvNutritionPreview.text = "Kalori: $calories kkal\nKarbo: ${carbs}g | Protein: ${protein}g | Lemak: ${fat}g\nGula: ${sugar}g | Serat: ${fiber}g | Na: ${sodium}mg"
         }
         
         updateNutritionPreview() // Initial update
@@ -289,6 +292,9 @@ class AddFoodActivity : AppCompatActivity() {
         val etCarbs = dialog.findViewById<EditText>(R.id.etCarbs)
         val etProtein = dialog.findViewById<EditText>(R.id.etProtein)
         val etFat = dialog.findViewById<EditText>(R.id.etFat)
+        val etSugar = dialog.findViewById<EditText>(R.id.etSugar)
+        val etFiber = dialog.findViewById<EditText>(R.id.etFiber)
+        val etSodium = dialog.findViewById<EditText>(R.id.etSodium)
         val spinnerCategory = dialog.findViewById<Spinner>(R.id.spinnerCategory)
         val btnSave = dialog.findViewById<Button>(R.id.btnSaveCustom)
         val btnCancel = dialog.findViewById<Button>(R.id.btnCancelCustom)
@@ -307,6 +313,9 @@ class AddFoodActivity : AppCompatActivity() {
             val carbs = etCarbs.text.toString().toFloatOrNull() ?: 0f
             val protein = etProtein.text.toString().toFloatOrNull() ?: 0f
             val fat = etFat.text.toString().toFloatOrNull() ?: 0f
+            val sugar = etSugar.text.toString().toFloatOrNull() ?: 0f
+            val fiber = etFiber.text.toString().toFloatOrNull() ?: 0f
+            val sodium = etSodium.text.toString().toFloatOrNull() ?: 0f
             val category = spinnerCategory.selectedItem.toString()
             
             // Validation
@@ -323,6 +332,9 @@ class AddFoodActivity : AppCompatActivity() {
                 carbs = carbs,
                 protein = protein,
                 fat = fat,
+                sugar = sugar,
+                fiber = fiber,
+                sodium = sodium,
                 servingSize = servingSize,
                 servingUnit = servingUnit,
                 // Map back to English category for DB consistency if needed, or keep Indonesian if DB supports strings. 
