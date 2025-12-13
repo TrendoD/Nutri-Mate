@@ -16,7 +16,7 @@
         android:id="@+id/ivSplashLogo"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@drawable/ic_splash_logo"
+        android:src="@drawable/logo_aplikasi"
         android:contentDescription="@string/app_logo_description"
         app:layout_constraintBottom_toTopOf="@+id/tvAppName"
         app:layout_constraintEnd_toEndOf="parent"
