@@ -392,6 +392,11 @@ private fun CalorieCard(
     }
 }
 
+// Macro colors from StatisticsActivity
+private val CarbsColor = Color(0xFFFF9800)   // Orange
+private val ProteinColor = Color(0xFFE91E63) // Pink
+private val FatColor = Color(0xFF9C27B0)     // Purple
+
 @Composable
 private fun MacrosRow(
     carbsGrams: Int,
@@ -405,18 +410,21 @@ private fun MacrosRow(
         MacroChip(
             label = "Karbo",
             value = "${carbsGrams}g",
+            labelColor = CarbsColor,
             modifier = Modifier.weight(1f)
         )
         
         MacroChip(
             label = "Protein",
             value = "${proteinGrams}g",
+            labelColor = ProteinColor,
             modifier = Modifier.weight(1f)
         )
         
         MacroChip(
             label = "Lemak",
             value = "${fatGrams}g",
+            labelColor = FatColor,
             modifier = Modifier.weight(1f)
         )
     }
@@ -426,6 +434,7 @@ private fun MacrosRow(
 private fun MacroChip(
     label: String,
     value: String,
+    labelColor: Color,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -444,7 +453,7 @@ private fun MacroChip(
                 text = label,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = GreenPrimary
+                color = labelColor
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
