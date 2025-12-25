@@ -1,62 +1,31 @@
 package com.example.nutrimate
 
-import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.nutrimate.data.AppDatabase
 import com.example.nutrimate.data.FoodLog
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.nutrimate.ui.foodlog.DeleteConfirmationDialog
+import com.example.nutrimate.ui.foodlog.EditFoodDialog
+import com.example.nutrimate.ui.foodlog.FoodLogScreen
+import com.example.nutrimate.ui.foodlog.FoodLogScreenItem
+import com.example.nutrimate.ui.foodlog.FoodLogScreenState
+import com.example.nutrimate.ui.main.NavItem
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
-class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
+class FoodLogActivity : ComponentActivity() {
 
     private lateinit var database: AppDatabase
-    private lateinit var rvBreakfast: RecyclerView
-    private lateinit var rvLunch: RecyclerView
-    private lateinit var rvDinner: RecyclerView
-    private lateinit var rvSnack: RecyclerView
-    
-    private lateinit var btnAddBreakfast: Button
-    private lateinit var btnAddLunch: Button
-    private lateinit var btnAddDinner: Button
-    private lateinit var btnAddSnack: Button
-    
-    private lateinit var tvDate: TextView
-    private lateinit var btnPrevDay: ImageButton
-    private lateinit var btnNextDay: ImageButton
-    private lateinit var btnCopyPreviousDay: Button
-    
-    private lateinit var bottomNavigation: BottomNavigationView
-
-    // Daily Summary TextViews
-    private lateinit var tvCalorieProgress: TextView
-    private lateinit var tvCalorieTarget: TextView
-    private lateinit var pbCalories: android.widget.ProgressBar
-    private lateinit var tvTotalCarbs: TextView
-    private lateinit var tvTotalProtein: TextView
-    private lateinit var tvTotalFat: TextView
-    private lateinit var tvTotalSugar: TextView
-    private lateinit var tvTotalSodium: TextView
-    private lateinit var tvTotalFiber: TextView
-    
     private var username: String = ""
     private val localeID = Locale.forLanguageTag("id-ID")
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", localeID)
@@ -64,10 +33,14 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
     
     private var currentCalendar: Calendar = Calendar.getInstance()
     private val todayCalendar: Calendar = Calendar.getInstance()
+    
+    // Compose state
+    private var screenState by mutableStateOf(FoodLogScreenState())
+    private var editingItem by mutableStateOf<FoodLogScreenItem?>(null)
+    private var deletingItem by mutableStateOf<FoodLogScreenItem?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_food_log)
 
         database = AppDatabase.getDatabase(this)
         username = intent.getStringExtra("USERNAME") ?: ""
@@ -78,65 +51,51 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
             return
         }
 
-        initViews()
-        setupListeners()
-        setupBottomNavigation()
+        updateDateDisplay()
+        
+        setContent {
+            FoodLogScreen(
+                state = screenState,
+                selectedNavItem = NavItem.FOOD_LOG,
+                onPrevDayClick = { navigatePrevDay() },
+                onNextDayClick = { navigateNextDay() },
+                onDateClick = { showDatePicker() },
+                onCopyPreviousDayClick = { copyFromPreviousDay() },
+                onAddFood = { mealType -> navigateToAddFood(mealType) },
+                onEditFood = { item -> editingItem = item },
+                onDeleteFood = { item -> deletingItem = item },
+                onNavItemClick = { navItem -> handleNavigation(navItem) }
+            )
+            
+            // Edit Dialog
+            editingItem?.let { item ->
+                EditFoodDialog(
+                    item = item,
+                    onDismiss = { editingItem = null },
+                    onSave = { newQty -> 
+                        updateFoodQuantity(item.id, newQty)
+                        editingItem = null
+                    }
+                )
+            }
+            
+            // Delete Confirmation Dialog
+            deletingItem?.let { item ->
+                DeleteConfirmationDialog(
+                    item = item,
+                    onDismiss = { deletingItem = null },
+                    onConfirm = {
+                        deleteFood(item.id)
+                        deletingItem = null
+                    }
+                )
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
         loadFoodLogs()
-    }
-
-    private fun initViews() {
-        tvDate = findViewById(R.id.tvDate)
-        btnPrevDay = findViewById(R.id.btnPrevDay)
-        btnNextDay = findViewById(R.id.btnNextDay)
-        btnCopyPreviousDay = findViewById(R.id.btnCopyPreviousDay)
-        bottomNavigation = findViewById(R.id.bottomNavigation)
-        
-        // Daily Summary
-        tvCalorieProgress = findViewById(R.id.tvCalorieProgress)
-        tvCalorieTarget = findViewById(R.id.tvCalorieTarget)
-        pbCalories = findViewById(R.id.pbCalories)
-        tvTotalCarbs = findViewById(R.id.tvTotalCarbs)
-        tvTotalProtein = findViewById(R.id.tvTotalProtein)
-        tvTotalFat = findViewById(R.id.tvTotalFat)
-        tvTotalSugar = findViewById(R.id.tvTotalSugar)
-        tvTotalSodium = findViewById(R.id.tvTotalSodium)
-        tvTotalFiber = findViewById(R.id.tvTotalFiber)
-        
-        updateDateDisplay()
-
-        rvBreakfast = findViewById(R.id.rvBreakfast)
-        rvLunch = findViewById(R.id.rvLunch)
-        rvDinner = findViewById(R.id.rvDinner)
-        rvSnack = findViewById(R.id.rvSnack)
-
-        rvBreakfast.layoutManager = LinearLayoutManager(this)
-        rvLunch.layoutManager = LinearLayoutManager(this)
-        rvDinner.layoutManager = LinearLayoutManager(this)
-        rvSnack.layoutManager = LinearLayoutManager(this)
-        
-        val breakfastAdapter = FoodLogAdapter()
-        val lunchAdapter = FoodLogAdapter()
-        val dinnerAdapter = FoodLogAdapter()
-        val snackAdapter = FoodLogAdapter()
-        
-        breakfastAdapter.setListener(this)
-        lunchAdapter.setListener(this)
-        dinnerAdapter.setListener(this)
-        snackAdapter.setListener(this)
-        
-        rvBreakfast.adapter = breakfastAdapter
-        rvLunch.adapter = lunchAdapter
-        rvDinner.adapter = dinnerAdapter
-        rvSnack.adapter = snackAdapter
-        
-        btnAddBreakfast = findViewById(R.id.btnAddBreakfast)
-        btnAddLunch = findViewById(R.id.btnAddLunch)
-        btnAddDinner = findViewById(R.id.btnAddDinner)
-        btnAddSnack = findViewById(R.id.btnAddSnack)
     }
     
     private fun updateDateDisplay() {
@@ -146,90 +105,29 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
         } else {
             displayDateFormat.format(currentCalendar.time)
         }
-        tvDate.text = displayText
         
-        // Disable next day button if current date is today
-        btnNextDay.isEnabled = !isToday
-        btnNextDay.alpha = if (isToday) 0.3f else 1.0f
+        screenState = screenState.copy(
+            currentDate = displayText,
+            isToday = isToday
+        )
     }
     
     private fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean {
         return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
     }
-
-    private fun setupListeners() {
-        val addListener = { mealType: String ->
-            val intent = Intent(this, AddFoodActivity::class.java)
-            intent.putExtra("MEAL_TYPE", mealType)
-            intent.putExtra("USERNAME", username)
-            intent.putExtra("DATE", dateFormat.format(currentCalendar.time))
-            startActivity(intent)
-        }
-
-        btnAddBreakfast.setOnClickListener { addListener("Breakfast") }
-        btnAddLunch.setOnClickListener { addListener("Lunch") }
-        btnAddDinner.setOnClickListener { addListener("Dinner") }
-        btnAddSnack.setOnClickListener { addListener("Snack") }
-        
-        // Date Navigation
-        btnPrevDay.setOnClickListener {
-            currentCalendar.add(Calendar.DAY_OF_MONTH, -1)
-            updateDateDisplay()
-            loadFoodLogs()
-        }
-        
-        btnNextDay.setOnClickListener {
-            if (!isSameDay(currentCalendar, todayCalendar)) {
-                currentCalendar.add(Calendar.DAY_OF_MONTH, 1)
-                updateDateDisplay()
-                loadFoodLogs()
-            }
-        }
-        
-        // Calendar Picker - Click on date text
-        tvDate.setOnClickListener {
-            showDatePicker()
-        }
-        
-        // Copy Previous Day
-        btnCopyPreviousDay.setOnClickListener {
-            copyFromPreviousDay()
-        }
+    
+    private fun navigatePrevDay() {
+        currentCalendar.add(Calendar.DAY_OF_MONTH, -1)
+        updateDateDisplay()
+        loadFoodLogs()
     }
     
-    private fun setupBottomNavigation() {
-        bottomNavigation.selectedItemId = R.id.nav_food_log
-        
-        bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.putExtra("USERNAME", username)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    startActivity(intent)
-                    finish()
-                    true
-                }
-                R.id.nav_food_log -> {
-                    true
-                }
-                R.id.nav_stats -> {
-                    val intent = Intent(this, StatisticsActivity::class.java)
-                    intent.putExtra("USERNAME", username)
-                    startActivity(intent)
-                    finish()
-                    true
-                }
-                R.id.nav_settings -> {
-                    val intent = Intent(this, SettingsActivity::class.java)
-                    intent.putExtra("USERNAME", username)
-                    startActivity(intent)
-                    finish()
-                    true
-                }
-                else -> false
-            }
+    private fun navigateNextDay() {
+        if (!isSameDay(currentCalendar, todayCalendar)) {
+            currentCalendar.add(Calendar.DAY_OF_MONTH, 1)
+            updateDateDisplay()
+            loadFoodLogs()
         }
     }
     
@@ -293,6 +191,62 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
             }
         }
     }
+    
+    private fun navigateToAddFood(mealType: String) {
+        val intent = Intent(this, AddFoodActivity::class.java)
+        intent.putExtra("MEAL_TYPE", mealType)
+        intent.putExtra("USERNAME", username)
+        intent.putExtra("DATE", dateFormat.format(currentCalendar.time))
+        startActivity(intent)
+    }
+    
+    private fun handleNavigation(navItem: NavItem) {
+        when (navItem) {
+            NavItem.HOME -> {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("USERNAME", username)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                startActivity(intent)
+                finish()
+            }
+            NavItem.FOOD_LOG -> {
+                // Already here, refresh data
+                loadFoodLogs()
+            }
+            NavItem.STATS -> {
+                val intent = Intent(this, StatisticsActivity::class.java)
+                intent.putExtra("USERNAME", username)
+                startActivity(intent)
+                finish()
+            }
+            NavItem.SETTINGS -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                intent.putExtra("USERNAME", username)
+                startActivity(intent)
+                finish()
+            }
+        }
+    }
+    
+    private fun updateFoodQuantity(itemId: Int, newQty: Float) {
+        lifecycleScope.launch {
+            database.foodDao().updateFoodLogQuantity(itemId, newQty)
+            runOnUiThread {
+                Toast.makeText(this@FoodLogActivity, "Berhasil diperbarui", Toast.LENGTH_SHORT).show()
+                loadFoodLogs()
+            }
+        }
+    }
+    
+    private fun deleteFood(itemId: Int) {
+        lifecycleScope.launch {
+            database.foodDao().deleteFoodLog(itemId)
+            runOnUiThread {
+                Toast.makeText(this@FoodLogActivity, "Berhasil dihapus", Toast.LENGTH_SHORT).show()
+                loadFoodLogs()
+            }
+        }
+    }
 
     private fun loadFoodLogs() {
         lifecycleScope.launch {
@@ -308,10 +262,10 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
             val fatLimit = user?.fatTarget ?: 65f
             val carbsLimit = user?.carbsTarget ?: 300f
             
-            val breakfastList = mutableListOf<FoodLogItem>()
-            val lunchList = mutableListOf<FoodLogItem>()
-            val dinnerList = mutableListOf<FoodLogItem>()
-            val snackList = mutableListOf<FoodLogItem>()
+            val breakfastList = mutableListOf<FoodLogScreenItem>()
+            val lunchList = mutableListOf<FoodLogScreenItem>()
+            val dinnerList = mutableListOf<FoodLogScreenItem>()
+            val snackList = mutableListOf<FoodLogScreenItem>()
             
             var totalCalories = 0f
             var totalCarbs = 0f
@@ -340,7 +294,7 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
                     totalSodium += itemSodium
                     totalFiber += itemFiber
                     
-                    val item = FoodLogItem(
+                    val item = FoodLogScreenItem(
                         id = log.id,
                         name = food.name,
                         totalCalories = totalCals,
@@ -363,137 +317,25 @@ class FoodLogActivity : AppCompatActivity(), FoodLogItemListener {
             }
             
             runOnUiThread {
-                // Update daily summary
-                tvCalorieProgress.text = totalCalories.toInt().toString()
-                tvCalorieTarget.text = "/ ${calorieLimit.toInt()} kkal"
-
-                pbCalories.max = calorieLimit.toInt()
-                android.animation.ObjectAnimator.ofInt(pbCalories, "progress", totalCalories.toInt())
-                    .setDuration(1000)
-                    .start()
-
-                tvTotalCarbs.text = "${totalCarbs.toInt()}g"
-                tvTotalProtein.text = "${totalProtein.toInt()}g"
-                tvTotalFat.text = "${totalFat.toInt()}g"
-                
-                // Update new nutrients - SHOW ONLY CURRENT VALUE
-                tvTotalSugar.text = "${totalSugar.toInt()}g"
-                tvTotalSodium.text = "${totalSodium.toInt()}mg"
-                tvTotalFiber.text = "${totalFiber.toInt()}g"
-                
-                // Apply dynamic health colors (Green -> Orange -> Red)
-                // Calories
-                tvCalorieProgress.setTextColor(getHealthColor(totalCalories, calorieLimit))
-                
-                // Macros (Treating targets as limits for color coding purposes based on request)
-                tvTotalFat.setTextColor(getHealthColor(totalFat, fatLimit))
-                tvTotalCarbs.setTextColor(getHealthColor(totalCarbs, carbsLimit))
-                
-                // Micros (Limits)
-                tvTotalSugar.setTextColor(getHealthColor(totalSugar, sugarLimit))
-                tvTotalSodium.setTextColor(getHealthColor(totalSodium, sodiumLimit))
-                
-                // Fiber and Protein usually are minimum targets, so we don't apply "Danger" red for exceeding.
-                // We keep them default or green.
-                
-                // Update lists
-                (rvBreakfast.adapter as FoodLogAdapter).submitList(breakfastList)
-                (rvLunch.adapter as FoodLogAdapter).submitList(lunchList)
-                (rvDinner.adapter as FoodLogAdapter).submitList(dinnerList)
-                (rvSnack.adapter as FoodLogAdapter).submitList(snackList)
+                screenState = screenState.copy(
+                    calorieProgress = totalCalories.toInt(),
+                    calorieTarget = calorieLimit.toInt(),
+                    totalCarbs = totalCarbs.toInt(),
+                    totalProtein = totalProtein.toInt(),
+                    totalFat = totalFat.toInt(),
+                    totalSugar = totalSugar.toInt(),
+                    totalSodium = totalSodium.toInt(),
+                    totalFiber = totalFiber.toInt(),
+                    carbsLimit = carbsLimit,
+                    fatLimit = fatLimit,
+                    sugarLimit = sugarLimit,
+                    sodiumLimit = sodiumLimit,
+                    breakfastItems = breakfastList,
+                    lunchItems = lunchList,
+                    dinnerItems = dinnerList,
+                    snackItems = snackList
+                )
             }
-        }
-    }
-    
-    // FoodLogItemListener implementation
-    override fun onEditClick(item: FoodLogItem) {
-        showEditDialog(item)
-    }
-    
-    override fun onDeleteClick(item: FoodLogItem) {
-        showDeleteConfirmation(item)
-    }
-    
-    private fun showEditDialog(item: FoodLogItem) {
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_edit_food, null)
-        val tvFoodName = dialogView.findViewById<TextView>(R.id.tvFoodName)
-        val etQuantity = dialogView.findViewById<EditText>(R.id.etQuantity)
-        val tvUnit = dialogView.findViewById<TextView>(R.id.tvUnit)
-        val tvNutritionPreview = dialogView.findViewById<TextView>(R.id.tvNutritionPreview)
-        val btnCancel = dialogView.findViewById<Button>(R.id.btnCancel)
-        val btnSave = dialogView.findViewById<Button>(R.id.btnSave)
-        
-        tvFoodName.text = item.name
-        etQuantity.setText(item.servingQty.toString())
-        tvUnit.text = item.unit
-        
-        // Update preview based on quantity
-        fun updatePreview() {
-            val qty = etQuantity.text.toString().toFloatOrNull() ?: 0f
-            val calories = (item.caloriesPerServing * qty).toInt()
-            tvNutritionPreview.text = "Kalori: $calories kkal"
-        }
-        
-        updatePreview()
-        
-        etQuantity.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                updatePreview()
-            }
-        })
-        
-        val dialog = AlertDialog.Builder(this)
-            .setView(dialogView)
-            .create()
-        
-        btnCancel.setOnClickListener {
-            dialog.dismiss()
-        }
-        
-        btnSave.setOnClickListener {
-            val newQty = etQuantity.text.toString().toFloatOrNull()
-            if (newQty == null || newQty <= 0) {
-                Toast.makeText(this, "Harap masukkan jumlah yang valid", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            
-            lifecycleScope.launch {
-                database.foodDao().updateFoodLogQuantity(item.id, newQty)
-                runOnUiThread {
-                    Toast.makeText(this@FoodLogActivity, "Berhasil diperbarui", Toast.LENGTH_SHORT).show()
-                    dialog.dismiss()
-                    loadFoodLogs()
-                }
-            }
-        }
-        
-        dialog.show()
-    }
-    
-    private fun showDeleteConfirmation(item: FoodLogItem) {
-        AlertDialog.Builder(this)
-            .setTitle("Hapus Makanan")
-            .setMessage("Apakah Anda yakin ingin menghapus '${item.name}' dari log Anda?")
-            .setPositiveButton("Hapus") { _, _ ->
-                lifecycleScope.launch {
-                    database.foodDao().deleteFoodLog(item.id)
-                    runOnUiThread {
-                        Toast.makeText(this@FoodLogActivity, "Berhasil dihapus", Toast.LENGTH_SHORT).show()
-                        loadFoodLogs()
-                    }
-                }
-            }
-            .setNegativeButton("Batal", null)
-            .show()
-    }
-
-    private fun getHealthColor(current: Float, max: Float): Int {
-        return when {
-            current > max -> ContextCompat.getColor(this, R.color.colorStateDanger)
-            current >= (max * 0.8f) -> ContextCompat.getColor(this, R.color.colorStateWarning)
-            else -> ContextCompat.getColor(this, R.color.colorStateSafe)
         }
     }
 }
