@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
                 state = screenState,
                 onLogoutClick = { handleLogout() },
                 onFabClick = { navigateToAddFood() },
-                onRecommendationsClick = { navigateToRecommendations() },
+
                 onWaterAdd = { amount -> addWaterIntake(amount) },
                 onNavItemClick = { navItem -> handleNavigation(navItem) }
             )
@@ -100,11 +100,6 @@ class MainActivity : ComponentActivity() {
         startActivity(intent)
     }
 
-    private fun navigateToRecommendations() {
-        val intent = Intent(this, RecommendationsActivity::class.java)
-        intent.putExtra("USERNAME", currentUsername)
-        startActivity(intent)
-    }
 
     private fun handleNavigation(navItem: NavItem) {
         when (navItem) {

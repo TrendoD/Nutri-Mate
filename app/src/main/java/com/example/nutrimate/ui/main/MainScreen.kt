@@ -69,9 +69,7 @@ private val WaterTextSecondary = Color(0xFF0277BD)
 private val WaterButtonOutline = Color(0xFF81D4FA)
 private val WaterProgress = Color(0xFF29B6F6)
 private val WaterProgressBg = Color(0xFFE0E0E0)
-private val RecommendationsBackground = Color(0xFFE8F5E9)
-private val RecommendationsText = Color(0xFF2E7D32)
-private val RecommendationsTextSecondary = Color(0xFF558B2F)
+
 private val AlertGreenBg = Color(0xFFE8F5E9)
 private val AlertGreenText = Color(0xFF2E7D32)
 private val AlertGreenTextDark = Color(0xFF1B5E20)
@@ -121,7 +119,6 @@ fun MainScreen(
     state: MainScreenState,
     onLogoutClick: () -> Unit = {},
     onFabClick: () -> Unit = {},
-    onRecommendationsClick: () -> Unit = {},
     onWaterAdd: (Int) -> Unit = {},
     onNavItemClick: (NavItem) -> Unit = {}
 ) {
@@ -275,13 +272,7 @@ fun MainScreen(
                 onWaterAdd = onWaterAdd
             )
             
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // Recommendations Card
-            RecommendationsCard(
-                onClick = onRecommendationsClick
-            )
-            
+
             Spacer(modifier = Modifier.height(20.dp))
             
             // Insights Section
@@ -600,40 +591,6 @@ private fun WaterButton(
     }
 }
 
-@Composable
-private fun RecommendationsCard(
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = RecommendationsBackground),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(20.dp)
-        ) {
-            Text(
-                text = "Rekomendasi Diet",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
-                color = RecommendationsText
-            )
-            
-            Spacer(modifier = Modifier.height(6.dp))
-            
-            Text(
-                text = "Rencana makan yang dipersonalisasi dengan tips nutrisi berdasarkan profil kesehatan Anda",
-                fontSize = 13.sp,
-                color = RecommendationsTextSecondary,
-                lineHeight = 18.sp
-            )
-        }
-    }
-}
 
 @Composable
 private fun InsightsSection(
