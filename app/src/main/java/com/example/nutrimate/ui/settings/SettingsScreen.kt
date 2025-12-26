@@ -18,12 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.Create
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -31,8 +25,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -65,13 +57,8 @@ private val DeleteAccountColor = Color(0xFFF44336)
 private val ClearDataColor = Color(0xFFFF5722)
 
 data class SettingsScreenState(
-    val notificationsEnabled: Boolean = false,
-    val breakfastTime: String = "08:00 AM",
-    val lunchTime: String = "12:00 PM",
-    val dinnerTime: String = "07:00 PM",
-    val unitSystem: String = "Metrik (kg, cm)",
-    val darkModeEnabled: Boolean = false,
-    val appVersion: String = "Versi 1.0.0"
+    // Empty data class - no state needed for simplified settings
+    val placeholder: Unit = Unit
 )
 
 @Composable
@@ -80,19 +67,8 @@ fun SettingsScreen(
     selectedNavItem: NavItem = NavItem.SETTINGS,
     onNavItemClick: (NavItem) -> Unit = {},
     onMyProfileClick: () -> Unit = {},
-    onNotificationsToggle: (Boolean) -> Unit = {},
-    onBreakfastReminderClick: () -> Unit = {},
-    onLunchReminderClick: () -> Unit = {},
-    onDinnerReminderClick: () -> Unit = {},
-    onUnitPreferencesClick: () -> Unit = {},
-    onDarkModeToggle: (Boolean) -> Unit = {},
-    onBackupDataClick: () -> Unit = {},
-    onRestoreDataClick: () -> Unit = {},
     onClearFoodLogClick: () -> Unit = {},
-    onDeleteAccountClick: () -> Unit = {},
-    onAboutAppClick: () -> Unit = {},
-    onPrivacyPolicyClick: () -> Unit = {},
-    onHelpFaqClick: () -> Unit = {}
+    onDeleteAccountClick: () -> Unit = {}
 ) {
     var currentNavItem by remember { mutableStateOf(selectedNavItem) }
     
@@ -185,84 +161,6 @@ fun SettingsScreen(
             
             Spacer(modifier = Modifier.height(16.dp))
             
-            // Notifications Section
-            SectionTitle(title = "Notifikasi")
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            SettingsCard {
-                Column {
-                    SettingsSwitchItem(
-                        title = "Aktifkan Notifikasi",
-                        subtitle = "Terima pengingat untuk mencatat makanan Anda",
-                        checked = state.notificationsEnabled,
-                        onCheckedChange = onNotificationsToggle
-                    )
-                    
-                    SettingsDivider()
-                    
-                    SettingsItem(
-                        title = "Pengingat Sarapan",
-                        subtitle = state.breakfastTime,
-                        subtitleColor = GreenPrimary,
-                        onClick = onBreakfastReminderClick,
-                        enabled = state.notificationsEnabled,
-                        showArrow = true
-                    )
-                    
-                    SettingsDivider()
-                    
-                    SettingsItem(
-                        title = "Pengingat Makan Siang",
-                        subtitle = state.lunchTime,
-                        subtitleColor = GreenPrimary,
-                        onClick = onLunchReminderClick,
-                        enabled = state.notificationsEnabled,
-                        showArrow = true
-                    )
-                    
-                    SettingsDivider()
-                    
-                    SettingsItem(
-                        title = "Pengingat Makan Malam",
-                        subtitle = state.dinnerTime,
-                        subtitleColor = GreenPrimary,
-                        onClick = onDinnerReminderClick,
-                        enabled = state.notificationsEnabled,
-                        showArrow = true
-                    )
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // Preferences Section
-            SectionTitle(title = "Preferensi")
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            SettingsCard {
-                Column {
-                    SettingsItem(
-                        title = "Sistem Satuan",
-                        subtitle = state.unitSystem,
-                        onClick = onUnitPreferencesClick,
-                        showArrow = true
-                    )
-                    
-                    SettingsDivider()
-                    
-                    SettingsSwitchItem(
-                        title = "Mode Gelap",
-                        subtitle = "Beralih ke tema gelap",
-                        checked = state.darkModeEnabled,
-                        onCheckedChange = onDarkModeToggle
-                    )
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
             // Data Management Section
             SectionTitle(title = "Manajemen Data")
             
@@ -270,24 +168,6 @@ fun SettingsScreen(
             
             SettingsCard {
                 Column {
-                    SettingsItem(
-                        title = "Cadangkan Data",
-                        subtitle = "Ekspor data Anda ke file",
-                        onClick = onBackupDataClick,
-                        showArrow = true
-                    )
-                    
-                    SettingsDivider()
-                    
-                    SettingsItem(
-                        title = "Pulihkan Data",
-                        subtitle = "Impor data dari file cadangan",
-                        onClick = onRestoreDataClick,
-                        showArrow = true
-                    )
-                    
-                    SettingsDivider()
-                    
                     SettingsItem(
                         title = "Hapus Semua Catatan Makanan",
                         titleColor = ClearDataColor,
@@ -304,40 +184,6 @@ fun SettingsScreen(
                         subtitle = "Hapus akun dan semua data Anda secara permanen",
                         onClick = onDeleteAccountClick,
                         showArrow = false
-                    )
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // About Section
-            SectionTitle(title = "Tentang")
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            SettingsCard {
-                Column {
-                    SettingsItem(
-                        title = "Tentang NutriMate",
-                        subtitle = state.appVersion,
-                        onClick = onAboutAppClick,
-                        showArrow = true
-                    )
-                    
-                    SettingsDivider()
-                    
-                    SettingsItem(
-                        title = "Kebijakan Privasi",
-                        onClick = onPrivacyPolicyClick,
-                        showArrow = true
-                    )
-                    
-                    SettingsDivider()
-                    
-                    SettingsItem(
-                        title = "Bantuan & FAQ",
-                        onClick = onHelpFaqClick,
-                        showArrow = true
                     )
                 }
             }
@@ -434,48 +280,6 @@ private fun SettingsItem(
 }
 
 @Composable
-private fun SettingsSwitchItem(
-    title: String,
-    subtitle: String,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = title,
-                fontSize = 16.sp,
-                color = TextPrimary
-            )
-            Text(
-                text = subtitle,
-                fontSize = 12.sp,
-                color = TextSecondary
-            )
-        }
-        
-        Switch(
-            checked = checked,
-            onCheckedChange = onCheckedChange,
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = Color.White,
-                checkedTrackColor = GreenPrimary,
-                uncheckedThumbColor = Color.White,
-                uncheckedTrackColor = Color(0xFFBDBDBD)
-            )
-        )
-    }
-}
-
-@Composable
 private fun SettingsDivider() {
     Box(
         modifier = Modifier
@@ -489,14 +293,6 @@ private fun SettingsDivider() {
 @Composable
 fun SettingsScreenPreview() {
     SettingsScreen(
-        state = SettingsScreenState(
-            notificationsEnabled = true,
-            breakfastTime = "08:00 AM",
-            lunchTime = "12:00 PM",
-            dinnerTime = "07:00 PM",
-            unitSystem = "Metrik (kg, cm)",
-            darkModeEnabled = false,
-            appVersion = "Versi 1.0.0"
-        )
+        state = SettingsScreenState()
     )
 }
