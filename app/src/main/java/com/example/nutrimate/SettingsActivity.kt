@@ -6,57 +6,29 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.LinearLayout
-import androidx.appcompat.widget.SwitchCompat
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.lifecycleScope
 import com.example.nutrimate.data.AppDatabase
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.nutrimate.ui.main.NavItem
+import com.example.nutrimate.ui.settings.SettingsScreen
+import com.example.nutrimate.ui.settings.SettingsScreenState
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : ComponentActivity() {
 
-    private lateinit var ivBack: ImageView
-    
-    // Account
-    private lateinit var llMyProfile: LinearLayout
-    
-    // Notification Settings
-    private lateinit var switchNotifications: SwitchCompat
-    private lateinit var llBreakfastReminder: LinearLayout
-    private lateinit var llLunchReminder: LinearLayout
-    private lateinit var llDinnerReminder: LinearLayout
-    private lateinit var tvBreakfastTime: TextView
-    private lateinit var tvLunchTime: TextView
-    private lateinit var tvDinnerTime: TextView
-    
-    // Preferences
-    private lateinit var llUnitPreferences: LinearLayout
-    private lateinit var switchDarkMode: SwitchCompat
-    private lateinit var tvUnitSystem: TextView
-    
-    // Data Management
-    private lateinit var llBackupData: LinearLayout
-    private lateinit var llRestoreData: LinearLayout
-    private lateinit var llClearFoodLog: LinearLayout
-    private lateinit var llDeleteAccount: LinearLayout
-    
-    // About
-    private lateinit var llAboutApp: LinearLayout
-    private lateinit var llPrivacyPolicy: LinearLayout
-    private lateinit var llHelpFaq: LinearLayout
-    private lateinit var tvAppVersion: TextView
-    
-    private lateinit var bottomNavigation: BottomNavigationView
-    
     private lateinit var database: AppDatabase
     private lateinit var sharedPreferences: SharedPreferences
     private var username: String = ""
+    
+    // State for Compose UI
+    private var screenState by mutableStateOf(SettingsScreenState())
     
     companion object {
         const val PREFS_NAME = "NutriMateSettings"
@@ -74,7 +46,6 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
         
         database = AppDatabase.getDatabase(this)
         sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -86,198 +57,126 @@ class SettingsActivity : AppCompatActivity() {
             return
         }
         
-        initViews()
         loadSettings()
-        setupListeners()
-    }
-    
-    private fun initViews() {
-        ivBack = findViewById(R.id.ivBack)
         
-        // Account
-        llMyProfile = findViewById(R.id.llMyProfile)
-        
-        // Notifications
-        switchNotifications = findViewById(R.id.switchNotifications)
-        llBreakfastReminder = findViewById(R.id.llBreakfastReminder)
-        llLunchReminder = findViewById(R.id.llLunchReminder)
-        llDinnerReminder = findViewById(R.id.llDinnerReminder)
-        tvBreakfastTime = findViewById(R.id.tvBreakfastTime)
-        tvLunchTime = findViewById(R.id.tvLunchTime)
-        tvDinnerTime = findViewById(R.id.tvDinnerTime)
-        
-        // Preferences
-        llUnitPreferences = findViewById(R.id.llUnitPreferences)
-        switchDarkMode = findViewById(R.id.switchDarkMode)
-        tvUnitSystem = findViewById(R.id.tvUnitSystem)
-        
-        // Data Management
-        llBackupData = findViewById(R.id.llBackupData)
-        llRestoreData = findViewById(R.id.llRestoreData)
-        llClearFoodLog = findViewById(R.id.llClearFoodLog)
-        llDeleteAccount = findViewById(R.id.llDeleteAccount)
-        
-        // About
-        llAboutApp = findViewById(R.id.llAboutApp)
-        llPrivacyPolicy = findViewById(R.id.llPrivacyPolicy)
-        llHelpFaq = findViewById(R.id.llHelpFaq)
-        tvAppVersion = findViewById(R.id.tvAppVersion)
-        
-        bottomNavigation = findViewById(R.id.bottomNavigation)
-        
-        // Set app version
-        try {
-            val pInfo = packageManager.getPackageInfo(packageName, 0)
-            tvAppVersion.text = "Versi ${pInfo.versionName}"
-        } catch (e: Exception) {
-            tvAppVersion.text = "Versi 1.0.0"
-        }
-    }
-    
-    private fun loadSettings() {
-        // Load notification settings
-        switchNotifications.isChecked = sharedPreferences.getBoolean(KEY_NOTIFICATIONS_ENABLED, false)
-        tvBreakfastTime.text = sharedPreferences.getString(KEY_BREAKFAST_TIME, "08:00 AM")
-        tvLunchTime.text = sharedPreferences.getString(KEY_LUNCH_TIME, "12:00 PM")
-        tvDinnerTime.text = sharedPreferences.getString(KEY_DINNER_TIME, "07:00 PM")
-        
-        // Load preferences
-        val unitSystem = sharedPreferences.getString(KEY_UNIT_SYSTEM, "metric")
-        tvUnitSystem.text = if (unitSystem == "metric") "Metrik (kg, cm)" else "Imperial (lbs, inci)"
-        
-        switchDarkMode.isChecked = sharedPreferences.getBoolean(KEY_DARK_MODE, false)
-        
-        // Update reminder items enabled state
-        updateReminderItemsEnabled()
-    }
-    
-    private fun updateReminderItemsEnabled() {
-        val enabled = switchNotifications.isChecked
-        llBreakfastReminder.alpha = if (enabled) 1.0f else 0.5f
-        llLunchReminder.alpha = if (enabled) 1.0f else 0.5f
-        llDinnerReminder.alpha = if (enabled) 1.0f else 0.5f
-        llBreakfastReminder.isClickable = enabled
-        llLunchReminder.isClickable = enabled
-        llDinnerReminder.isClickable = enabled
-    }
-    
-    private fun setupListeners() {
-        ivBack.setOnClickListener {
-            finish()
-        }
-        
-        setupBottomNavigation()
-        
-        // Account
-        llMyProfile.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java).putExtra("USERNAME", username))
-        }
-        
-        // Notification toggle
-        switchNotifications.setOnCheckedChangeListener { _, isChecked ->
-            sharedPreferences.edit().putBoolean(KEY_NOTIFICATIONS_ENABLED, isChecked).apply()
-            updateReminderItemsEnabled()
-            if (isChecked) {
-                Toast.makeText(this, "Notifikasi diaktifkan", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Notifikasi dinonaktifkan", Toast.LENGTH_SHORT).show()
-            }
-        }
-        
-        // Meal reminders
-        llBreakfastReminder.setOnClickListener {
-            if (switchNotifications.isChecked) {
-                showTimePickerDialog("Sarapan", KEY_BREAKFAST_TIME, tvBreakfastTime)
-            }
-        }
-        
-        llLunchReminder.setOnClickListener {
-            if (switchNotifications.isChecked) {
-                showTimePickerDialog("Makan Siang", KEY_LUNCH_TIME, tvLunchTime)
-            }
-        }
-        
-        llDinnerReminder.setOnClickListener {
-            if (switchNotifications.isChecked) {
-                showTimePickerDialog("Makan Malam", KEY_DINNER_TIME, tvDinnerTime)
-            }
-        }
-        
-        // Unit preferences
-        llUnitPreferences.setOnClickListener {
-            showUnitSystemDialog()
-        }
-        
-        // Dark mode toggle
-        switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
-            sharedPreferences.edit().putBoolean(KEY_DARK_MODE, isChecked).apply()
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-        }
-        
-        // Data management
-        llBackupData.setOnClickListener {
-            showBackupDataDialog()
-        }
-        
-        llRestoreData.setOnClickListener {
-            showRestoreDataDialog()
-        }
-        
-        llClearFoodLog.setOnClickListener {
-            showClearFoodLogDialog()
-        }
-        
-        llDeleteAccount.setOnClickListener {
-            showDeleteAccountDialog()
-        }
-        
-        // About
-        llAboutApp.setOnClickListener {
-            showAboutDialog()
-        }
-        
-        llPrivacyPolicy.setOnClickListener {
-            showPrivacyPolicyDialog()
-        }
-        
-        llHelpFaq.setOnClickListener {
-            showHelpFaqDialog()
-        }
-    }
-    
-    private fun setupBottomNavigation() {
-        bottomNavigation.selectedItemId = R.id.nav_settings
-        bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                    startActivity(intent)
-                    true
-                }
-                R.id.nav_food_log -> {
-                    startActivity(Intent(this, FoodLogActivity::class.java).putExtra("USERNAME", username))
-                    finish()
-                    true
-                }
-                R.id.nav_stats -> {
-                    startActivity(Intent(this, StatisticsActivity::class.java).putExtra("USERNAME", username))
-                    finish()
-                    true
-                }
-                R.id.nav_settings -> true
-                else -> false
-            }
+        setContent {
+            SettingsScreen(
+                state = screenState,
+                selectedNavItem = NavItem.SETTINGS,
+                onNavItemClick = { navItem -> handleNavigation(navItem) },
+                onMyProfileClick = {
+                    startActivity(Intent(this, ProfileActivity::class.java).putExtra("USERNAME", username))
+                },
+                onNotificationsToggle = { enabled -> handleNotificationToggle(enabled) },
+                onBreakfastReminderClick = { 
+                    if (screenState.notificationsEnabled) {
+                        showTimePickerDialog("Sarapan", KEY_BREAKFAST_TIME) { time ->
+                            screenState = screenState.copy(breakfastTime = time)
+                        }
+                    }
+                },
+                onLunchReminderClick = { 
+                    if (screenState.notificationsEnabled) {
+                        showTimePickerDialog("Makan Siang", KEY_LUNCH_TIME) { time ->
+                            screenState = screenState.copy(lunchTime = time)
+                        }
+                    }
+                },
+                onDinnerReminderClick = { 
+                    if (screenState.notificationsEnabled) {
+                        showTimePickerDialog("Makan Malam", KEY_DINNER_TIME) { time ->
+                            screenState = screenState.copy(dinnerTime = time)
+                        }
+                    }
+                },
+                onUnitPreferencesClick = { showUnitSystemDialog() },
+                onDarkModeToggle = { enabled -> handleDarkModeToggle(enabled) },
+                onBackupDataClick = { showBackupDataDialog() },
+                onRestoreDataClick = { showRestoreDataDialog() },
+                onClearFoodLogClick = { showClearFoodLogDialog() },
+                onDeleteAccountClick = { showDeleteAccountDialog() },
+                onAboutAppClick = { showAboutDialog() },
+                onPrivacyPolicyClick = { showPrivacyPolicyDialog() },
+                onHelpFaqClick = { showHelpFaqDialog() }
+            )
         }
     }
 
-    private fun showTimePickerDialog(mealType: String, prefKey: String, textView: TextView) {
+    
+    private fun loadSettings() {
+        val notificationsEnabled = sharedPreferences.getBoolean(KEY_NOTIFICATIONS_ENABLED, false)
+        val breakfastTime = sharedPreferences.getString(KEY_BREAKFAST_TIME, "08:00 AM") ?: "08:00 AM"
+        val lunchTime = sharedPreferences.getString(KEY_LUNCH_TIME, "12:00 PM") ?: "12:00 PM"
+        val dinnerTime = sharedPreferences.getString(KEY_DINNER_TIME, "07:00 PM") ?: "07:00 PM"
+        val unitSystem = sharedPreferences.getString(KEY_UNIT_SYSTEM, "metric")
+        val unitSystemDisplay = if (unitSystem == "metric") "Metrik (kg, cm)" else "Imperial (lbs, inci)"
+        val darkModeEnabled = sharedPreferences.getBoolean(KEY_DARK_MODE, false)
+        
+        val appVersion = try {
+            val pInfo = packageManager.getPackageInfo(packageName, 0)
+            "Versi ${pInfo.versionName}"
+        } catch (e: Exception) {
+            "Versi 1.0.0"
+        }
+        
+        screenState = SettingsScreenState(
+            notificationsEnabled = notificationsEnabled,
+            breakfastTime = breakfastTime,
+            lunchTime = lunchTime,
+            dinnerTime = dinnerTime,
+            unitSystem = unitSystemDisplay,
+            darkModeEnabled = darkModeEnabled,
+            appVersion = appVersion
+        )
+    }
+    
+    private fun handleNavigation(navItem: NavItem) {
+        when (navItem) {
+            NavItem.HOME -> {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                startActivity(intent)
+            }
+            NavItem.FOOD_LOG -> {
+                startActivity(Intent(this, FoodLogActivity::class.java).putExtra("USERNAME", username))
+                finish()
+            }
+            NavItem.STATS -> {
+                startActivity(Intent(this, StatisticsActivity::class.java).putExtra("USERNAME", username))
+                finish()
+            }
+            NavItem.SETTINGS -> { /* Already on settings */ }
+        }
+    }
+    
+    private fun handleNotificationToggle(enabled: Boolean) {
+        sharedPreferences.edit().putBoolean(KEY_NOTIFICATIONS_ENABLED, enabled).apply()
+        screenState = screenState.copy(notificationsEnabled = enabled)
+        if (enabled) {
+            Toast.makeText(this, "Notifikasi diaktifkan", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Notifikasi dinonaktifkan", Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    private fun handleDarkModeToggle(enabled: Boolean) {
+        sharedPreferences.edit().putBoolean(KEY_DARK_MODE, enabled).apply()
+        screenState = screenState.copy(darkModeEnabled = enabled)
+        if (enabled) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
+    
+    private fun showTimePickerDialog(mealType: String, prefKey: String, onTimeSelected: (String) -> Unit) {
         val calendar = Calendar.getInstance()
-        val currentTime = textView.text.toString()
+        val currentTime = when (prefKey) {
+            KEY_BREAKFAST_TIME -> screenState.breakfastTime
+            KEY_LUNCH_TIME -> screenState.lunchTime
+            KEY_DINNER_TIME -> screenState.dinnerTime
+            else -> "08:00 AM"
+        }
         
         // Parse current time
         try {
@@ -299,8 +198,8 @@ class SettingsActivity : AppCompatActivity() {
             val hour12 = if (hourOfDay == 0) 12 else if (hourOfDay > 12) hourOfDay - 12 else hourOfDay
             val timeString = String.format("%02d:%02d %s", hour12, minute, amPm)
             
-            textView.text = timeString
             sharedPreferences.edit().putString(prefKey, timeString).apply()
+            onTimeSelected(timeString)
             
             Toast.makeText(this, "Pengingat $mealType diatur ke $timeString", Toast.LENGTH_SHORT).show()
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show()
@@ -316,7 +215,7 @@ class SettingsActivity : AppCompatActivity() {
             .setSingleChoiceItems(options, selectedIndex) { dialog, which ->
                 val selectedUnit = if (which == 0) "metric" else "imperial"
                 sharedPreferences.edit().putString(KEY_UNIT_SYSTEM, selectedUnit).apply()
-                tvUnitSystem.text = options[which]
+                screenState = screenState.copy(unitSystem = options[which])
                 Toast.makeText(this, "Sistem satuan diubah ke ${options[which]}", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             }
