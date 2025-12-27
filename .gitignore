@@ -16,3 +16,4 @@ local.properties
 plan.md
 GEMINI.md
 .agent/rules/kotlin.md
+*.md
