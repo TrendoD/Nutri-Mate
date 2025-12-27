@@ -55,9 +55,6 @@
             android:name=".StatisticsActivity"
             android:exported="false" />
 
-        <activity
-            android:name=".RecommendationsActivity"
-            android:exported="false" />
 
         <activity
             android:name=".NutritionTargetActivity"

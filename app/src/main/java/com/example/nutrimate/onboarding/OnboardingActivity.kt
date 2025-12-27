@@ -1,87 +1,173 @@
 package com.example.nutrimate.onboarding
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager2.widget.ViewPager2
-import com.example.nutrimate.R
-import com.google.android.material.progressindicator.LinearProgressIndicator
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.nutrimate.MainActivity
+import com.example.nutrimate.ui.theme.PageBackground
 
-class OnboardingActivity : AppCompatActivity() {
 
-    private lateinit var viewPager: ViewPager2
-    private lateinit var progressBar: LinearProgressIndicator
+class OnboardingActivity : ComponentActivity() {
+
     private lateinit var viewModel: OnboardingViewModel
     private lateinit var username: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_onboarding)
 
         username = intent.getStringExtra("USERNAME") ?: ""
 
         viewModel = ViewModelProvider(this)[OnboardingViewModel::class.java]
-        
-        viewPager = findViewById(R.id.viewPager)
-        progressBar = findViewById(R.id.progressBar)
 
-        val adapter = OnboardingPagerAdapter(this)
-        viewPager.adapter = adapter
-        viewPager.isUserInputEnabled = false // Disable swipe to enforce flow validation if needed, or true for free flow. Feature doc says "swipe", but logical flow usually requires validation (e.g. can't go next if age not picked). I'll set false and control via buttons.
-        // Actually feature doc says "Navigasi geser (swipe) antar halaman". 
-        // But also "Mengetuk salah satu kartu ... secara otomatis mengarahkan ke halaman berikutnya".
-        // I'll enable user input but maybe I should check validation. For simplicity and UX smoothness, I'll disable swipe so users don't skip steps accidentally, and rely on buttons/interactions.
-        
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                val progress = ((position + 1) * 100) / adapter.itemCount
-                progressBar.setProgress(progress, true)
-                
-                // Calculate TDEE when reaching Summary page (last page)
-                if (position == adapter.itemCount - 1) {
-                    viewModel.calculateTDEE()
-                }
+        setContent {
+            OnboardingScreen(
+                viewModel = viewModel,
+                onFinish = { finishOnboarding() }
+            )
+        }
+    }
+
+    private fun finishOnboarding() {
+        if (username.isNotEmpty()) {
+            viewModel.saveUserData(username) {
+                Toast.makeText(this, "Profil berhasil dibuat!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("USERNAME", username)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
             }
-        })
-        
-        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (viewPager.currentItem > 0) {
-                    viewPager.currentItem -= 1
-                } else {
-                    isEnabled = false
-                    onBackPressedDispatcher.onBackPressed()
-                }
-            }
-        })
+        } else {
+            Toast.makeText(this, "Error: Username not found", Toast.LENGTH_SHORT).show()
+        }
+    }
+}
+
+@Composable
+fun OnboardingScreen(
+    viewModel: OnboardingViewModel,
+    onFinish: () -> Unit
+) {
+    val totalPages = 8
+    var currentPage by remember { mutableIntStateOf(0) }
+    val dailyCalories by viewModel.dailyCalories.observeAsState(0)
+
+    // Handle back button
+    BackHandler(enabled = currentPage > 0) {
+        currentPage--
     }
 
     fun nextPage() {
-        if (viewPager.currentItem < (viewPager.adapter?.itemCount ?: 0) - 1) {
-            viewPager.currentItem += 1
+        if (currentPage < totalPages - 1) {
+            currentPage++
+        }
+        // Calculate TDEE when reaching Summary page
+        if (currentPage == totalPages - 1) {
+            viewModel.calculateTDEE()
         }
     }
-    
-    fun getUsername(): String = username
 
-    private inner class OnboardingPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
-        override fun getItemCount(): Int = 8
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PageBackground)
+    ) {
+        // Segmented progress bar
+        SegmentedProgressIndicator(
+            currentPage = currentPage,
+            totalPages = totalPages,
+            modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)
+        )
 
-        override fun createFragment(position: Int): Fragment {
-            return when (position) {
-                0 -> GenderFragment()
-                1 -> AgeFragment()
-                2 -> HeightFragment()
-                3 -> WeightFragment()
-                4 -> ActivityLevelFragment()
-                5 -> GoalFragment()
-                6 -> HealthFragment()
-                7 -> SummaryFragment()
-                else -> GenderFragment()
+        // Page content with animation
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f)
+        ) {
+            AnimatedContent(
+                targetState = currentPage,
+                transitionSpec = {
+                    if (targetState > initialState) {
+                        slideInHorizontally { width -> width } togetherWith
+                                slideOutHorizontally { width -> -width }
+                    } else {
+                        slideInHorizontally { width -> -width } togetherWith
+                                slideOutHorizontally { width -> width }
+                    }
+                },
+                label = "page_transition"
+            ) { page ->
+                when (page) {
+                    0 -> GenderScreen(
+                        onGenderSelected = { gender ->
+                            viewModel.setGender(gender)
+                            nextPage()
+                        }
+                    )
+                    1 -> AgeScreen(
+                        onAgeSelected = { age ->
+                            viewModel.setAge(age)
+                            nextPage()
+                        }
+                    )
+                    2 -> HeightScreen(
+                        onHeightSelected = { height ->
+                            viewModel.setHeight(height)
+                            nextPage()
+                        }
+                    )
+                    3 -> WeightScreen(
+                        onWeightSelected = { weight ->
+                            viewModel.setWeight(weight)
+                            nextPage()
+                        }
+                    )
+                    4 -> ActivityLevelScreen(
+                        onActivityLevelSelected = { level ->
+                            viewModel.setActivityLevel(level)
+                            nextPage()
+                        }
+                    )
+                    5 -> GoalScreen(
+                        onGoalSelected = { goal ->
+                            viewModel.setDietGoal(goal)
+                            nextPage()
+                        }
+                    )
+                    6 -> HealthScreen(
+                        onHealthSubmitted = { conditions, allergies ->
+                            conditions.forEach { viewModel.toggleCondition(it, true) }
+                            viewModel.setAllergies(allergies)
+                            nextPage()
+                        }
+                    )
+                    7 -> SummaryScreen(
+                        dailyCalories = dailyCalories,
+                        onFinish = onFinish
+                    )
+                }
             }
         }
     }

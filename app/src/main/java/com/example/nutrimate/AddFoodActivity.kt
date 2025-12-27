@@ -1,368 +1,273 @@
 package com.example.nutrimate
 
-import android.app.Dialog
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.nutrimate.data.AppDatabase
 import com.example.nutrimate.data.FavoriteFood
 import com.example.nutrimate.data.Food
 import com.example.nutrimate.data.FoodLog
+import com.example.nutrimate.ui.addfood.AddFoodDialog
+import com.example.nutrimate.ui.addfood.AddFoodScreen
+import com.example.nutrimate.ui.addfood.AddFoodScreenState
+import com.example.nutrimate.ui.addfood.CreateCustomFoodDialog
+import com.example.nutrimate.ui.addfood.FoodItem
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
 
-class AddFoodActivity : AppCompatActivity() {
+class AddFoodActivity : ComponentActivity() {
 
     private lateinit var database: AppDatabase
-    private lateinit var etSearch: EditText
-    private lateinit var rvFoodSearch: RecyclerView
-    private lateinit var tvMealType: TextView
-    private lateinit var adapter: FoodSearchAdapter
-    
-    // Filter buttons
-    private lateinit var btnFilterAll: Button
-    private lateinit var btnFilterRecent: Button
-    private lateinit var btnFilterFavorites: Button
-    private lateinit var btnCategoryFruit: Button
-    private lateinit var btnCategoryVegetable: Button
-    private lateinit var btnCategoryProtein: Button
-    private lateinit var btnCategoryGrain: Button
-    private lateinit var btnCategoryDairy: Button
-    private lateinit var btnCreateCustomFood: Button
-    
     private var username: String = ""
     private var mealType: String = ""
     private var selectedDate: String = ""
-    private var currentFilter: String = "All"
-    private var favoriteIds: MutableSet<String> = mutableSetOf()
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+    // State holders
+    private var screenState by mutableStateOf(AddFoodScreenState())
+    private var favoriteIds by mutableStateOf<Set<String>>(emptySet())
+    private var showAddDialog by mutableStateOf(false)
+    private var selectedFood by mutableStateOf<Food?>(null)
+    private var showCreateCustomDialog by mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_food)
 
         database = AppDatabase.getDatabase(this)
         username = intent.getStringExtra("USERNAME") ?: ""
         mealType = intent.getStringExtra("MEAL_TYPE") ?: "Breakfast"
         selectedDate = intent.getStringExtra("DATE") ?: dateFormat.format(Date())
-        
+
         if (username.isEmpty()) {
             finish()
             return
         }
 
-        initViews()
+        screenState = screenState.copy(mealType = mealType)
+
         loadFavorites()
         loadFilteredFoods()
-    }
 
-    private fun initViews() {
-        tvMealType = findViewById(R.id.tvMealType)
-        val displayMealType = when(mealType) {
-            "Breakfast" -> "Sarapan"
-            "Lunch" -> "Makan Siang"
-            "Dinner" -> "Makan Malam"
-            "Snack" -> "Camilan"
-            else -> mealType
-        }
-        tvMealType.text = "Tambah ke $displayMealType"
+        setContent {
+            AddFoodScreen(
+                    state = screenState,
+                    onSearchQueryChange = { query ->
+                        screenState = screenState.copy(searchQuery = query)
+                        if (query.length >= 3) {
+                            searchFood(query)
+                        } else if (query.isEmpty()) {
+                            loadFilteredFoods()
+                        }
+                    },
+                    onFilterChange = { filter ->
+                        screenState = screenState.copy(
+                            currentFilter = filter,
+                            searchQuery = ""
+                        )
+                        loadFilteredFoods()
+                    },
+                    onFoodClick = { foodItem ->
+                        // Find the original Food object
+                        lifecycleScope.launch {
+                            val food = database.foodDao().getFoodById(foodItem.id)
+                            food?.let {
+                                selectedFood = it
+                                showAddDialog = true
+                            }
+                        }
+                    },
+                    onFavoriteClick = { foodItem ->
+                        toggleFavorite(foodItem)
+                    },
+                    onCreateCustomFoodClick = {
+                        showCreateCustomDialog = true
+                    },
+                    onBackClick = {
+                        finish()
+                    }
+                )
 
-        etSearch = findViewById(R.id.etSearch)
-        rvFoodSearch = findViewById(R.id.rvFoodSearch)
-        
-        // Filter buttons
-        btnFilterAll = findViewById(R.id.btnFilterAll)
-        btnFilterRecent = findViewById(R.id.btnFilterRecent)
-        btnFilterFavorites = findViewById(R.id.btnFilterFavorites)
-        btnCategoryFruit = findViewById(R.id.btnCategoryFruit)
-        btnCategoryVegetable = findViewById(R.id.btnCategoryVegetable)
-        btnCategoryProtein = findViewById(R.id.btnCategoryProtein)
-        btnCategoryGrain = findViewById(R.id.btnCategoryGrain)
-        btnCategoryDairy = findViewById(R.id.btnCategoryDairy)
-        btnCreateCustomFood = findViewById(R.id.btnCreateCustomFood)
-        
-        rvFoodSearch.layoutManager = LinearLayoutManager(this)
-        adapter = FoodSearchAdapter(
-            onFoodClick = { food -> showAddDialog(food) },
-            onFavoriteClick = { food -> toggleFavorite(food) }
-        )
-        rvFoodSearch.adapter = adapter
-        
-        // Search functionality
-        etSearch.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                val query = s.toString()
-                if (query.length >= 3) {
-                    searchFood(query)
-                } else if (query.isEmpty()) {
-                    loadFilteredFoods()
+                // Add Food Dialog
+                if (showAddDialog && selectedFood != null) {
+                    val food = selectedFood!!
+                    AddFoodDialog(
+                        foodName = food.name,
+                        servingUnit = food.servingUnit,
+                        caloriesPerServing = food.calories,
+                        carbsPerServing = food.carbs,
+                        proteinPerServing = food.protein,
+                        fatPerServing = food.fat,
+                        sugarPerServing = food.sugar,
+                        fiberPerServing = food.fiber,
+                        sodiumPerServing = food.sodium,
+                        onDismiss = {
+                            showAddDialog = false
+                            selectedFood = null
+                        },
+                        onAdd = { qty ->
+                            saveFoodLog(food, qty)
+                            showAddDialog = false
+                            selectedFood = null
+                        }
+                    )
                 }
-            }
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
-        
-        // Filter button listeners
-        btnFilterAll.setOnClickListener { setFilter("All") }
-        btnFilterRecent.setOnClickListener { setFilter("Recent") }
-        btnFilterFavorites.setOnClickListener { setFilter("Favorites") }
-        btnCategoryFruit.setOnClickListener { setFilter("Fruit") }
-        btnCategoryVegetable.setOnClickListener { setFilter("Vegetable") }
-        btnCategoryProtein.setOnClickListener { setFilter("Protein") }
-        btnCategoryGrain.setOnClickListener { setFilter("Grain") }
-        btnCategoryDairy.setOnClickListener { setFilter("Dairy") }
-        
-        btnCreateCustomFood.setOnClickListener { showCreateCustomFoodDialog() }
-        
-        updateFilterButtons()
-    }
-    
-    private fun setFilter(filter: String) {
-        currentFilter = filter
-        updateFilterButtons()
-        loadFilteredFoods()
-        etSearch.setText("") // Clear search when changing filter
-    }
-    
-    private fun updateFilterButtons() {
-        // Reset all buttons
-        val buttons = listOf(
-            btnFilterAll, btnFilterRecent, btnFilterFavorites,
-            btnCategoryFruit, btnCategoryVegetable, btnCategoryProtein,
-            btnCategoryGrain, btnCategoryDairy
-        )
-        
-        buttons.forEach { btn ->
-            btn.setBackgroundColor(resources.getColor(android.R.color.transparent, null))
-            btn.setTextColor(resources.getColor(android.R.color.darker_gray, null))
+
+                // Create Custom Food Dialog
+                if (showCreateCustomDialog) {
+                    CreateCustomFoodDialog(
+                        onDismiss = {
+                            showCreateCustomDialog = false
+                        },
+                        onSave = { name, servingSize, servingUnit, calories, carbs, protein, fat, sugar, fiber, sodium, displayCategory ->
+                            val internalCategory = mapCategoryToInternal(displayCategory)
+                            val customFood = Food(
+                                id = "custom_${UUID.randomUUID()}",
+                                name = name,
+                                calories = calories,
+                                carbs = carbs,
+                                protein = protein,
+                                fat = fat,
+                                sugar = sugar,
+                                fiber = fiber,
+                                sodium = sodium,
+                                servingSize = servingSize,
+                                servingUnit = servingUnit,
+                                category = internalCategory,
+                                isCustom = true,
+                                createdBy = username
+                            )
+
+                            lifecycleScope.launch {
+                                database.foodDao().insertFood(customFood)
+                                Toast.makeText(this@AddFoodActivity, "Makanan kustom dibuat!", Toast.LENGTH_SHORT).show()
+                                loadFilteredFoods()
+                                showCreateCustomDialog = false
+                            }
+                        }
+                    )
+                }
         }
-        
-        // Highlight selected button
-        val selectedBtn = when(currentFilter) {
-            "All" -> btnFilterAll
-            "Recent" -> btnFilterRecent
-            "Favorites" -> btnFilterFavorites
-            "Fruit" -> btnCategoryFruit
-            "Vegetable" -> btnCategoryVegetable
-            "Protein" -> btnCategoryProtein
-            "Grain" -> btnCategoryGrain
-            "Dairy" -> btnCategoryDairy
-            else -> btnFilterAll
-        }
-        
-        selectedBtn.setBackgroundColor(resources.getColor(android.R.color.darker_gray, null))
-        selectedBtn.setTextColor(resources.getColor(android.R.color.white, null))
     }
-    
+
     private fun loadFavorites() {
         lifecycleScope.launch {
             val favorites = database.foodDao().getFavoriteFoods(username)
-            favoriteIds = favorites.map { it.id }.toMutableSet()
-            adapter.updateFavorites(favoriteIds)
+            favoriteIds = favorites.map { it.id }.toSet()
+            updateFoodsWithFavorites()
         }
     }
-    
+
     private fun loadFilteredFoods() {
         lifecycleScope.launch {
-            val foods = when(currentFilter) {
+            screenState = screenState.copy(isLoading = true)
+            
+            val foods = when (screenState.currentFilter) {
                 "Recent" -> database.foodDao().getRecentFoods(username, 20)
                 "Favorites" -> database.foodDao().getFavoriteFoods(username)
-                "Fruit", "Vegetable", "Protein", "Grain", "Dairy" -> 
-                    database.foodDao().getFoodsByCategory(currentFilter)
-                else -> database.foodDao().searchFoods("") // All foods
+                "Fruit", "Vegetable", "Protein", "Grain", "Dairy" ->
+                    database.foodDao().getFoodsByCategory(screenState.currentFilter)
+                else -> database.foodDao().searchFoods("")
             }
-            adapter.submitList(foods)
+
+            val foodItems = foods.map { food ->
+                FoodItem(
+                    id = food.id,
+                    name = food.name,
+                    servingSize = food.servingSize,
+                    servingUnit = food.servingUnit,
+                    calories = food.calories,
+                    carbs = food.carbs,
+                    protein = food.protein,
+                    fat = food.fat,
+                    sugar = food.sugar,
+                    fiber = food.fiber,
+                    sodium = food.sodium,
+                    category = food.category,
+                    isFavorite = favoriteIds.contains(food.id)
+                )
+            }
+
+            screenState = screenState.copy(
+                foods = foodItems,
+                isLoading = false
+            )
         }
     }
 
     private fun searchFood(query: String) {
         lifecycleScope.launch {
-            val foods = if (currentFilter == "All" || currentFilter == "Recent" || currentFilter == "Favorites") {
+            val foods = if (screenState.currentFilter == "All" || 
+                           screenState.currentFilter == "Recent" || 
+                           screenState.currentFilter == "Favorites") {
                 database.foodDao().searchFoods(query)
             } else {
-                database.foodDao().searchFoodsByCategory(query, currentFilter)
+                database.foodDao().searchFoodsByCategory(query, screenState.currentFilter)
             }
-            adapter.submitList(foods)
+
+            val foodItems = foods.map { food ->
+                FoodItem(
+                    id = food.id,
+                    name = food.name,
+                    servingSize = food.servingSize,
+                    servingUnit = food.servingUnit,
+                    calories = food.calories,
+                    carbs = food.carbs,
+                    protein = food.protein,
+                    fat = food.fat,
+                    sugar = food.sugar,
+                    fiber = food.fiber,
+                    sodium = food.sodium,
+                    category = food.category,
+                    isFavorite = favoriteIds.contains(food.id)
+                )
+            }
+
+            screenState = screenState.copy(foods = foodItems)
         }
     }
-    
-    private fun toggleFavorite(food: Food) {
+
+    private fun toggleFavorite(foodItem: FoodItem) {
         lifecycleScope.launch {
-            if (favoriteIds.contains(food.id)) {
+            if (favoriteIds.contains(foodItem.id)) {
                 // Remove from favorites
-                database.foodDao().deleteFavorite(username, food.id)
-                favoriteIds.remove(food.id)
+                database.foodDao().deleteFavorite(username, foodItem.id)
+                favoriteIds = favoriteIds - foodItem.id
                 Toast.makeText(this@AddFoodActivity, "Dihapus dari favorit", Toast.LENGTH_SHORT).show()
             } else {
                 // Add to favorites
-                val favorite = FavoriteFood(username = username, foodId = food.id)
+                val favorite = FavoriteFood(username = username, foodId = foodItem.id)
                 database.foodDao().insertFavorite(favorite)
-                favoriteIds.add(food.id)
+                favoriteIds = favoriteIds + foodItem.id
                 Toast.makeText(this@AddFoodActivity, "Ditambahkan ke favorit", Toast.LENGTH_SHORT).show()
             }
-            adapter.updateFavorites(favoriteIds)
-            
+
+            updateFoodsWithFavorites()
+
             // Refresh list if in favorites view
-            if (currentFilter == "Favorites") {
+            if (screenState.currentFilter == "Favorites") {
                 loadFilteredFoods()
             }
         }
     }
 
-    private fun showAddDialog(food: Food) {
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_add_food)
-        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        
-        val tvTitle = dialog.findViewById<TextView>(R.id.tvDialogTitle)
-        val etQty = dialog.findViewById<EditText>(R.id.etQuantity)
-        val btnAdd = dialog.findViewById<Button>(R.id.btnAdd)
-        val btnCancel = dialog.findViewById<Button>(R.id.btnCancel)
-        val tvUnit = dialog.findViewById<TextView>(R.id.tvUnit)
-        val tvNutritionPreview = dialog.findViewById<TextView>(R.id.tvNutritionPreview)
-        
-        tvTitle.text = "Tambah ${food.name}"
-        tvUnit.text = food.servingUnit
-        
-        // Update nutrition preview when quantity changes
-        fun updateNutritionPreview() {
-            val qty = etQty.text.toString().toFloatOrNull() ?: 1.0f
-            val calories = (food.calories * qty).toInt()
-            val carbs = (food.carbs * qty).toInt()
-            val protein = (food.protein * qty).toInt()
-            val fat = (food.fat * qty).toInt()
-            val sugar = (food.sugar * qty).toInt()
-            val fiber = (food.fiber * qty).toInt()
-            val sodium = (food.sodium * qty).toInt()
-            
-            tvNutritionPreview.text = "Kalori: $calories kkal\nKarbo: ${carbs}g | Protein: ${protein}g | Lemak: ${fat}g\nGula: ${sugar}g | Serat: ${fiber}g | Na: ${sodium}mg"
-        }
-        
-        updateNutritionPreview() // Initial update
-        
-        etQty.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) { updateNutritionPreview() }
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
-        
-        btnAdd.setOnClickListener {
-            val qtyStr = etQty.text.toString()
-            val qty = qtyStr.toFloatOrNull() ?: 1.0f
-            
-            if (qty <= 0) {
-                Toast.makeText(this, "Harap masukkan jumlah yang valid", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+    private fun updateFoodsWithFavorites() {
+        screenState = screenState.copy(
+            foods = screenState.foods.map { food ->
+                food.copy(isFavorite = favoriteIds.contains(food.id))
             }
-            
-            saveFoodLog(food, qty)
-            dialog.dismiss()
-        }
-        
-        btnCancel.setOnClickListener {
-            dialog.dismiss()
-        }
-        
-        dialog.show()
+        )
     }
-    
-    private fun showCreateCustomFoodDialog() {
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_create_food)
-        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        
-        val etFoodName = dialog.findViewById<EditText>(R.id.etFoodName)
-        val etServingSize = dialog.findViewById<EditText>(R.id.etServingSize)
-        val etServingUnit = dialog.findViewById<EditText>(R.id.etServingUnit)
-        val etCalories = dialog.findViewById<EditText>(R.id.etCalories)
-        val etCarbs = dialog.findViewById<EditText>(R.id.etCarbs)
-        val etProtein = dialog.findViewById<EditText>(R.id.etProtein)
-        val etFat = dialog.findViewById<EditText>(R.id.etFat)
-        val etSugar = dialog.findViewById<EditText>(R.id.etSugar)
-        val etFiber = dialog.findViewById<EditText>(R.id.etFiber)
-        val etSodium = dialog.findViewById<EditText>(R.id.etSodium)
-        val spinnerCategory = dialog.findViewById<Spinner>(R.id.spinnerCategory)
-        val btnSave = dialog.findViewById<Button>(R.id.btnSaveCustom)
-        val btnCancel = dialog.findViewById<Button>(R.id.btnCancelCustom)
-        
-        // Setup category spinner
-        val categories = arrayOf("Buah", "Sayur", "Protein", "Biji-bijian", "Produk Susu", "Lainnya")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerCategory.adapter = adapter
-        
-        btnSave.setOnClickListener {
-            val name = etFoodName.text.toString().trim()
-            val servingSize = etServingSize.text.toString().toFloatOrNull() ?: 0f
-            val servingUnit = etServingUnit.text.toString().trim()
-            val calories = etCalories.text.toString().toFloatOrNull() ?: 0f
-            val carbs = etCarbs.text.toString().toFloatOrNull() ?: 0f
-            val protein = etProtein.text.toString().toFloatOrNull() ?: 0f
-            val fat = etFat.text.toString().toFloatOrNull() ?: 0f
-            val sugar = etSugar.text.toString().toFloatOrNull() ?: 0f
-            val fiber = etFiber.text.toString().toFloatOrNull() ?: 0f
-            val sodium = etSodium.text.toString().toFloatOrNull() ?: 0f
-            val category = spinnerCategory.selectedItem.toString()
-            
-            // Validation
-            if (name.isEmpty() || servingUnit.isEmpty() || servingSize <= 0 || calories <= 0) {
-                Toast.makeText(this, "Harap isi semua kolom yang wajib", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            
-            // Create custom food
-            val customFood = Food(
-                id = "custom_${UUID.randomUUID()}",
-                name = name,
-                calories = calories,
-                carbs = carbs,
-                protein = protein,
-                fat = fat,
-                sugar = sugar,
-                fiber = fiber,
-                sodium = sodium,
-                servingSize = servingSize,
-                servingUnit = servingUnit,
-                // Map back to English category for DB consistency if needed, or keep Indonesian if DB supports strings. 
-                // Assuming DB stores string and filtering uses string matches.
-                // But `AddFoodActivity` filters use English strings ("Fruit", etc).
-                // So I should map the display category to internal category.
-                category = mapCategoryToInternal(category),
-                isCustom = true,
-                createdBy = username
-            )
-            
-            lifecycleScope.launch {
-                database.foodDao().insertFood(customFood)
-                Toast.makeText(this@AddFoodActivity, "Makanan kustom dibuat!", Toast.LENGTH_SHORT).show()
-                loadFilteredFoods() // Refresh list
-                dialog.dismiss()
-            }
-        }
-        
-        btnCancel.setOnClickListener {
-            dialog.dismiss()
-        }
-        
-        dialog.show()
-    }
-    
+
     private fun mapCategoryToInternal(displayCategory: String): String {
-        return when(displayCategory) {
+        return when (displayCategory) {
             "Buah" -> "Fruit"
             "Sayur" -> "Vegetable"
             "Protein" -> "Protein"
@@ -371,7 +276,7 @@ class AddFoodActivity : AppCompatActivity() {
             else -> "Other"
         }
     }
-    
+
     private fun saveFoodLog(food: Food, qty: Float) {
         lifecycleScope.launch {
             val log = FoodLog(
