@@ -2,6 +2,14 @@
 
 NutriMate is a personal nutrition companion app designed to help users manage their diet based on their medical conditions.
 
+## 📊 Promotional Poster
+
+![NutriMate Poster](./POSTER_NUTRIMATE_PREVIEW.png)
+
+*For full size poster, see [POSTER_NUTRIMATE.svg](./POSTER_NUTRIMATE.svg) or [POSTER_NUTRIMATE.png](./POSTER_NUTRIMATE.png)*
+
+For detailed information about the poster, including how to use and customize it, please see [POSTER_README.md](./POSTER_README.md).
+
 ## Features
 
 - **User Profile Management**: Calculate Daily Calorie Target (TDEE) based on age, weight, height, gender, and activity level.

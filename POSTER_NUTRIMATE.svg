@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!-- Background Gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2E7D32;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.95" />
+      <stop offset="100%" style="stop-color:#f5f5f5;stop-opacity:0.95" />
+    </linearGradient>
+    
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="1600" fill="url(#bgGradient)"/>
+  
+  <!-- Decorative Elements -->
+  <circle cx="100" cy="100" r="80" fill="#81C784" opacity="0.3"/>
+  <circle cx="1100" cy="200" r="100" fill="#66BB6A" opacity="0.3"/>
+  <circle cx="200" cy="1500" r="120" fill="#81C784" opacity="0.3"/>
+  <circle cx="1000" cy="1450" r="90" fill="#66BB6A" opacity="0.3"/>
+  
+  <!-- Main Content Container -->
+  <rect x="60" y="60" width="1080" height="1480" rx="30" fill="url(#cardGradient)" filter="url(#shadow)"/>
+  
+  <!-- Header Section -->
+  <g id="header">
+    <!-- Logo Circle -->
+    <circle cx="600" cy="180" r="80" fill="#4CAF50"/>
+    <path d="M 600 120 L 600 150 M 575 135 L 600 150 L 625 135" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="600" cy="195" r="15" fill="white"/>
+    <circle cx="580" cy="180" r="8" fill="white"/>
+    <circle cx="620" cy="180" r="8" fill="white"/>
+    
+    <!-- App Name -->
+    <text x="600" y="310" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#2E7D32" text-anchor="middle">NutriMate</text>
+    <text x="600" y="355" font-family="Arial, sans-serif" font-size="28" fill="#666" text-anchor="middle">Teman Nutrisi Pribadi Anda</text>
+  </g>
+  
+  <!-- Tagline -->
+  <rect x="150" y="400" width="900" height="3" fill="#4CAF50"/>
+  <text x="600" y="455" font-family="Arial, sans-serif" font-size="24" fill="#424242" text-anchor="middle" font-style="italic">
+    "Kelola Pola Makan Sesuai Kondisi Kesehatan Anda"
+  </text>
+  
+  <!-- Features Section -->
+  <g id="features">
+    <!-- Feature 1 -->
+    <g transform="translate(150, 520)">
+      <circle cx="40" cy="40" r="35" fill="#4CAF50" opacity="0.2"/>
+      <text x="40" y="50" font-family="Arial, sans-serif" font-size="36" fill="#4CAF50" text-anchor="middle">👤</text>
+      <text x="110" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2E7D32">Profil Pengguna</text>
+      <text x="110" y="65" font-family="Arial, sans-serif" font-size="18" fill="#666">
+        <tspan x="110" dy="0">Hitung target kalori harian (TDEE)</tspan>
+        <tspan x="110" dy="25">berdasarkan usia, berat, tinggi, dan</tspan>
+        <tspan x="110" dy="25">tingkat aktivitas Anda</tspan>
+      </text>
+    </g>
+    
+    <!-- Feature 2 -->
+    <g transform="translate(150, 680)">
+      <circle cx="40" cy="40" r="35" fill="#4CAF50" opacity="0.2"/>
+      <text x="40" y="50" font-family="Arial, sans-serif" font-size="36" fill="#4CAF50" text-anchor="middle">🏥</text>
+      <text x="110" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2E7D32">Pelacakan Kondisi Medis</text>
+      <text x="110" y="65" font-family="Arial, sans-serif" font-size="18" fill="#666">
+        <tspan x="110" dy="0">Menyesuaikan wawasan untuk Diabetes,</tspan>
+        <tspan x="110" dy="25">Hipertensi, Kolesterol, dan Gastritis</tspan>
+      </text>
+    </g>
+    
+    <!-- Feature 3 -->
+    <g transform="translate(150, 820)">
+      <circle cx="40" cy="40" r="35" fill="#4CAF50" opacity="0.2"/>
+      <text x="40" y="50" font-family="Arial, sans-serif" font-size="36" fill="#4CAF50" text-anchor="middle">🍽️</text>
+      <text x="110" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2E7D32">Pencatatan Makanan</text>
+      <text x="110" y="65" font-family="Arial, sans-serif" font-size="18" fill="#666">
+        <tspan x="110" dy="0">Lacak makanan (Sarapan, Makan Siang,</tspan>
+        <tspan x="110" dy="25">Makan Malam, Camilan) dengan database</tspan>
+        <tspan x="110" dy="25">makanan Indonesia yang lengkap</tspan>
+      </text>
+    </g>
+    
+    <!-- Feature 4 -->
+    <g transform="translate(150, 980)">
+      <circle cx="40" cy="40" r="35" fill="#4CAF50" opacity="0.2"/>
+      <text x="40" y="50" font-family="Arial, sans-serif" font-size="36" fill="#4CAF50" text-anchor="middle">📊</text>
+      <text x="110" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2E7D32">Dashboard Pintar</text>
+      <text x="110" y="65" font-family="Arial, sans-serif" font-size="18" fill="#666">
+        <tspan x="110" dy="0">Pelacakan kalori real-time, breakdown</tspan>
+        <tspan x="110" dy="25">makro, dan peringatan kesehatan yang</tspan>
+        <tspan x="110" dy="25">dipersonalisasi</tspan>
+      </text>
+    </g>
+    
+    <!-- Feature 5 -->
+    <g transform="translate(150, 1140)">
+      <circle cx="40" cy="40" r="35" fill="#4CAF50" opacity="0.2"/>
+      <text x="40" y="50" font-family="Arial, sans-serif" font-size="36" fill="#4CAF50" text-anchor="middle">💾</text>
+      <text x="110" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2E7D32">Offline First</text>
+      <text x="110" y="65" font-family="Arial, sans-serif" font-size="18" fill="#666">
+        <tspan x="110" dy="0">Semua data tersimpan lokal menggunakan</tspan>
+        <tspan x="110" dy="25">Room Database - tidak perlu internet!</tspan>
+      </text>
+    </g>
+  </g>
+  
+  <!-- Tech Stack Section -->
+  <rect x="150" y="1260" width="900" height="2" fill="#E0E0E0"/>
+  <text x="600" y="1305" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#2E7D32" text-anchor="middle">Teknologi yang Digunakan</text>
+  
+  <g id="tech-stack" transform="translate(200, 1330)">
+    <g transform="translate(0, 0)">
+      <rect width="180" height="45" rx="22.5" fill="#4CAF50" opacity="0.15"/>
+      <text x="90" y="30" font-family="Arial, sans-serif" font-size="18" fill="#2E7D32" text-anchor="middle">Kotlin</text>
+    </g>
+    <g transform="translate(200, 0)">
+      <rect width="180" height="45" rx="22.5" fill="#4CAF50" opacity="0.15"/>
+      <text x="90" y="30" font-family="Arial, sans-serif" font-size="18" fill="#2E7D32" text-anchor="middle">Android</text>
+    </g>
+    <g transform="translate(400, 0)">
+      <rect width="180" height="45" rx="22.5" fill="#4CAF50" opacity="0.15"/>
+      <text x="90" y="30" font-family="Arial, sans-serif" font-size="18" fill="#2E7D32" text-anchor="middle">Room DB</text>
+    </g>
+    <g transform="translate(600, 0)">
+      <rect width="180" height="45" rx="22.5" fill="#4CAF50" opacity="0.15"/>
+      <text x="90" y="30" font-family="Arial, sans-serif" font-size="18" fill="#2E7D32" text-anchor="middle">MVVM</text>
+    </g>
+  </g>
+  
+  <!-- Footer -->
+  <rect x="150" y="1420" width="900" height="2" fill="#E0E0E0"/>
+  <g id="footer">
+    <text x="600" y="1460" font-family="Arial, sans-serif" font-size="20" fill="#666" text-anchor="middle">Open Source Project</text>
+    <text x="600" y="1495" font-family="Arial, sans-serif" font-size="18" fill="#4CAF50" text-anchor="middle" font-weight="bold">github.com/TrendoD/Nutri-Mate</text>
+    <text x="600" y="1530" font-family="Arial, sans-serif" font-size="16" fill="#999" text-anchor="middle">MIT License</text>
+  </g>
+</svg>
