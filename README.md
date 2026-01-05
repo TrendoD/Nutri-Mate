@@ -2,6 +2,15 @@
 
 NutriMate is a personal nutrition companion app designed to help users manage their diet based on their medical conditions.
 
+## Sustainable Development Goal (SDG)
+
+This project supports **SDG 3: Good Health and Well-being** – Ensure healthy lives and promote well-being for all at all ages.
+
+NutriMate contributes to this goal by:
+- Helping users maintain healthy nutrition habits through personalized calorie and macro tracking.
+- Providing tailored dietary insights for individuals with chronic conditions such as Diabetes, Hypertension, Cholesterol, and Gastritis.
+- Empowering users to make informed food choices through real-time health warnings and nutritional data.
+
 ## Features
 
 - **User Profile Management**: Calculate Daily Calorie Target (TDEE) based on age, weight, height, gender, and activity level.
