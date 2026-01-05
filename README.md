@@ -1,5 +1,22 @@
 # NutriMate
 
+🥗 **NutriMate** adalah aplikasi pendamping nutrisi personal yang dirancang khusus untuk membantu pengguna mengelola pola makan berdasarkan kondisi medis mereka. Kami memahami bahwa menjaga kesehatan melalui nutrisi yang tepat bukanlah hal yang mudah, terutama bagi mereka yang memiliki kondisi kesehatan khusus seperti Diabetes, Hipertensi, Kolesterol Tinggi, atau Maag.
+
+Dengan NutriMate, pengguna dapat menghitung kebutuhan kalori harian secara otomatis, mencatat makanan yang dikonsumsi, memantau asupan nutrisi, dan mendapatkan peringatan kesehatan yang dipersonalisasi sesuai kondisi medis mereka. Didukung dengan database makanan Indonesia yang lengkap, NutriMate menjadi solusi praktis untuk menjalani gaya hidup sehat sesuai kebutuhan tubuh Anda.
+
+🎯 **Fitur Unggulan:**
+- Perhitungan Target Kalori Harian (TDEE) berdasarkan usia, berat badan, tinggi badan, jenis kelamin, dan tingkat aktivitas
+- Pelacakan Kondisi Medis untuk Diabetes, Hipertensi, Kolesterol, dan Maag
+- Pencatatan Makanan dengan database makanan khas Indonesia
+- Dashboard Pintar dengan pemantauan kalori real-time, rincian makro, dan peringatan kesehatan
+- Pelacakan Konsumsi Air untuk memastikan hidrasi yang cukup
+- Statistik dan Grafik untuk memantau progress kesehatan
+- Mode Offline untuk penggunaan tanpa koneksi internet
+
+📱 **Mulai hidup sehat hari ini! Kelola nutrisi Anda dengan lebih mudah dan terstruktur bersama NutriMate.**
+
+---
+
 NutriMate is a personal nutrition companion app designed to help users manage their diet based on their medical conditions.
 
 ## Features
